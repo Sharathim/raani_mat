@@ -31,31 +31,38 @@ export function generateRegistrationId() {
 
 /**
  * Formats date into readable string (e.g. 14 Oct 2026, 04:30 PM)
+ * Highly defensive against undefined, null, Firestore Timestamps, or string formats.
  */
 export function formatDate(timestamp) {
   if (!timestamp) return '—';
 
-  let dateObj;
-  if (typeof timestamp === 'object' && timestamp.toDate) {
-    // Firestore Timestamp
-    dateObj = timestamp.toDate();
-  } else if (timestamp instanceof Date) {
-    dateObj = timestamp;
-  } else if (typeof timestamp === 'string' || typeof timestamp === 'number') {
-    dateObj = new Date(timestamp);
-  } else {
+  try {
+    let dateObj;
+    if (typeof timestamp === 'object' && timestamp !== null) {
+      if (typeof timestamp.toDate === 'function') {
+        dateObj = timestamp.toDate();
+      } else if (timestamp.seconds !== undefined) {
+        dateObj = new Date(timestamp.seconds * 1000);
+      } else if (timestamp instanceof Date) {
+        dateObj = timestamp;
+      }
+    } else if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+      dateObj = new Date(timestamp);
+    }
+
+    if (!dateObj || isNaN(dateObj.getTime())) return '—';
+
+    return new Intl.DateTimeFormat('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(dateObj);
+  } catch (err) {
+    console.warn('formatDate error:', err);
     return '—';
   }
-
-  if (isNaN(dateObj.getTime())) return '—';
-
-  return new Intl.DateTimeFormat('en-IN', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  }).format(dateObj);
 }
 
 /**
@@ -66,77 +73,76 @@ export function validateStep(stepNumber, formData) {
 
   if (stepNumber === 1) {
     if (!formData.name || formData.name.trim().length < 2) {
-      errors.name = 'பெயரை உள்ளிடவும் (Please enter a valid name)';
+      errors.name = 'Please enter full name (at least 2 characters)';
     }
     if (!formData.dateOfBirth) {
-      errors.dateOfBirth = 'பிறந்த தேதியை தேர்ந்தெடுக்கவும் (Please select Date of Birth)';
+      errors.dateOfBirth = 'Please select Date of Birth';
     } else {
       const selected = new Date(formData.dateOfBirth);
       const today = new Date();
       if (selected > today) {
-        errors.dateOfBirth = 'பிறந்த தேதி எதிர்காலமாக இருக்கக்கூடாது (DOB cannot be in future)';
+        errors.dateOfBirth = 'Date of birth cannot be in the future';
       }
     }
     if (!formData.age || Number(formData.age) < 18 || Number(formData.age) > 90) {
-      errors.age = 'செல்லுபடியாகும் வயதை உள்ளிடவும் (18+ வயது)';
+      errors.age = 'Please enter a valid age (18+)';
     }
     if (!formData.phone || formData.phone.trim().replace(/\D/g, '').length < 10) {
-      errors.phone = '10 இலக்க மொபைல் எண்ணை உள்ளிடவும் (Enter valid 10-digit phone)';
+      errors.phone = 'Please enter a valid 10-digit mobile number';
     }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'செல்லுபடியாகும் மின்னஞ்சலை உள்ளிடவும் (Invalid email address)';
+      errors.email = 'Please enter a valid email address';
     }
   }
 
   if (stepNumber === 2) {
     if (!formData.fatherName || formData.fatherName.trim().length < 2) {
-      errors.fatherName = 'அப்பா பெயரை உள்ளிடவும் (Enter Father name)';
+      errors.fatherName = "Please enter Father's name";
     }
     if (!formData.motherName || formData.motherName.trim().length < 2) {
-      errors.motherName = 'அம்மா பெயரை உள்ளிடவும் (Enter Mother name)';
+      errors.motherName = "Please enter Mother's name";
     }
   }
 
   if (stepNumber === 3) {
     if (!formData.birthStar) {
-      errors.birthStar = 'நட்சத்திரத்தை தேர்ந்தெடுக்கவும் (Select Birth Star)';
+      errors.birthStar = 'Please select Birth Star (Nakshatra)';
     }
     if (!formData.zodiacSign) {
-      errors.zodiacSign = 'ராசியை தேர்ந்தெடுக்கவும் (Select Zodiac Sign)';
+      errors.zodiacSign = 'Please select Zodiac Sign (Rasi)';
     }
   }
 
   if (stepNumber === 4) {
     if (!formData.height || formData.height.trim().length < 2) {
-      errors.height = 'உயரத்தை உள்ளிடவும் (Enter height e.g. 5 ft 6 in or 168 cm)';
+      errors.height = 'Please enter height (e.g. 5 ft 6 in or 168 cm)';
     }
     if (!formData.education || formData.education.trim().length < 2) {
-      errors.education = 'கல்வி தகுதியை உள்ளிடவும் (Enter Education qualification)';
+      errors.education = 'Please enter highest education qualification';
     }
     if (!formData.occupation || formData.occupation.trim().length < 2) {
-      errors.occupation = 'தொழில் விவரத்தை உள்ளிடவும் (Enter Occupation)';
+      errors.occupation = 'Please enter current occupation or job title';
     }
   }
 
   if (stepNumber === 5) {
     if (!formData.casteReligion || formData.casteReligion.trim().length < 2) {
-      errors.casteReligion = 'மதம் / சாதியை உள்ளிடவும் (Enter Religion / Caste)';
+      errors.casteReligion = 'Please enter Religion / Caste details';
     }
     if (!formData.location || formData.location.trim().length < 2) {
-      errors.location = 'தற்போதைய இருப்பிடத்தை உள்ளிடவும் (Enter Current Location / City)';
+      errors.location = 'Please enter current residential city/area';
     }
-    // Photo is highly recommended but optional or required based on business rule
   }
 
   if (stepNumber === 6) {
     if (!formData.expectation || formData.expectation.trim().length < 5) {
-      errors.expectation = 'எதிர்பார்ப்பு விவரங்களை உள்ளிடவும் (Please describe expectations)';
+      errors.expectation = 'Please describe partner expectations (at least 5 characters)';
     }
   }
 
   if (stepNumber === 7) {
     if (!formData.consentAccepted) {
-      errors.consentAccepted = 'பதிவை சமர்ப்பிக்க விதிமுறைகளை ஏற்கவும் (Please accept the declaration)';
+      errors.consentAccepted = 'Please check the consent declaration to submit your profile';
     }
   }
 

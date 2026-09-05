@@ -11,10 +11,11 @@ export function BrandHeader() {
   const { isAuthenticated } = useAuth();
 
   const navLinks = [
-    { nameTa: 'முகப்பு', nameEn: 'Home', path: '/' },
-    { nameTa: 'சேவைகள்', nameEn: 'Services', path: '/#services' },
-    { nameTa: 'எங்களை பற்றி', nameEn: 'About Us', path: '/#about' },
-    { nameTa: 'தொடர்புக்கு', nameEn: 'Contact', path: '/#contact' }
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/#services' },
+    { name: 'About Us', path: '/#about' },
+    { name: 'Success Stories', path: '/#stories' },
+    { name: 'Contact', path: '/#contact' }
   ];
 
   const isActive = (path) => {
@@ -25,32 +26,29 @@ export function BrandHeader() {
   return (
     <header
       style={{
-        backgroundColor: 'var(--paper)',
-        borderBottom: '2px solid var(--border)',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid var(--border)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
         boxShadow: 'var(--shadow-sm)'
       }}
     >
-      {/* Top Auspicious Announcement Bar */}
+      {/* Top Announcement Bar */}
       <div
         style={{
-          background: 'linear-gradient(90deg, var(--maroon-950) 0%, var(--maroon-800) 50%, var(--maroon-950) 100%)',
+          background: 'linear-gradient(90deg, var(--maroon-950) 0%, var(--maroon-900) 50%, var(--maroon-950) 100%)',
           color: 'var(--gold-100)',
           padding: '0.35rem 1rem',
-          fontSize: '0.8rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid var(--gold-700)'
+          fontSize: '0.775rem',
+          borderBottom: '1px solid rgba(199, 150, 47, 0.3)'
         }}
       >
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ color: 'var(--gold-300)' }}>❖</span>
-            <span className="font-tamil-sans" style={{ fontWeight: 500 }}>
-              {BRAND.tagline} {BRAND.subTagline}
+            <span style={{ fontWeight: 500 }}>
+              {BRAND.tagline}
             </span>
           </div>
 
@@ -59,23 +57,23 @@ export function BrandHeader() {
               href={`tel:${BRAND.phones[0]}`}
               style={{ color: 'var(--gold-100)', display: 'flex', alignItems: 'center', gap: '0.35rem', textDecoration: 'none' }}
             >
-              <Phone size={13} color="var(--gold-300)" />
+              <Phone size={12} color="var(--gold-300)" />
               <span>{BRAND.displayPhones}</span>
             </a>
             <Link
-              to={isAuthenticated ? "/admin" : "/admin/login"}
+              to={isAuthenticated ? '/admin' : '/admin/login'}
               style={{
                 color: 'var(--gold-300)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.25rem',
                 fontSize: '0.75rem',
-                opacity: 0.85
+                opacity: 0.9
               }}
               title="Admin Portal"
             >
-              <ShieldCheck size={13} />
-              <span>{isAuthenticated ? 'Dashboard' : 'நிர்வாகம் (Admin)'}</span>
+              <ShieldCheck size={12} />
+              <span>{isAuthenticated ? 'Dashboard' : 'Admin Login'}</span>
             </Link>
           </div>
         </div>
@@ -84,18 +82,17 @@ export function BrandHeader() {
       {/* Main Navbar */}
       <div className="container" style={{ padding: '0.65rem 1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {/* Brand Logo & Titles */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', textDecoration: 'none' }}>
-            <LogoMark size={50} />
+          {/* Brand Logo & Tamil Title */}
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+            <LogoMark size={46} />
             <div>
               <div
-                className="font-tamil-serif"
+                className="font-tamil-brand"
                 style={{
                   color: 'var(--maroon-900)',
-                  fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
                   fontWeight: 800,
-                  letterSpacing: '0.2px',
-                  lineHeight: 1.2
+                  lineHeight: 1.15
                 }}
               >
                 {BRAND.tamilName}
@@ -104,7 +101,7 @@ export function BrandHeader() {
                 style={{
                   fontFamily: 'var(--font-heading)',
                   color: 'var(--gold-800)',
-                  fontSize: '0.8rem',
+                  fontSize: '0.75rem',
                   fontWeight: 600,
                   letterSpacing: '0.5px'
                 }}
@@ -115,44 +112,33 @@ export function BrandHeader() {
           </Link>
 
           {/* Desktop Nav Links */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }} className="desktop-nav">
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="desktop-nav">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
                   color: isActive(link.path) ? 'var(--maroon-700)' : 'var(--ink)',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
+                  fontWeight: isActive(link.path) ? 700 : 500,
+                  fontSize: '0.9rem',
                   transition: 'color var(--transition-fast)'
                 }}
               >
-                <span className="font-tamil-sans">{link.nameTa}</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 400 }}>{link.nameEn}</span>
+                {link.name}
               </Link>
             ))}
 
             <Link
               to="/register"
-              className="btn btn-primary"
-              style={{
-                padding: '0.6rem 1.35rem',
-                fontSize: '0.95rem',
-                boxShadow: 'var(--shadow-sm)'
-              }}
+              className="btn btn-primary btn-sm"
+              style={{ padding: '0.55rem 1.15rem' }}
             >
-              <HeartHandshake size={18} />
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
-                <span>மணமக்கள் பதிவு</span>
-                <span style={{ fontSize: '0.7rem', opacity: 0.9, fontWeight: 400 }}>Register Now</span>
-              </div>
+              <HeartHandshake size={16} />
+              <span>Register Profile</span>
             </Link>
           </nav>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="mobile-toggle-btn"
@@ -160,27 +146,27 @@ export function BrandHeader() {
               background: 'none',
               border: '1px solid var(--border)',
               borderRadius: 'var(--radius-sm)',
-              padding: '0.45rem',
+              padding: '0.4rem',
               color: 'var(--maroon-900)',
               cursor: 'pointer',
               display: 'none'
             }}
             aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
           <div
             style={{
               marginTop: '0.75rem',
               paddingTop: '0.75rem',
-              borderTop: '1px solid var(--line)',
+              borderTop: '1px solid var(--border)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.85rem'
+              gap: '0.75rem'
             }}
           >
             {navLinks.map((link) => (
@@ -189,16 +175,13 @@ export function BrandHeader() {
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '0.5rem 0',
-                  color: 'var(--maroon-900)',
-                  fontWeight: 600
+                  padding: '0.4rem 0',
+                  color: 'var(--ink)',
+                  fontWeight: 600,
+                  fontSize: '0.925rem'
                 }}
               >
-                <span className="font-tamil-sans">{link.nameTa}</span>
-                <span style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>{link.nameEn}</span>
+                {link.name}
               </Link>
             ))}
 
@@ -206,10 +189,10 @@ export function BrandHeader() {
               to="/register"
               onClick={() => setMobileMenuOpen(false)}
               className="btn btn-primary"
-              style={{ width: '100%', marginTop: '0.5rem' }}
+              style={{ width: '100%', marginTop: '0.35rem' }}
             >
-              <HeartHandshake size={18} />
-              <span>மணமக்கள் பதிவு (Register Now)</span>
+              <HeartHandshake size={16} />
+              <span>Register Profile Online</span>
             </Link>
           </div>
         )}
@@ -221,7 +204,7 @@ export function BrandHeader() {
             display: none !important;
           }
           .mobile-toggle-btn {
-            display: block !important;
+            display: flex !important;
           }
         }
       `}</style>

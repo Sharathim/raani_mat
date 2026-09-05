@@ -45,17 +45,17 @@ export function NotFoundPage() {
             </div>
 
             <h1 className="font-tamil-serif" style={{ fontSize: '1.6rem', color: 'var(--maroon-950)', marginBottom: '0.5rem' }}>
-              பக்கம் கிடைக்கவில்லை (Page Not Found)
+              Page Not Found
             </h1>
 
             <p style={{ color: 'var(--muted)', fontSize: '0.95rem', maxWidth: '460px', margin: '0 auto 2rem', lineHeight: 1.6 }}>
-              நீங்கள் தேடும் பக்கம் மாற்றப்பட்டிருக்கலாம் அல்லது நீக்கப்பட்டிருக்கலாம். முகப்பு பக்கத்திற்கு சென்று தொடரவும்.
+              The page you are looking for might have been moved or does not exist. Please return to the homepage to continue browsing.
             </p>
 
             <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
               <Link to="/" className="btn btn-primary btn-lg">
                 <Home size={18} />
-                <span>முகப்புக்கு செல்க (Go to Home)</span>
+                <span>Return to Homepage</span>
               </Link>
             </div>
           </div>

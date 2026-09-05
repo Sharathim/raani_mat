@@ -8,7 +8,7 @@ export function ProtectedRoute({ children }) {
   const location = useLocation();
 
   if (loading) {
-    return <LoadingSpinner text="நிர்வாக அனுமதியை சரிபார்க்கிறது... (Verifying admin access...)" fullPage />;
+    return <LoadingSpinner text="Verifying admin access..." fullPage />;
   }
 
   if (!user) {

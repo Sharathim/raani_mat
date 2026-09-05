@@ -25,25 +25,25 @@ export function ProgressStepper({ currentStep, onStepClick, completedSteps = [] 
   return (
     <div
       style={{
-        background: 'var(--cream)',
-        border: '1.5px solid var(--border)',
+        background: '#ffffff',
+        border: '1px solid var(--border)',
         borderRadius: 'var(--radius-md)',
         padding: '1.25rem 1rem',
-        marginBottom: '2rem',
-        boxShadow: 'var(--shadow-sm)'
+        marginBottom: '1.75rem',
+        boxShadow: 'var(--shadow-card)'
       }}
     >
       {/* Desktop Stepper */}
       <div className="stepper-desktop" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
-        {/* Progress Line Behind Circles */}
+        {/* Progress Line */}
         <div
           style={{
             position: 'absolute',
-            top: '20px',
+            top: '18px',
             left: '30px',
             right: '30px',
-            height: '3px',
-            backgroundColor: 'var(--line)',
+            height: '2px',
+            backgroundColor: 'var(--border)',
             zIndex: 1
           }}
         >
@@ -75,62 +75,55 @@ export function ProgressStepper({ currentStep, onStepClick, completedSteps = [] 
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '0.4rem',
+                gap: '0.35rem',
                 cursor: isClickable ? 'pointer' : 'default',
                 zIndex: 2,
                 position: 'relative',
                 padding: '0 0.25rem',
-                maxWidth: '120px',
+                maxWidth: '115px',
                 textAlign: 'center'
               }}
             >
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
+                  width: '36px',
+                  height: '36px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: 700,
-                  fontSize: '0.9rem',
+                  fontSize: '0.85rem',
                   transition: 'all 0.25s ease',
                   backgroundColor: isCurrent
                     ? 'var(--maroon-900)'
                     : isCompleted
                     ? 'var(--success)'
-                    : 'var(--paper)',
+                    : '#ffffff',
                   color: isCurrent || isCompleted ? '#ffffff' : 'var(--muted)',
                   border: isCurrent
-                    ? '2.5px solid var(--gold-500)'
+                    ? '2px solid var(--gold-500)'
                     : isCompleted
-                    ? '2px solid var(--success-border)'
-                    : '2px solid var(--line)',
-                  boxShadow: isCurrent ? 'var(--shadow-gold)' : 'none'
+                    ? '2px solid var(--success)'
+                    : '2px solid var(--border)',
+                  boxShadow: isCurrent ? 'var(--shadow-sm)' : 'none'
                 }}
               >
-                {isCompleted ? <Check size={20} strokeWidth={2.5} /> : <StepIcon size={18} />}
+                {isCompleted ? <Check size={18} strokeWidth={2.5} /> : <StepIcon size={16} />}
               </div>
 
-              <div style={{ lineHeight: 1.1 }}>
+              <div style={{ lineHeight: 1.15 }}>
                 <div
-                  className="font-tamil-sans"
                   style={{
                     fontSize: '0.8rem',
                     fontWeight: isCurrent ? 700 : 500,
-                    color: isCurrent ? 'var(--maroon-950)' : isCompleted ? 'var(--maroon-800)' : 'var(--muted)'
+                    color: isCurrent ? 'var(--maroon-950)' : isCompleted ? 'var(--ink)' : 'var(--muted)'
                   }}
                 >
-                  {step.titleTa}
+                  {step.title}
                 </div>
-                <div
-                  style={{
-                    fontSize: '0.7rem',
-                    color: isCurrent ? 'var(--maroon-700)' : 'var(--muted-light)',
-                    marginTop: '2px'
-                  }}
-                >
-                  {step.titleEn}
+                <div style={{ fontSize: '0.7rem', color: 'var(--muted-light)', marginTop: '2px' }}>
+                  {step.subtitle}
                 </div>
               </div>
             </button>
@@ -144,37 +137,36 @@ export function ProgressStepper({ currentStep, onStepClick, completedSteps = [] 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span
               style={{
-                width: '32px',
-                height: '32px',
+                width: '28px',
+                height: '28px',
                 borderRadius: '50%',
                 backgroundColor: 'var(--maroon-900)',
-                color: 'var(--gold-100)',
+                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                border: '1.5px solid var(--gold-500)'
+                fontSize: '0.8rem',
+                fontWeight: 700
               }}
             >
               {currentStep}
             </span>
             <div>
-              <div className="font-tamil-sans" style={{ fontWeight: 700, color: 'var(--maroon-900)', fontSize: '0.95rem' }}>
-                {FORM_STEPS[currentStep - 1]?.titleTa}
+              <div style={{ fontWeight: 700, color: 'var(--ink)', fontSize: '0.9rem' }}>
+                {FORM_STEPS[currentStep - 1]?.title}
               </div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
-                {FORM_STEPS[currentStep - 1]?.titleEn}
+              <div style={{ fontSize: '0.725rem', color: 'var(--muted)' }}>
+                {FORM_STEPS[currentStep - 1]?.subtitle}
               </div>
             </div>
           </div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--maroon-700)', background: 'var(--paper)', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border)' }}>
-            படி {currentStep} / {FORM_STEPS.length}
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--maroon-700)', background: 'var(--maroon-50)', padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-pill)', border: '1px solid rgba(138, 16, 38, 0.15)' }}>
+            Step {currentStep} of {FORM_STEPS.length}
           </span>
         </div>
 
         {/* Mobile Progress Bar */}
-        <div style={{ height: '6px', backgroundColor: 'var(--line)', borderRadius: '3px', overflow: 'hidden' }}>
+        <div style={{ height: '4px', backgroundColor: 'var(--border)', borderRadius: '2px', overflow: 'hidden' }}>
           <div
             style={{
               height: '100%',

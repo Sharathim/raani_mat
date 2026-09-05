@@ -21,7 +21,6 @@ import {
   LAGNAMS,
   INCOME_OPTIONS,
   EDUCATION_SUGGESTIONS,
-  FORM_STEPS,
   BRAND
 } from '../utils/constants';
 import { calculateAge, validateStep } from '../utils/helpers';
@@ -32,9 +31,7 @@ import {
   Send,
   Loader2,
   Sparkles,
-  Info,
-  PhoneCall,
-  MessageCircle
+  Info
 } from 'lucide-react';
 
 export function RegisterPage() {
@@ -57,12 +54,12 @@ export function RegisterPage() {
   const [submitError, setSubmitError] = useState(null);
   const [completedSteps, setCompletedSteps] = useState([]);
 
-  // Save form draft to sessionStorage so user never loses data on accidental reload
+  // Save form draft to sessionStorage
   useEffect(() => {
     sessionStorage.setItem('rani_matrimony_form_draft', JSON.stringify(formData));
   }, [formData]);
 
-  // Handle generic input change
+  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => {
@@ -86,7 +83,7 @@ export function RegisterPage() {
       return updated;
     });
 
-    // Clear field-level error on change
+    // Clear field-level error
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
     }
@@ -104,12 +101,12 @@ export function RegisterPage() {
     }
   };
 
-  // Step Navigation Handlers
+  // Step Navigation
   const handleNext = () => {
     const validation = validateStep(currentStep, formData);
     if (!validation.isValid) {
       setErrors(validation.errors);
-      window.scrollTo({ top: 150, behavior: 'smooth' });
+      window.scrollTo({ top: 120, behavior: 'smooth' });
       return;
     }
 
@@ -120,21 +117,20 @@ export function RegisterPage() {
 
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    window.scrollTo({ top: 120, behavior: 'smooth' });
   };
 
   const handleBack = () => {
     setErrors({});
     setCurrentStep((prev) => Math.max(1, prev - 1));
-    window.scrollTo({ top: 150, behavior: 'smooth' });
+    window.scrollTo({ top: 120, behavior: 'smooth' });
   };
 
   const handleStepClick = (targetStep) => {
-    // Only allow clicking already completed steps or previous steps
     if (targetStep < currentStep || completedSteps.includes(targetStep - 1)) {
       setErrors({});
       setCurrentStep(targetStep);
-      window.scrollTo({ top: 150, behavior: 'smooth' });
+      window.scrollTo({ top: 120, behavior: 'smooth' });
     }
   };
 
@@ -153,13 +149,11 @@ export function RegisterPage() {
 
     try {
       const created = await createRegistration(formData);
-      // Clear draft storage
       sessionStorage.removeItem('rani_matrimony_form_draft');
-      // Navigate to success screen
       navigate(`/register/success/${created.id || created.registrationId}`);
     } catch (err) {
       console.error('Submission failed:', err);
-      setSubmitError(err.message || 'பதிவு செய்வதில் பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.');
+      setSubmitError(err.message || 'Unable to submit profile. Please check your connection and try again.');
       setIsSubmitting(false);
     }
   };
@@ -168,18 +162,18 @@ export function RegisterPage() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--ivory)' }}>
       <BrandHeader />
 
-      <main style={{ flex: 1, padding: '2.5rem 1.25rem 4rem' }}>
+      <main style={{ flex: 1, padding: '2rem 1.25rem 5rem' }}>
         <div className="container-narrow">
-          {/* Page Top Heading */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <span className="pill-title">
-              <span>❖</span> மணமக்கள் விவரப் பதிவு (Registration) <span>❖</span>
-            </span>
-            <h1 className="font-tamil-serif" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.25rem)', color: 'var(--maroon-950)', marginTop: '0.5rem' }}>
-              ராணி திருமண சேவை மையம்
+          {/* Header Title */}
+          <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+            <h1 className="font-tamil-brand" style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.1rem)', color: 'var(--maroon-950)', margin: '0 0 0.25rem' }}>
+              {BRAND.tamilName}
             </h1>
-            <p style={{ color: 'var(--muted)', fontSize: '0.95rem' }}>
-              கீழே உள்ள படிகளில் மணமக்கள் பற்றிய முழு விவரங்களையும் உள்ளிடவும்.
+            <div style={{ fontFamily: 'var(--font-heading)', color: 'var(--gold-800)', fontSize: '0.95rem', fontWeight: 600 }}>
+              Matrimonial Profile Registration
+            </div>
+            <p style={{ color: 'var(--muted)', fontSize: '0.875rem', marginTop: '0.35rem' }}>
+              Complete the guided steps below to register your matrimonial profile.
             </p>
           </div>
 
@@ -190,15 +184,16 @@ export function RegisterPage() {
             completedSteps={completedSteps}
           />
 
-          {/* Error Banner if any submit errors */}
+          {/* Error Banner */}
           <ErrorBanner message={submitError} onDismiss={() => setSubmitError(null)} />
 
           {/* Form Container Card */}
           <div
-            className="card-ornate"
+            className="card-clean"
             style={{
-              padding: '2.5rem 2rem',
-              backgroundColor: 'var(--paper)',
+              padding: '2.25rem 1.75rem',
+              backgroundColor: '#ffffff',
+              border: '1px solid var(--border)',
               position: 'relative'
             }}
           >
@@ -208,19 +203,18 @@ export function RegisterPage() {
             {/* Step 1: Basic Details */}
             {currentStep === 1 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 1: மணமக்கள் அடிப்படை விவரம் (Basic Details)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 1: Basic & Contact Details
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    சுயவிவரம் யாருக்கு பதிவு செய்யப்படுகிறது மற்றும் அடிப்படை தகவல்களை உள்ளிடவும்.
+                    Select who this registration is for and provide basic identity details.
                   </p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <SelectField
-                    labelTa="பதிவு யாருக்காக?"
-                    labelEn="Profile For"
+                    label="Profile For"
                     name="profileFor"
                     value={formData.profileFor}
                     onChange={handleChange}
@@ -229,8 +223,7 @@ export function RegisterPage() {
                   />
 
                   <SelectField
-                    labelTa="பாலினம்"
-                    labelEn="Gender"
+                    label="Gender"
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
@@ -240,20 +233,18 @@ export function RegisterPage() {
                 </div>
 
                 <FormField
-                  labelTa="பெயர்"
-                  labelEn="Full Name of Bride / Groom"
+                  label="Full Name of Bride / Groom"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="எ.கா: சுப்பிரமணியன் கார்த்திக் (Subramanian K)"
+                  placeholder="e.g. Karthika Subramanian"
                   required
                   error={errors.name}
                 />
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="பிறந்த தேதி"
-                    labelEn="Date of Birth"
+                    label="Date of Birth"
                     name="dateOfBirth"
                     type="date"
                     value={formData.dateOfBirth}
@@ -263,8 +254,7 @@ export function RegisterPage() {
                   />
 
                   <FormField
-                    labelTa="வயது"
-                    labelEn="Age (Auto-calculated)"
+                    label="Age"
                     name="age"
                     type="number"
                     value={formData.age}
@@ -273,13 +263,12 @@ export function RegisterPage() {
                     min="18"
                     max="90"
                     required
-                    hint="பிறந்த தேதியை தேர்வு செய்தால் தானாக நிரப்பப்படும்"
+                    hint="Auto-calculated from date of birth"
                     error={errors.age}
                   />
 
                   <SelectField
-                    labelTa="திருமண நிலை"
-                    labelEn="Marital Status"
+                    label="Marital Status"
                     name="maritalStatus"
                     value={formData.maritalStatus}
                     onChange={handleChange}
@@ -290,8 +279,7 @@ export function RegisterPage() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="தொலைபேசி / மொபைல் எண்"
-                    labelEn="Mobile Phone Number"
+                    label="Mobile Phone Number"
                     name="phone"
                     type="tel"
                     value={formData.phone}
@@ -302,13 +290,12 @@ export function RegisterPage() {
                   />
 
                   <FormField
-                    labelTa="மின்னஞ்சல் முகவரி"
-                    labelEn="Email Address (Optional)"
+                    label="Email Address (Optional)"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="example@gmail.com"
+                    placeholder="karthika@example.com"
                     error={errors.email}
                   />
                 </div>
@@ -318,82 +305,76 @@ export function RegisterPage() {
             {/* Step 2: Family Details */}
             {currentStep === 2 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 2: குடும்ப விவரம் (Family Details)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 2: Family Background
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    பெற்றோர் பெயர், அவர்களின் தொழில் மற்றும் உடன்பிறப்புகள் பற்றிய விவரங்கள்.
+                    Provide information about parents, occupations, and siblings.
                   </p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="அப்பா பெயர்"
-                    labelEn="Father Name"
+                    label="Father's Full Name"
                     name="fatherName"
                     value={formData.fatherName}
                     onChange={handleChange}
-                    placeholder="தந்தையின் பெயர்"
+                    placeholder="e.g. Subramanian K"
                     required
                     error={errors.fatherName}
                   />
 
                   <FormField
-                    labelTa="அப்பா தொழில்"
-                    labelEn="Father Occupation"
+                    label="Father's Occupation"
                     name="fatherOccupation"
                     value={formData.fatherOccupation}
                     onChange={handleChange}
-                    placeholder="எ.கா: அரசு ஊழியர் / தொழில் / ஓய்வு"
+                    placeholder="e.g. Government Officer / Business / Retired"
                   />
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="அம்மா பெயர்"
-                    labelEn="Mother Name"
+                    label="Mother's Full Name"
                     name="motherName"
                     value={formData.motherName}
                     onChange={handleChange}
-                    placeholder="தாயாரின் பெயர்"
+                    placeholder="e.g. Meenakshi S"
                     required
                     error={errors.motherName}
                   />
 
                   <FormField
-                    labelTa="அம்மா தொழில்"
-                    labelEn="Mother Occupation"
+                    label="Mother's Occupation"
                     name="motherOccupation"
                     value={formData.motherOccupation}
                     onChange={handleChange}
-                    placeholder="எ.கா: இல்லத்தரசி (Home Maker)"
+                    placeholder="e.g. Home Maker / Teacher"
                   />
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <SelectField
-                    labelTa="குடும்ப அமைப்பு"
-                    labelEn="Family Type"
+                    label="Family Type"
                     name="familyType"
                     value={formData.familyType}
                     onChange={handleChange}
                     options={[
-                      'Nuclear Family (தனிக்குடும்பம்)',
-                      'Joint Family (கூட்டுக்குடும்பம்)'
+                      'Nuclear Family',
+                      'Joint Family'
                     ]}
                   />
                 </div>
 
                 <TextAreaField
-                  labelTa="உடன் பிறந்தவர்கள்"
-                  labelEn="Siblings Details"
+                  label="Siblings Details"
                   name="siblings"
                   value={formData.siblings}
                   onChange={handleChange}
                   rows={3}
-                  placeholder="எ.கா: 1 அண்ணன் (திருமணம் ஆனவர், மென்பொருள் பொறியாளர்), 1 தங்கை (படித்து வருகிறார்)"
-                  hint="அண்ணன்/தம்பி/அக்கா/தங்கை, வயது, திருமண நிலை மற்றும் தொழில் விவரங்களை குறிப்பிடலாம்"
+                  placeholder="e.g. 1 Elder Brother (Married, Software Architect in Chennai), 1 Younger Sister (B.Com, Unmarried)"
+                  hint="Mention brothers/sisters, age, marital status, and occupations"
                 />
               </div>
             )}
@@ -401,19 +382,18 @@ export function RegisterPage() {
             {/* Step 3: Birth / Horoscope */}
             {currentStep === 3 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 3: பிறப்பு / ஜாதக விவரம் (Horoscope & Astrology)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 3: Birth & Horoscope (Astrology)
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    நட்சத்திரம், ராசி, லக்கினம் மற்றும் தோஷ விவரங்களை தேர்ந்தெடுக்கவும்.
+                    Select birth star (Nakshatra), zodiac sign (Rasi), and lagnam details.
                   </p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <SelectField
-                    labelTa="நட்சத்திரம்"
-                    labelEn="Birth Star (Nakshatra)"
+                    label="Birth Star (Nakshatra)"
                     name="birthStar"
                     value={formData.birthStar}
                     onChange={handleChange}
@@ -423,8 +403,7 @@ export function RegisterPage() {
                   />
 
                   <SelectField
-                    labelTa="ராசி"
-                    labelEn="Zodiac Sign (Rasi)"
+                    label="Zodiac Sign (Rasi)"
                     name="zodiacSign"
                     value={formData.zodiacSign}
                     onChange={handleChange}
@@ -436,8 +415,7 @@ export function RegisterPage() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <SelectField
-                    labelTa="லக்கினம்"
-                    labelEn="Lagnam"
+                    label="Lagnam"
                     name="lagnam"
                     value={formData.lagnam}
                     onChange={handleChange}
@@ -445,63 +423,59 @@ export function RegisterPage() {
                   />
 
                   <FormField
-                    labelTa="கோத்திரம்"
-                    labelEn="Gothram (Optional)"
+                    label="Gothram (Optional)"
                     name="gothram"
                     value={formData.gothram}
                     onChange={handleChange}
-                    placeholder="எ.கா: சிவா / விஷ்ணு / வசிஷ்டர்"
+                    placeholder="e.g. Siva / Vishnu / Vashishta"
                   />
                 </div>
 
                 <SelectField
-                  labelTa="செவ்வாய் / நாக தோஷம்"
-                  labelEn="Dosham"
+                  label="Dosham Status"
                   name="dosham"
                   value={formData.dosham}
                   onChange={handleChange}
                   options={[
-                    'None / இல்லை',
-                    'Sevvai Dosham (செவ்வாய் தோஷம்)',
-                    'Naga / Rahu-Ketu Dosham (ராகு-கேது தோஷம்)',
-                    'Other Dosham (பிற தோஷங்கள்)',
-                    'Don’t Know / தெரியவில்லை'
+                    'None / No Dosham',
+                    'Sevvai Dosham (Chevvai)',
+                    'Naga / Rahu-Ketu Dosham',
+                    'Other Dosham',
+                    'Don’t Know / To be analyzed'
                   ]}
                 />
               </div>
             )}
 
-            {/* Step 4: Education / Career */}
+            {/* Step 4: Education & Career */}
             {currentStep === 4 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 4: கல்வி & தொழில் விவரம் (Education & Career)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 4: Education, Career & Income
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    உயரம், கல்வித்தகுதி, தொழில் நிறுவனம் மற்றும் மாத வருமான வரம்பு.
+                    Provide height, educational qualifications, job designation, and monthly income range.
                   </p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="உயரம்"
-                    labelEn="Height"
+                    label="Height"
                     name="height"
                     value={formData.height}
                     onChange={handleChange}
-                    placeholder="எ.கா: 5 ft 6 in அல்லது 168 cm"
+                    placeholder="e.g. 5 ft 6 in or 168 cm"
                     required
                     error={errors.height}
                   />
 
                   <FormField
-                    labelTa="கல்வி தகுதி"
-                    labelEn="Education Qualification"
+                    label="Highest Education Qualification"
                     name="education"
                     value={formData.education}
                     onChange={handleChange}
-                    placeholder="எ.கா: B.E (Computer Science) / MBA"
+                    placeholder="e.g. B.Tech (Computer Science) / MBA"
                     required
                     error={errors.education}
                   />
@@ -509,36 +483,33 @@ export function RegisterPage() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="தொழில் / பணி விவரம்"
-                    labelEn="Occupation / Designation"
+                    label="Occupation / Designation"
                     name="occupation"
                     value={formData.occupation}
                     onChange={handleChange}
-                    placeholder="எ.கா: Software Engineer / Manager / Business"
+                    placeholder="e.g. Senior Software Engineer / Manager"
                     required
                     error={errors.occupation}
                   />
 
                   <SelectField
-                    labelTa="பணிபுரியும் துறை"
-                    labelEn="Employment Sector"
+                    label="Employment Sector"
                     name="employedIn"
                     value={formData.employedIn}
                     onChange={handleChange}
                     options={[
-                      'Private Sector (தனியார் நிறுவனம்)',
-                      'Government / PSU (அரசு துறை)',
-                      'Business / Self Employed (சொந்த தொழில்)',
+                      'Private Sector',
+                      'Government / PSU',
+                      'Business / Self-Employed',
                       'Civil Services / Defence',
-                      'Working Abroad (வெளிநாடு)',
+                      'Working Abroad',
                       'Not Working / Looking for job'
                     ]}
                   />
                 </div>
 
                 <SelectField
-                  labelTa="மாத வருமானம்"
-                  labelEn="Monthly Income Range"
+                  label="Monthly Income Range"
                   name="income"
                   value={formData.income}
                   onChange={handleChange}
@@ -550,12 +521,12 @@ export function RegisterPage() {
             {/* Step 5: Photo & Location */}
             {currentStep === 5 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 5: புகைப்படம் & முகவரி (Photo & Location)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 5: Profile Photo & Location
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    மணமக்கள் புகைப்படம், மதம்/சாதி மற்றும் இருப்பிட விவரங்களை சேர்க்கவும்.
+                    Attach a portrait photo and specify current residential location and native place.
                   </p>
                 </div>
 
@@ -569,33 +540,30 @@ export function RegisterPage() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    labelTa="மதம் / சாதி"
-                    labelEn="Religion & Caste / Subcaste"
+                    label="Religion & Caste / Community"
                     name="casteReligion"
                     value={formData.casteReligion}
                     onChange={handleChange}
-                    placeholder="எ.கா: Hindu / Mudaliar / Pillai / Naidu"
+                    placeholder="e.g. Hindu / Pillai / Mudaliar / Naidu"
                     required
                     error={errors.casteReligion}
                   />
 
                   <FormField
-                    labelTa="சொந்த ஊர்"
-                    labelEn="Native Place"
+                    label="Native Place"
                     name="nativePlace"
                     value={formData.nativePlace}
                     onChange={handleChange}
-                    placeholder="எ.கா: Madurai / Kanchipuram"
+                    placeholder="e.g. Madurai / Thanjavur"
                   />
                 </div>
 
                 <FormField
-                  labelTa="தற்போதைய வசிப்பிடம்"
-                  labelEn="Current Residential Location / City"
+                  label="Current Residential City & Area"
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  placeholder="எ.கா: Anna Nagar, Chennai"
+                  placeholder="e.g. Anna Nagar, Chennai"
                   required
                   error={errors.location}
                 />
@@ -605,25 +573,24 @@ export function RegisterPage() {
             {/* Step 6: Expectations */}
             {currentStep === 6 && (
               <div>
-                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--line)', paddingBottom: '0.75rem' }}>
-                  <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.25rem' }}>
-                    படி 6: எதிர்பார்ப்புகள் (Partner Expectations)
+                <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
+                  <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
+                    Step 6: Partner Expectations
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    நீங்கள் எதிர்பார்க்கும் வரனின் கல்வி, தொழில், வயது மற்றும் இருப்பிட விருப்பங்களை குறிப்பிடவும்.
+                    Describe your preferences regarding the prospective bride / groom.
                   </p>
                 </div>
 
                 <TextAreaField
-                  labelTa="எதிர்பார்ப்பு விவரங்கள்"
-                  labelEn="Describe your expectations regarding partner"
+                  label="Partner Preferences & Expectations"
                   name="expectation"
                   value={formData.expectation}
                   onChange={handleChange}
                   rows={5}
                   required
-                  placeholder="உதாரணம்: பட்டதாரி அல்லது பொறியியல் முடித்த நல்ல குடும்பப் பின்னணி கொண்ட மணமகன் / மணமகள் தேவை. சென்னை அல்லது பெங்களூரில் பணிபுரிபவராக இருக்க வேண்டும்."
-                  hint="கல்வி, தொழில், வயது விருப்பம், குடும்ப பின்னணி போன்ற விவரங்களை தாராளமாக குறிப்பிடலாம்."
+                  placeholder="e.g. Looking for a well-educated, cultured groom with good family values. Graduate or post-graduate working in Chennai, Bangalore or abroad. Age preference 27-31."
+                  hint="You may specify preferred age range, education, career, location, or family background"
                   error={errors.expectation}
                 />
               </div>
@@ -650,16 +617,16 @@ export function RegisterPage() {
               </div>
             )}
 
-            {/* Navigation Buttons Bar */}
+            {/* Desktop Navigation Action Buttons */}
             <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 gap: '1rem',
-                marginTop: '2rem',
-                paddingTop: '1.5rem',
-                borderTop: '1.5px solid var(--line)'
+                marginTop: '1.75rem',
+                paddingTop: '1.25rem',
+                borderTop: '1px solid var(--border-subtle)'
               }}
             >
               {currentStep > 1 ? (
@@ -669,12 +636,12 @@ export function RegisterPage() {
                   disabled={isSubmitting}
                   className="btn btn-secondary"
                 >
-                  <ArrowLeft size={18} />
-                  <span>முந்தைய படி (Back)</span>
+                  <ArrowLeft size={16} />
+                  <span>Previous Step</span>
                 </button>
               ) : (
                 <Link to="/" className="btn btn-secondary">
-                  <span>முகப்பு (Home)</span>
+                  <span>Home</span>
                 </Link>
               )}
 
@@ -684,8 +651,8 @@ export function RegisterPage() {
                   onClick={handleNext}
                   className="btn btn-primary"
                 >
-                  <span>அடுத்த படி (Continue)</span>
-                  <ArrowRight size={18} />
+                  <span>Continue</span>
+                  <ArrowRight size={16} />
                 </button>
               ) : (
                 <button
@@ -693,26 +660,64 @@ export function RegisterPage() {
                   onClick={handleSubmit}
                   disabled={isSubmitting || !formData.consentAccepted}
                   className="btn btn-primary btn-lg"
-                  style={{
-                    backgroundColor: 'var(--maroon-900)',
-                    boxShadow: 'var(--shadow-hover)'
-                  }}
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 size={20} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
-                      <span>பதிவு சமர்ப்பிக்கப்படுகிறது (Submitting Profile...)</span>
+                      <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
+                      <span>Submitting Profile...</span>
                     </>
                   ) : (
                     <>
-                      <Send size={20} />
-                      <span>பதிவை சமர்ப்பிக்கவும் (Submit Registration)</span>
+                      <Send size={18} />
+                      <span>Submit Registration</span>
                     </>
                   )}
                 </button>
               )}
             </div>
           </div>
+        </div>
+
+        {/* Mobile Sticky Action Bar for App-like experience */}
+        <div className="mobile-sticky-action-bar">
+          {currentStep > 1 ? (
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={isSubmitting}
+              className="btn btn-secondary btn-sm"
+              style={{ flex: 1 }}
+            >
+              <ArrowLeft size={14} />
+              <span>Back</span>
+            </button>
+          ) : (
+            <Link to="/" className="btn btn-secondary btn-sm" style={{ flex: 1 }}>
+              <span>Home</span>
+            </Link>
+          )}
+
+          {currentStep < 7 ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="btn btn-primary btn-sm"
+              style={{ flex: 2 }}
+            >
+              <span>Continue Step {currentStep + 1}</span>
+              <ArrowRight size={14} />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={isSubmitting || !formData.consentAccepted}
+              className="btn btn-primary btn-sm"
+              style={{ flex: 2 }}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Profile'}
+            </button>
+          )}
         </div>
       </main>
 

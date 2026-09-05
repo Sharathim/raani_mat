@@ -1,44 +1,52 @@
 import React from 'react';
 
-export function StatsCard({ titleTa, titleEn, count, icon: Icon, color = 'var(--maroon-900)', bg = 'var(--paper)', highlight = false }) {
+export function StatsCard({ title, count, icon: Icon, color = 'var(--maroon-900)', highlight = false, subtitle }) {
   return (
     <div
-      className="card-ornate"
+      className="card-clean"
       style={{
         padding: '1.25rem',
-        backgroundColor: bg,
-        border: highlight ? '2px solid var(--gold-500)' : '1px solid var(--border)',
-        boxShadow: highlight ? 'var(--shadow-gold)' : 'var(--shadow-sm)'
+        backgroundColor: '#ffffff',
+        border: highlight ? '1.5px solid var(--maroon-700)' : '1px solid var(--border)',
+        boxShadow: highlight ? 'var(--shadow-hover)' : 'var(--shadow-card)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        minHeight: '110px'
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-        <div>
-          <div className="font-tamil-sans" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--maroon-950)' }}>
-            {titleTa}
-          </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{titleEn}</div>
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--muted)' }}>
+          {title}
+        </span>
         {Icon && (
           <div
             style={{
-              width: '40px',
-              height: '40px',
+              width: '36px',
+              height: '36px',
               borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--cream)',
-              border: '1px solid var(--border)',
+              backgroundColor: 'var(--maroon-50)',
+              color: color,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: color
+              flexShrink: 0
             }}
           >
-            <Icon size={20} />
+            <Icon size={18} />
           </div>
         )}
       </div>
 
-      <div style={{ fontSize: '1.85rem', fontWeight: 800, color: color, fontFamily: 'var(--font-heading)' }}>
-        {count}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.5rem' }}>
+        <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1 }}>
+          {count}
+        </div>
+        {subtitle && (
+          <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500 }}>
+            {subtitle}
+          </span>
+        )}
       </div>
     </div>
   );

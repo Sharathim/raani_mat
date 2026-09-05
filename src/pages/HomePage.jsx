@@ -23,7 +23,8 @@ import {
   MessageCircle,
   ChevronDown,
   ChevronUp,
-  Quote
+  Quote,
+  ArrowRight
 } from 'lucide-react';
 
 export function HomePage() {
@@ -32,93 +33,79 @@ export function HomePage() {
   const serviceFeatures = [
     {
       icon: Users,
-      titleTa: 'மணமக்கள் பதிவு மையம்',
-      titleEn: 'Matrimonial Profile Registration',
-      desc: 'அனைத்து சமூகத்தினருக்கும் விரிவான மற்றும் துல்லியமான மணமக்கள் சுயவிவரப் பதிவு.'
+      title: 'Matrimonial Profile Registration',
+      desc: 'Comprehensive profile registration with complete personal, family, education, and career details for all communities.'
     },
     {
       icon: Scroll,
-      titleTa: 'ஜாதகம் & பிறப்பு விவரம்',
-      titleEn: 'Birth Star & Horoscope Matching',
-      desc: 'நட்சத்திரம், ராசி, லக்கினம் மற்றும் தோஷ விவரங்களுடன் துல்லியமான பொருத்த உதவி.'
+      title: 'Horoscope & Birth Star Matching',
+      desc: 'Accurate horoscope compatibility assistance including Nakshatra, Rasi, Lagnam, and Dosham analysis.'
     },
     {
       icon: FileCheck2,
-      titleTa: 'குடும்ப பின்னணி சரிபார்ப்பு',
-      titleEn: 'Family Background Verification',
-      desc: 'பெற்றோர், உடன்பிறப்புகள் மற்றும் குடும்ப மதிப்பீடுகள் குறித்த நம்பகமான தகவல்கள்.'
+      title: 'Family Background Verification',
+      desc: 'Reliable details regarding parents, siblings, family values, and native background for complete peace of mind.'
     },
     {
       icon: Award,
-      titleTa: 'கல்வி & தொழில் பொருத்தம்',
-      titleEn: 'Education & Career Preference',
-      desc: 'பட்டப்படிப்பு, அரசு/தனியார் வேலைவாய்ப்பு மற்றும் வருமான விருப்பத்திற்கு ஏற்ப நல்வரன்கள்.'
+      title: 'Education & Career Preference',
+      desc: 'Curated matches matching your preferred qualifications, government or private employment, and income criteria.'
     },
     {
       icon: ShieldCheck,
-      titleTa: 'பாதுகாப்பான தகவல் முறை',
-      titleEn: 'Privacy & Confidentiality',
-      desc: 'மணமக்கள் விவரங்கள் மற்றும் புகைப்படங்கள் முழு பாதுகாப்புடன் கையாளப்படுகின்றன.'
+      title: 'Privacy & Confidentiality',
+      desc: 'Candidate photos and contact details are handled with strict privacy and shared only with verified prospects.'
     },
     {
       icon: HeartHandshake,
-      titleTa: 'நேரடி ஆலோசனை சேவை',
-      titleEn: 'Personalized Match Assistance',
-      desc: 'எங்கள் நெற்குன்றம் மையத்தில் நேரடி ஆலோசனை மற்றும் சுபகாரிய வழிகாட்டுதல்.'
+      title: 'Personalized Match Assistance',
+      desc: 'One-on-one consultation and direct guidance from our experienced team at our Nerkundram service center.'
     }
   ];
 
   const whyChooseUs = [
     {
       number: '01',
-      titleTa: 'பாரம்பரியமும் நம்பிக்கையும்',
-      titleEn: 'Traditional & Trusted Service',
-      desc: 'பல வருடங்களாக திருப்திகரமான குடும்பங்களின் நல்வாழ்த்துகளுடன் இயங்கி வரும் நம்பகமான திருமண சேவை மையம்.'
+      title: 'Traditional & Trusted Service',
+      desc: 'Serving families for years with high trust, goodwill, and thousands of successful matrimonial alliances.'
     },
     {
       number: '02',
-      titleTa: 'அனைத்து சமூகத்தினருக்கும்',
-      titleEn: 'For All Communities',
-      desc: 'அனைத்து சமூகத்தினரின் குடும்ப சம்பிரதாயங்களையும் மதித்து சிறந்த வரன்களை அடையாளம் காண உதவுகிறோம்.'
+      title: 'Serving All Communities',
+      desc: 'Respecting traditional customs and cultural preferences to identify ideal bride and groom alliances across all communities.'
     },
     {
       number: '03',
-      titleTa: 'எளிதான ஆன்லைன் பதிவு',
-      titleEn: 'Simple & Quick Registration',
-      desc: 'உங்கள் மொபைல் அல்லது கணினியிலேயே சில நிமிடங்களில் முழு விவரங்களையும் எளிய முறையில் பதிவு செய்யலாம்.'
+      title: 'Quick & Simple Online Registration',
+      desc: 'Seamlessly submit candidate details in a clean, step-by-step form from any smartphone or computer in just a few minutes.'
     },
     {
       number: '04',
-      titleTa: 'நேரடி உதவி மையம்',
-      titleEn: 'Direct Service Center Assistance',
-      desc: 'பதிவு செய்த பின்னர் எங்கள் குழுவினர் உங்களை தொலைபேசி அல்லது நேரடி சந்திப்பில் தொடர்பு கொண்டு வழிகாட்டுவர்.'
+      title: 'Dedicated Helpline & Service Center',
+      desc: 'Our team directly follows up with registered families via phone calls and in-person consultations to ensure active matching.'
     }
   ];
 
   const processSteps = [
     {
       step: '1',
-      titleTa: 'சுயவிவரப் பதிவு',
-      titleEn: 'Fill Registration Form',
-      desc: 'மணமக்கள் அடிப்படை, குடும்ப, கல்வி மற்றும் ஜாதக விவரங்களை ஆன்லைனில் உள்ளிடவும்.'
+      title: 'Submit Profile Online',
+      desc: 'Fill in basic candidate information, family background, horoscope, education, and partner preferences.'
     },
     {
       step: '2',
-      titleTa: 'மையத்தின் சரிபார்ப்பு',
-      titleEn: 'Verification by Center',
-      desc: 'எங்கள் சேவை மையம் விவரங்களை சரிபார்த்து வரன் தேடலை துவங்கும்.'
+      title: 'Profile Verification',
+      desc: 'Our matrimonial service center reviews and verifies the submitted details to begin active matchmaking.'
     },
     {
       step: '3',
-      titleTa: 'வரன் அறிமுகம்',
-      titleEn: 'Match Introductions',
-      desc: 'உங்கள் எதிர்பார்ப்புகளுக்கு ஏற்ற தகுதியான வரன்களை தொலைபேசி வாயிலாக அறிமுகப்படுத்துவோம்.'
+      title: 'Curated Match Introductions',
+      desc: 'We identify compatible prospective matches and facilitate initial introductions via phone and WhatsApp.'
     },
     {
       step: '4',
-      titleTa: 'சுபமுகூர்த்த நன்னாட்கள்',
-      titleEn: 'Auspicious Union',
-      desc: 'இரு குடும்பங்களின் விருப்பத்துடன் மனநிறைவான இனிய திருமண பந்தம் உருவாகிறது.'
+      title: 'Auspicious Marriage Union',
+      desc: 'Mutual family consultations and horoscope matching lead to a blessed, happy matrimonial journey.'
     }
   ];
 
@@ -139,7 +126,7 @@ export function HomePage() {
             overflow: 'hidden'
           }}
         >
-          {/* Subtle Traditional Arch Accent */}
+          {/* Subtle Radial Gradient */}
           <div
             style={{
               position: 'absolute',
@@ -187,9 +174,9 @@ export function HomePage() {
                   style={{
                     fontFamily: 'var(--font-heading)',
                     color: 'var(--gold-800)',
-                    fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)',
+                    fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
                     fontWeight: 700,
-                    letterSpacing: '1px',
+                    letterSpacing: '0.5px',
                     marginBottom: '1.25rem'
                   }}
                 >
@@ -197,10 +184,9 @@ export function HomePage() {
                 </div>
 
                 <div
-                  className="font-tamil-serif"
                   style={{
-                    fontSize: '1.35rem',
-                    fontWeight: 700,
+                    fontSize: '1.15rem',
+                    fontWeight: 600,
                     color: 'var(--maroon-700)',
                     marginBottom: '1rem',
                     display: 'flex',
@@ -212,7 +198,7 @@ export function HomePage() {
                 </div>
 
                 <p style={{ color: 'var(--ink)', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '540px' }}>
-                  உங்கள் குடும்பத்தின் எதிர்பார்ப்புகளுக்கு ஏற்ற நல்வரன்களை அடையாளம் காணவும், பாரம்பரிய முறைப்படி சுபகாரியங்களை இனிதே தொடங்கவும் ராணி திருமண சேவை மையத்தில் உங்கள் மணமக்கள் சுயவிவரத்தை உடனே பதிவு செய்யுங்கள்.
+                  Find compatible matches tailored to your family's expectations, values, and traditions. Register your matrimonial profile today with Chennai's trusted matrimonial service center.
                 </p>
 
                 {/* Hero CTAs */}
@@ -226,8 +212,8 @@ export function HomePage() {
                   >
                     <HeartHandshake size={22} />
                     <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                      <div>மணமக்கள் பதிவு செய்க</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.9 }}>Register Profile Online</span>
+                      <div style={{ fontWeight: 700 }}>Register Profile</div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.9 }}>Quick 7-Step Online Form</span>
                     </div>
                   </Link>
 
@@ -240,8 +226,8 @@ export function HomePage() {
                   >
                     <Phone size={20} color="var(--maroon-800)" />
                     <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                      <div>நேரடி தொடர்புக்கு</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--muted)' }}>Call Us Directly</span>
+                      <div style={{ fontWeight: 700 }}>Call Helpline</div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--muted)' }}>Direct Service Center</span>
                     </div>
                   </a>
                 </div>
@@ -250,15 +236,15 @@ export function HomePage() {
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)', fontSize: '0.85rem', color: 'var(--maroon-900)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="var(--success)" />
-                    <span>நம்பகமான சரிபார்ப்பு</span>
+                    <span>Verified Profiles</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="var(--success)" />
-                    <span>நேரடி சேவை மையம்</span>
+                    <span>Direct Center Guidance</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="var(--success)" />
-                    <span>முழுமையான ரகசியத்தன்மை</span>
+                    <span>100% Confidentiality</span>
                   </div>
                 </div>
               </div>
@@ -296,25 +282,25 @@ export function HomePage() {
                   <GoldDivider />
 
                   <div style={{ background: 'var(--cream)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', marginBottom: '1.5rem', textAlign: 'left', fontSize: '0.9rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--maroon-900)', fontWeight: 700, marginBottom: '0.35rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--maroon-900)', fontWeight: 700, marginBottom: '0.5rem' }}>
                       <CalendarCheck size={16} />
-                      <span>மணமக்கள் பதிவு நடைமுறை:</span>
+                      <span>Registration Overview:</span>
                     </div>
-                    <ul style={{ paddingLeft: '1.25rem', color: 'var(--ink)', lineHeight: 1.6, fontSize: '0.85rem' }}>
-                      <li>அடிப்படை & குடும்ப விவரங்கள்</li>
-                      <li>நட்சத்திரம், ராசி, லக்கினம் விவரம்</li>
-                      <li>கல்வி, தொழில் & வருமானம்</li>
-                      <li>புகைப்படம் & உங்கள் எதிர்பார்ப்புகள்</li>
+                    <ul style={{ paddingLeft: '1.25rem', color: 'var(--ink)', lineHeight: 1.6, fontSize: '0.85rem', margin: 0 }}>
+                      <li>Candidate & Family Details</li>
+                      <li>Birth Star, Zodiac & Horoscope</li>
+                      <li>Education, Career & Income</li>
+                      <li>Photo Upload & Partner Expectations</li>
                     </ul>
                   </div>
 
                   <Link
                     to="/register"
                     className="btn btn-primary"
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', justifyContent: 'center' }}
                   >
                     <HeartHandshake size={18} />
-                    <span>பதிவை தொடங்கவும் (Start Registration)</span>
+                    <span>Start Online Registration</span>
                   </Link>
                 </div>
               </div>
@@ -328,9 +314,8 @@ export function HomePage() {
         <section id="services" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
-              titleTa="எங்களின் சிறப்பான சேவைகள்"
-              titleEn="Our Matrimonial Services"
-              subtitle="ராணி திருமண சேவை மையம் மூலம் நீங்கள் பெறும் விரிவான நன்மைகள் மற்றும் வழிகாட்டுதல்கள்."
+              title="Our Matrimonial Services"
+              subtitle="Personalized assistance, verified profiles, and traditional matching for all communities."
             />
 
             <div
@@ -369,13 +354,10 @@ export function HomePage() {
                       <Icon size={26} />
                     </div>
 
-                    <h3 className="font-tamil-serif" style={{ fontSize: '1.15rem', color: 'var(--maroon-950)', marginBottom: '0.3rem' }}>
-                      {svc.titleTa}
+                    <h3 style={{ fontSize: '1.15rem', color: 'var(--maroon-950)', marginBottom: '0.5rem', fontWeight: 700 }}>
+                      {svc.title}
                     </h3>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gold-800)', marginBottom: '0.75rem' }}>
-                      {svc.titleEn}
-                    </div>
-                    <p style={{ color: 'var(--ink)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                    <p style={{ color: 'var(--ink)', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
                       {svc.desc}
                     </p>
                   </div>
@@ -391,9 +373,8 @@ export function HomePage() {
         <section id="about" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
           <div className="container">
             <SectionHeader
-              titleTa="ஏன் ராணி திருமண சேவை மையம்?"
-              titleEn="Why Choose Rani Matrimony?"
-              subtitle="நம்பகத்தன்மையும், குடும்ப பாரம்பரியமும் நிறைந்த எங்களின் தனித்துவமான அணுகுமுறை."
+              title="Why Choose Rani Matrimony?"
+              subtitle="A trusted blend of traditional family values, personal attention, and transparent matchmaking."
             />
 
             <div
@@ -420,20 +401,17 @@ export function HomePage() {
                       fontFamily: 'var(--font-heading)',
                       fontWeight: 800,
                       color: 'var(--gold-500)',
-                      opacity: 0.6,
+                      opacity: 0.7,
                       lineHeight: 1,
                       marginBottom: '0.75rem'
                     }}
                   >
                     {item.number}
                   </div>
-                  <h3 className="font-tamil-serif" style={{ fontSize: '1.1rem', color: 'var(--maroon-950)', marginBottom: '0.25rem' }}>
-                    {item.titleTa}
+                  <h3 style={{ fontSize: '1.1rem', color: 'var(--maroon-950)', marginBottom: '0.5rem', fontWeight: 700 }}>
+                    {item.title}
                   </h3>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--gold-800)', marginBottom: '0.65rem' }}>
-                    {item.titleEn}
-                  </div>
-                  <p style={{ color: 'var(--ink)', fontSize: '0.875rem', lineHeight: 1.6 }}>
+                  <p style={{ color: 'var(--ink)', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
                     {item.desc}
                   </p>
                 </div>
@@ -451,10 +429,10 @@ export function HomePage() {
             >
               <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
                 <span className="pill-title">
-                  <span>❖</span> எளிய 4-படி நடைமுறை (Simple Process) <span>❖</span>
+                  <span>❖</span> Simple 4-Step Process <span>❖</span>
                 </span>
-                <h3 className="font-tamil-serif" style={{ fontSize: '1.4rem', color: 'var(--maroon-950)', marginTop: '0.5rem' }}>
-                  வரன் தேடும் எளிய வழிமுறைகள்
+                <h3 style={{ fontSize: '1.4rem', color: 'var(--maroon-950)', marginTop: '0.5rem', fontWeight: 800 }}>
+                  How It Works
                 </h3>
               </div>
 
@@ -486,13 +464,10 @@ export function HomePage() {
                     >
                       {p.step}
                     </div>
-                    <div className="font-tamil-sans" style={{ fontWeight: 700, color: 'var(--maroon-950)', fontSize: '1rem', marginBottom: '0.2rem' }}>
-                      {p.titleTa}
+                    <div style={{ fontWeight: 700, color: 'var(--maroon-950)', fontSize: '1rem', marginBottom: '0.35rem' }}>
+                      {p.title}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--gold-800)', fontWeight: 600, marginBottom: '0.5rem' }}>
-                      {p.titleEn}
-                    </div>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--muted)', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>
                       {p.desc}
                     </p>
                   </div>
@@ -502,7 +477,7 @@ export function HomePage() {
               <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
                 <Link to="/register" className="btn btn-primary btn-lg">
                   <HeartHandshake size={20} />
-                  <span>மணமக்கள் விவரங்களை பதிவு செய்க (Register Now)</span>
+                  <span>Register Profile Now</span>
                 </Link>
               </div>
             </div>
@@ -515,9 +490,8 @@ export function HomePage() {
         <section style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
-              titleTa="திருமண வாழ்த்துக்கள் & மகிழ்ச்சியான தம்பதியர்"
-              titleEn="Happy Couples & Matrimonial Success Stories"
-              subtitle="ராணி திருமண சேவை மையம் மூலம் நல்வரன் அமைந்த குடும்பங்களின் மனமார்ந்த அனுபவங்கள்."
+              title="Happy Couples & Success Stories"
+              subtitle="Heartwarming experiences of families who found their blessed match through our service."
             />
 
             <div
@@ -553,7 +527,7 @@ export function HomePage() {
 
                   <div style={{ borderTop: '1px solid var(--line)', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <div className="font-tamil-serif" style={{ fontWeight: 700, color: 'var(--maroon-900)', fontSize: '1rem' }}>
+                      <div style={{ fontWeight: 700, color: 'var(--maroon-900)', fontSize: '1rem' }}>
                         {story.couple}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
@@ -576,9 +550,8 @@ export function HomePage() {
         <section style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
           <div className="container-narrow">
             <SectionHeader
-              titleTa="அடிக்கடி கேட்கப்படும் கேள்விகள்"
-              titleEn="Frequently Asked Questions (FAQs)"
-              subtitle="மணமக்கள் பதிவு மற்றும் சேவை நடைமுறைகள் குறித்த தெளிவான விளக்கங்கள்."
+              title="Frequently Asked Questions (FAQs)"
+              subtitle="Clear information regarding profile registration, verification, and match assistance."
             />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -611,11 +584,8 @@ export function HomePage() {
                       }}
                     >
                       <div>
-                        <div className="font-tamil-sans" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--maroon-950)' }}>
-                          {faq.qTa}
-                        </div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--muted)', marginTop: '2px' }}>
-                          {faq.qEn}
+                        <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--maroon-950)' }}>
+                          {faq.q}
                         </div>
                       </div>
                       <span style={{ color: 'var(--maroon-800)', flexShrink: 0 }}>
@@ -625,7 +595,7 @@ export function HomePage() {
 
                     {isOpen && (
                       <div style={{ padding: '0 1.5rem 1.25rem', color: 'var(--ink)', fontSize: '0.92rem', lineHeight: 1.6, borderTop: '1px solid var(--line)', paddingTop: '0.85rem' }}>
-                        {faq.aTa}
+                        {faq.a}
                       </div>
                     )}
                   </div>
@@ -641,9 +611,8 @@ export function HomePage() {
         <section id="contact" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
-              titleTa="எங்களை தொடர்பு கொள்ள"
-              titleEn="Contact Our Service Center"
-              subtitle="சென்னை நெற்குன்றத்தில் அமைந்துள்ள எங்கள் சேவை மையத்திற்கு நேரிலோ அல்லது தொலைபேசியிலோ தொடர்பு கொள்ளலாம்."
+              title="Contact Our Service Center"
+              subtitle="Visit our service center in Nerkundram, Chennai, or reach out to our team directly."
             />
 
             <div
@@ -670,10 +639,10 @@ export function HomePage() {
                       <Phone size={20} color="var(--maroon-800)" />
                     </div>
                     <div>
-                      <h4 className="font-tamil-serif" style={{ fontSize: '1.1rem', margin: 0 }}>
-                        தொலைபேசி எண்கள்
+                      <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
+                        Phone Numbers
                       </h4>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Phone Numbers</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Direct Service Center Lines</div>
                     </div>
                   </div>
 
@@ -697,10 +666,10 @@ export function HomePage() {
                       <MapPin size={20} color="var(--maroon-800)" />
                     </div>
                     <div>
-                      <h4 className="font-tamil-serif" style={{ fontSize: '1.1rem', margin: 0 }}>
-                        முகவரி & நேரம்
+                      <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
+                        Office Address & Timings
                       </h4>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Address & Office Timings</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Chennai Service Center</div>
                     </div>
                   </div>
 
@@ -735,7 +704,7 @@ export function HomePage() {
         }}
       >
         <a
-          href={`https://wa.me/91${BRAND.whatsapp}?text=${encodeURIComponent('வணக்கம், ராணி திருமண சேவை மையம் பற்றி அறிய விரும்புகிறேன்.')}`}
+          href={`https://wa.me/91${BRAND.whatsapp}?text=${encodeURIComponent('Hello, I would like to inquire about matrimonial profile registration at Rani Thirumana Sevai Maiyam.')}`}
           target="_blank"
           rel="noopener noreferrer"
           style={{

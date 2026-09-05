@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { LogoMark } from '../components/common/LogoMark';
 import { FormField } from '../components/common/FormField';
 import { ErrorBanner } from '../components/common/ErrorBanner';
-import { OrnateCorner, GoldDivider } from '../components/common/DecorativeElements';
 import { BRAND } from '../utils/constants';
 import { isFirebaseConfigured } from '../services/firebase';
 import { Lock, Mail, Eye, EyeOff, ShieldCheck, Loader2, ArrowLeft, KeyRound } from 'lucide-react';
@@ -31,7 +30,7 @@ export function AdminLoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('மின்னஞ்சல் மற்றும் கடவுச்சொல்லை உள்ளிடவும் (Please enter email & password).');
+      setError('Please enter both email and password.');
       return;
     }
 
@@ -44,7 +43,7 @@ export function AdminLoginPage() {
       navigate(origin, { replace: true });
     } catch (err) {
       console.error('Login failed:', err);
-      setError(err.message || 'உள்நுழைவதில் பிழை ஏற்பட்டது. தகவல்களை சரிபார்க்கவும்.');
+      setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +58,7 @@ export function AdminLoginPage() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: 'var(--ivory)',
+        backgroundColor: 'var(--saas-bg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -68,42 +67,38 @@ export function AdminLoginPage() {
         position: 'relative'
       }}
     >
-      {/* Back to Site Link */}
-      <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem' }}>
+      {/* Back to Public Site Link */}
+      <div style={{ position: 'absolute', top: '1.25rem', left: '1.25rem' }}>
         <Link
           to="/"
           className="btn btn-secondary btn-sm"
           style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
         >
-          <ArrowLeft size={16} />
-          <span>தளத்திற்கு திரும்பு (Back to Website)</span>
+          <ArrowLeft size={14} />
+          <span>Back to Website</span>
         </Link>
       </div>
 
       <div
-        className="card-ornate"
+        className="card-clean"
         style={{
           width: '100%',
-          maxWidth: '460px',
+          maxWidth: '440px',
           padding: '2.5rem 2rem',
-          backgroundColor: 'var(--paper)',
-          border: '2px solid var(--gold-500)',
-          boxShadow: 'var(--shadow-hover)',
-          position: 'relative'
+          backgroundColor: '#ffffff',
+          border: '1px solid var(--border)',
+          boxShadow: 'var(--shadow-card)',
+          borderRadius: 'var(--radius-md)'
         }}
       >
-        <OrnateCorner position="top-left" />
-        <OrnateCorner position="top-right" />
-
         {/* Card Header */}
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <LogoMark size={64} className="mx-auto" />
-          <h1 className="font-tamil-serif" style={{ fontSize: '1.4rem', color: 'var(--maroon-950)', marginTop: '0.75rem', marginBottom: '0.2rem' }}>
+          <LogoMark size={56} className="mx-auto" />
+          <h1 className="font-tamil-brand" style={{ fontSize: '1.3rem', color: 'var(--maroon-950)', marginTop: '0.75rem', marginBottom: '0.2rem' }}>
             {BRAND.tamilName}
           </h1>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', background: 'var(--maroon-900)', color: 'var(--gold-100)', padding: '0.2rem 0.75rem', borderRadius: 'var(--radius-pill)', fontSize: '0.75rem', fontWeight: 700, marginTop: '0.35rem' }}>
-            <ShieldCheck size={13} />
-            <span>நிர்வாக உள்நுழைவு (Admin Login)</span>
+          <div style={{ fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 500 }}>
+            Admin Portal Sign In
           </div>
         </div>
 
@@ -114,7 +109,7 @@ export function AdminLoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label" htmlFor="admin-email">
-              <span className="form-label-tamil">நிர்வாக மின்னஞ்சல் (Admin Email)</span>
+              <span>Admin Email</span>
             </label>
             <div style={{ position: 'relative' }}>
               <input
@@ -128,13 +123,13 @@ export function AdminLoginPage() {
                 className="form-input"
                 style={{ paddingLeft: '2.5rem' }}
               />
-              <Mail size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--maroon-700)' }} />
+              <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
             </div>
           </div>
 
           <div className="form-group" style={{ marginBottom: '1.75rem' }}>
             <label className="form-label" htmlFor="admin-password">
-              <span className="form-label-tamil">கடவுச்சொல் (Password)</span>
+              <span>Password</span>
             </label>
             <div style={{ position: 'relative' }}>
               <input
@@ -148,7 +143,7 @@ export function AdminLoginPage() {
                 className="form-input"
                 style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
               />
-              <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--maroon-700)' }} />
+              <Lock size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -161,11 +156,13 @@ export function AdminLoginPage() {
                   border: 'none',
                   color: 'var(--muted)',
                   cursor: 'pointer',
-                  padding: '4px'
+                  padding: '4px',
+                  display: 'flex',
+                  alignItems: 'center'
                 }}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
@@ -174,36 +171,36 @@ export function AdminLoginPage() {
             type="submit"
             disabled={isLoading}
             className="btn btn-primary"
-            style={{ width: '100%', padding: '0.85rem' }}
+            style={{ width: '100%', padding: '0.8rem' }}
           >
             {isLoading ? (
               <>
-                <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
-                <span>உள்நுழைகிறது... (Authenticating...)</span>
+                <Loader2 size={16} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />
+                <span>Authenticating...</span>
               </>
             ) : (
               <>
-                <KeyRound size={18} />
-                <span>உள்நுழைக (Sign In to Admin)</span>
+                <KeyRound size={16} />
+                <span>Sign In to Dashboard</span>
               </>
             )}
           </button>
         </form>
 
-        {/* Demo Mode / Helper Box */}
+        {/* Demo Mode Notice */}
         {!isFirebaseConfigured && (
           <div
             style={{
-              marginTop: '1.75rem',
-              padding: '1rem',
-              backgroundColor: 'var(--cream)',
+              marginTop: '1.5rem',
+              padding: '0.85rem 1rem',
+              backgroundColor: 'var(--surface-alt)',
               borderRadius: 'var(--radius-sm)',
               border: '1px solid var(--border)',
-              fontSize: '0.8rem'
+              fontSize: '0.775rem'
             }}
           >
-            <div style={{ fontWeight: 700, color: 'var(--maroon-900)', marginBottom: '0.35rem' }}>
-              💡 டெமோ பயன்முறை (Local Demo Credentials):
+            <div style={{ fontWeight: 700, color: 'var(--maroon-900)', marginBottom: '0.25rem' }}>
+              💡 Local Demo Credentials:
             </div>
             <div style={{ color: 'var(--ink)' }}>
               Email: <code>admin@ranimatrimony.com</code>
@@ -216,15 +213,13 @@ export function AdminLoginPage() {
               className="btn btn-secondary btn-sm"
               style={{ marginTop: '0.5rem', width: '100%', fontSize: '0.75rem', padding: '0.3rem' }}
             >
-              தானாக நிரப்புக (Auto-fill Demo Credentials)
+              Auto-fill Demo Credentials
             </button>
           </div>
         )}
 
-        <GoldDivider />
-
-        <div style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--muted)' }}>
-          பாதுகாப்பான Firebase நிர்வாக அங்கீகாரம்
+        <div style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--muted)', marginTop: '1.5rem' }}>
+          Secure Firebase Authentication System
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-export function LoadingSpinner({ text = 'ஏற்றுகிறது... (Loading...)', size = 32, fullPage = false }) {
+export function LoadingSpinner({ text = 'Loading...', size = 32, fullPage = false }) {
   const content = (
     <div
       style={{

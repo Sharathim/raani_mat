@@ -3,33 +3,36 @@ import { Link } from 'react-router-dom';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar } from 'lucide-react';
+import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, ExternalLink } from 'lucide-react';
 
 export function RegistrationCard({
   registration,
   onStatusChange,
-  onDeleteClick
+  onDeleteClick,
+  onClick
 }) {
   return (
     <div
-      className="card-ornate"
+      className="card-clean"
+      onClick={onClick}
       style={{
-        padding: '1.25rem',
-        marginBottom: '1rem',
-        backgroundColor: 'var(--paper)',
+        padding: '1rem',
+        backgroundColor: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.85rem'
+        gap: '0.75rem',
+        border: '1px solid var(--border)',
+        cursor: 'pointer'
       }}
     >
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
         {/* Photo Thumbnail */}
         <div
           style={{
-            width: '64px',
-            height: '76px',
+            width: '56px',
+            height: '68px',
             borderRadius: 'var(--radius-sm)',
-            border: '2px solid var(--gold-500)',
+            border: '1.5px solid var(--border)',
             overflow: 'hidden',
             flexShrink: 0,
             backgroundColor: 'var(--cream)'
@@ -43,31 +46,30 @@ export function RegistrationCard({
             />
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
-              <User size={24} />
+              <User size={20} />
             </div>
           )}
         </div>
 
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <Link
-              to={`/admin/registrations/${registration.id}`}
-              className="font-tamil-serif"
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.4rem', flexWrap: 'wrap' }}>
+            <h4
               style={{
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 fontWeight: 700,
-                color: 'var(--maroon-900)',
-                textDecoration: 'none'
+                color: 'var(--ink)',
+                margin: 0,
+                lineHeight: 1.2
               }}
             >
-              {registration.name}
-            </Link>
+              {registration.name || 'Unnamed Candidate'}
+            </h4>
             <StatusBadge status={registration.status} />
           </div>
 
-          <div style={{ fontSize: '0.85rem', color: 'var(--maroon-800)', fontWeight: 600, marginTop: '2px' }}>
-            {registration.age} Yrs • {registration.gender === 'Female' ? 'Bride (பெண்)' : 'Groom (ஆண்)'} • {registration.maritalStatus}
+          <div style={{ fontSize: '0.8rem', color: 'var(--maroon-800)', fontWeight: 600, marginTop: '2px' }}>
+            {registration.age ? `${registration.age} Yrs` : ''} • {registration.gender === 'Female' ? 'Bride' : 'Groom'} • {registration.maritalStatus || 'Unmarried'}
           </div>
 
           <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '2px' }}>
@@ -77,36 +79,37 @@ export function RegistrationCard({
       </div>
 
       {/* Meta Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.8rem', background: 'var(--cream)', padding: '0.65rem', borderRadius: 'var(--radius-xs)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <MapPin size={13} color="var(--maroon-700)" />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.775rem', background: 'var(--surface-alt)', padding: '0.5rem 0.65rem', borderRadius: 'var(--radius-xs)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <MapPin size={12} color="var(--maroon-700)" />
           <span>{registration.location || '—'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <Phone size={13} color="var(--maroon-700)" />
-          <a href={`tel:${registration.phone}`} style={{ color: 'var(--ink)', textDecoration: 'none' }}>
-            {registration.phone || '—'}
-          </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Phone size={12} color="var(--maroon-700)" />
+          <span>{registration.phone || '—'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', gridColumn: '1 / -1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <Briefcase size={13} color="var(--maroon-700)" />
-          <span>{registration.education} — {registration.occupation}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', gridColumn: '1 / -1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Briefcase size={12} color="var(--maroon-700)" />
+          <span>{registration.occupation} • {registration.education}</span>
         </div>
       </div>
 
       {/* Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid var(--line)' }}>
-        <div style={{ fontSize: '0.75rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-          <Calendar size={12} />
+      <div
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-subtle)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div style={{ fontSize: '0.7rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+          <Calendar size={11} />
           <span>{formatDate(registration.createdAt)}</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
           <select
             value={registration.status || REGISTRATION_STATUS.NEW}
-            onChange={(e) => onStatusChange(registration.id, e.target.value)}
+            onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
             style={{
-              padding: '0.25rem 0.5rem',
+              padding: '0.2rem 0.4rem',
               fontSize: '0.75rem',
               borderRadius: 'var(--radius-xs)',
               border: '1px solid var(--border)',
@@ -120,21 +123,21 @@ export function RegistrationCard({
           </select>
 
           <Link
-            to={`/admin/registrations/${registration.id}`}
+            to={`/admin/registrations/${registration.id || registration.registrationId}`}
             className="btn btn-secondary btn-sm"
-            style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
+            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
           >
-            <Eye size={13} /> View
+            <ExternalLink size={12} />
           </Link>
 
           <button
             type="button"
             onClick={() => onDeleteClick(registration)}
             className="btn btn-danger btn-sm"
-            style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+            style={{ padding: '0.2rem 0.45rem', fontSize: '0.75rem' }}
             title="Delete profile"
           >
-            <Trash2 size={13} />
+            <Trash2 size={12} />
           </button>
         </div>
       </div>

@@ -12,102 +12,103 @@ export function FilterBar({
   sortBy,
   onSortChange
 }) {
+  const statusTabs = [
+    { value: 'all', label: 'All Status' },
+    { value: REGISTRATION_STATUS.NEW, label: 'New' },
+    { value: REGISTRATION_STATUS.CONTACTED, label: 'Contacted' },
+    { value: REGISTRATION_STATUS.SHORTLISTED, label: 'Shortlisted' },
+    { value: REGISTRATION_STATUS.CLOSED, label: 'Closed' }
+  ];
+
   return (
     <div
       style={{
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
+        justifyContent: 'space-between',
         gap: '0.75rem',
-        padding: '0.85rem 1rem',
-        backgroundColor: 'var(--cream)',
+        padding: '0.75rem 1rem',
+        backgroundColor: '#ffffff',
         border: '1px solid var(--border)',
         borderRadius: 'var(--radius-sm)',
-        marginBottom: '1.25rem'
+        marginBottom: '1rem'
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--maroon-900)', fontWeight: 600, fontSize: '0.85rem' }}>
-        <Filter size={15} />
-        <span>வடிகட்டி (Filter):</span>
+      {/* Left: Status Filter Pills */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+        {statusTabs.map((tab) => (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => onStatusChange(tab.value)}
+            className={`filter-tab ${statusFilter === tab.value ? 'active' : ''}`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* Status Filter */}
-      <select
-        value={statusFilter}
-        onChange={(e) => onStatusChange(e.target.value)}
-        style={{
-          padding: '0.4rem 0.75rem',
-          borderRadius: 'var(--radius-xs)',
-          border: '1px solid var(--line)',
-          backgroundColor: '#ffffff',
-          fontSize: '0.85rem',
-          color: 'var(--ink)'
-        }}
-      >
-        <option value="all">அனைத்து நிலைகளும் (All Status)</option>
-        <option value={REGISTRATION_STATUS.NEW}>புதியது (New)</option>
-        <option value={REGISTRATION_STATUS.CONTACTED}>தொடர்பு கொள்ளப்பட்டது (Contacted)</option>
-        <option value={REGISTRATION_STATUS.SHORTLISTED}>பரிசீலனையில் (Shortlisted)</option>
-        <option value={REGISTRATION_STATUS.CLOSED}>நிறைவுற்றது (Closed)</option>
-      </select>
-
-      {/* Gender Filter */}
-      <select
-        value={genderFilter}
-        onChange={(e) => onGenderChange(e.target.value)}
-        style={{
-          padding: '0.4rem 0.75rem',
-          borderRadius: 'var(--radius-xs)',
-          border: '1px solid var(--line)',
-          backgroundColor: '#ffffff',
-          fontSize: '0.85rem',
-          color: 'var(--ink)'
-        }}
-      >
-        <option value="all">அனைத்து பாலினம் (All Genders)</option>
-        <option value="Female">பெண் வரன் (Bride)</option>
-        <option value="Male">ஆண் வரன் (Groom)</option>
-      </select>
-
-      {/* Photo Filter */}
-      <select
-        value={photoFilter}
-        onChange={(e) => onPhotoChange(e.target.value)}
-        style={{
-          padding: '0.4rem 0.75rem',
-          borderRadius: 'var(--radius-xs)',
-          border: '1px solid var(--line)',
-          backgroundColor: '#ffffff',
-          fontSize: '0.85rem',
-          color: 'var(--ink)'
-        }}
-      >
-        <option value="all">புகைப்படம்: அனைத்தும் (All)</option>
-        <option value="withPhoto">புகைப்படம் உள்ளவை (With Photo)</option>
-        <option value="noPhoto">புகைப்படம் இல்லாதவை (Without Photo)</option>
-      </select>
-
-      {/* Sort By Dropdown */}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-        <ArrowUpDown size={15} color="var(--maroon-700)" />
+      {/* Right: Gender, Photo & Sort Controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+        {/* Gender Filter */}
         <select
-          value={sortBy}
-          onChange={(e) => onSortChange(e.target.value)}
+          value={genderFilter}
+          onChange={(e) => onGenderChange(e.target.value)}
           style={{
-            padding: '0.4rem 0.75rem',
+            padding: '0.35rem 0.65rem',
             borderRadius: 'var(--radius-xs)',
-            border: '1px solid var(--line)',
+            border: '1px solid var(--border)',
             backgroundColor: '#ffffff',
-            fontSize: '0.85rem',
-            fontWeight: 500,
-            color: 'var(--maroon-950)'
+            fontSize: '0.8rem',
+            color: 'var(--ink)'
           }}
         >
-          <option value="newest">புதிய பதிவு முதலில் (Newest First)</option>
-          <option value="oldest">பழைய பதிவு முதலில் (Oldest First)</option>
-          <option value="nameAsc">பெயர் A–Z (Name A–Z)</option>
-          <option value="nameDesc">பெயர் Z–A (Name Z–A)</option>
+          <option value="all">All Genders</option>
+          <option value="Female">Bride (Female)</option>
+          <option value="Male">Groom (Male)</option>
         </select>
+
+        {/* Photo Filter */}
+        <select
+          value={photoFilter}
+          onChange={(e) => onPhotoChange(e.target.value)}
+          style={{
+            padding: '0.35rem 0.65rem',
+            borderRadius: 'var(--radius-xs)',
+            border: '1px solid var(--border)',
+            backgroundColor: '#ffffff',
+            fontSize: '0.8rem',
+            color: 'var(--ink)'
+          }}
+        >
+          <option value="all">All Profiles</option>
+          <option value="withPhoto">With Photo</option>
+          <option value="noPhoto">No Photo</option>
+        </select>
+
+        {/* Sort By */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <ArrowUpDown size={14} color="var(--muted)" />
+          <select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value)}
+            style={{
+              padding: '0.35rem 0.65rem',
+              borderRadius: 'var(--radius-xs)',
+              border: '1px solid var(--border)',
+              backgroundColor: '#ffffff',
+              fontSize: '0.8rem',
+              fontWeight: 500,
+              color: 'var(--ink)'
+            }}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="nameAsc">Name A–Z</option>
+            <option value="nameDesc">Name Z–A</option>
+          </select>
+        </div>
       </div>
     </div>
   );

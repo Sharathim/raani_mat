@@ -2,14 +2,13 @@ import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
 export function SelectField({
-  labelTa,
-  labelEn,
+  label,
   name,
   value,
   onChange,
   onBlur,
   options = [],
-  placeholder = '-- தேர்ந்தெடுக்கவும் (Select) --',
+  placeholder = '-- Select an option --',
   required = false,
   error,
   hint,
@@ -18,10 +17,9 @@ export function SelectField({
   return (
     <div className="form-group">
       <label htmlFor={name} className="form-label">
-        <span className="form-label-tamil">
-          {labelTa} {required && <span style={{ color: 'var(--danger)' }}>*</span>}
+        <span>
+          {label} {required && <span style={{ color: 'var(--danger)' }}>*</span>}
         </span>
-        {labelEn && <span className="form-label-en">({labelEn})</span>}
       </label>
 
       <select
@@ -47,7 +45,7 @@ export function SelectField({
           }
           return (
             <option key={`${opt.value}-${idx}`} value={opt.value}>
-              {opt.labelTa || opt.label || opt.value} {opt.labelEn ? `(${opt.labelEn})` : ''}
+              {opt.label || opt.labelEn || opt.value}
             </option>
           );
         })}
@@ -61,7 +59,7 @@ export function SelectField({
 
       {error && (
         <span id={`${name}-error`} className="form-error" role="alert">
-          <AlertCircle size={14} />
+          <AlertCircle size={13} />
           {error}
         </span>
       )}

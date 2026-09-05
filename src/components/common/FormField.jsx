@@ -2,8 +2,7 @@ import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
 export function FormField({
-  labelTa,
-  labelEn,
+  label,
   name,
   type = 'text',
   value,
@@ -22,10 +21,9 @@ export function FormField({
   return (
     <div className="form-group">
       <label htmlFor={name} className="form-label">
-        <span className="form-label-tamil">
-          {labelTa} {required && <span style={{ color: 'var(--danger)' }}>*</span>}
+        <span>
+          {label} {required && <span style={{ color: 'var(--danger)' }}>*</span>}
         </span>
-        {labelEn && <span className="form-label-en">({labelEn})</span>}
       </label>
 
       <input
@@ -55,7 +53,7 @@ export function FormField({
 
       {error && (
         <span id={`${name}-error`} className="form-error" role="alert">
-          <AlertCircle size={14} />
+          <AlertCircle size={13} />
           {error}
         </span>
       )}

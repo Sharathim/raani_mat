@@ -2,16 +2,15 @@ import React from 'react';
 import { FolderSearch } from 'lucide-react';
 
 export function EmptyState({
-  titleTa = 'பதிவுகள் எதுவும் கிடைக்கவில்லை',
-  titleEn = 'No registrations found',
-  description = 'வடிகட்டிகளை மாற்றி மீண்டும் முயற்சிக்கவும் (Try changing your search or filter criteria).',
+  titleEn = 'No candidate profiles found',
+  description = 'Try adjusting your search criteria or filter selections.',
   action
 }) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--cream)',
-        border: '1.5px dashed var(--border)',
+        backgroundColor: '#ffffff',
+        border: '1px dashed var(--border)',
         borderRadius: 'var(--radius-md)',
         padding: '3rem 1.5rem',
         textAlign: 'center',
@@ -20,10 +19,10 @@ export function EmptyState({
     >
       <div
         style={{
-          width: '56px',
-          height: '56px',
+          width: '50px',
+          height: '50px',
           borderRadius: '50%',
-          backgroundColor: 'var(--paper)',
+          backgroundColor: 'var(--surface-alt)',
           color: 'var(--maroon-700)',
           display: 'flex',
           alignItems: 'center',
@@ -32,13 +31,12 @@ export function EmptyState({
           border: '1px solid var(--border)'
         }}
       >
-        <FolderSearch size={28} />
+        <FolderSearch size={24} />
       </div>
-      <h3 className="font-tamil-serif" style={{ color: 'var(--maroon-900)', fontSize: '1.2rem', marginBottom: '0.25rem' }}>
-        {titleTa}
+      <h3 style={{ color: 'var(--ink)', fontSize: '1.15rem', marginBottom: '0.35rem' }}>
+        {titleEn}
       </h3>
-      <div style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{titleEn}</div>
-      <p style={{ color: 'var(--ink-light)', fontSize: '0.9rem', maxWidth: '420px', margin: '0 auto 1.25rem' }}>
+      <p style={{ color: 'var(--muted)', fontSize: '0.875rem', maxWidth: '420px', margin: '0 auto 1.25rem' }}>
         {description}
       </p>
       {action && <div>{action}</div>}
