@@ -1,6 +1,6 @@
 git init
 git add .
-git commit -m "first commit"
+git commit -m "feat: hosting success"
 git branch -M main
 git remote add origin https://github.com/Sharathim/raani_mat.git
 git push -u origin main
