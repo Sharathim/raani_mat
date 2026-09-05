@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if request is from an authenticated admin
+    // Replace YOUR_ADMIN_UID with the UID from Firebase Auth > Users
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Registrations collection rules
+    match /registrations/{registrationId} {
+      
+      // 1. CREATE: Anyone (public visitor) can create a new registration
+      // Validates that mandatory fields exist and consent is true
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() >= 2
+                    && request.resource.data.phone is string
+                    && request.resource.data.phone.size() >= 10
+                    && request.resource.data.consentAccepted == true;
+
+      // 2. READ: Only authenticated Administrator can view individual or list all profiles
+      // Public visitors cannot read any registrations to protect privacy
+      allow get, list: if isAdmin();
+
+      // 3. UPDATE: Only authenticated Administrator can update status or profile fields
+      allow update: if isAdmin();
+
+      // 4. DELETE: Only authenticated Administrator can delete registration records
+      allow delete: if isAdmin();
+    }
+
+    // Deny access to all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

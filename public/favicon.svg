@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#5a0715" stroke="#c7962f" stroke-width="3" />
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#e3bd63" stroke-width="1" stroke-dasharray="3,2" />
+  <!-- Traditional Kalasam / Sacred Wedding Pot & Bloom Symbol in Gold -->
+  <path d="M50 18 L55 27 L65 29 L57 36 L60 46 L50 40 L40 46 L43 36 L35 29 L45 27 Z" fill="#e3bd63" />
+  <path d="M36 48 C36 48 34 68 50 68 C66 68 64 48 64 48 Z" fill="#c7962f" stroke="#f7e7bb" stroke-width="1.5" />
+  <ellipse cx="50" cy="48" rx="14" ry="4" fill="#7e5510" />
+  <path d="M42 68 L38 80 L62 80 L58 68 Z" fill="#9a6b16" stroke="#f7e7bb" stroke-width="1" />
+  <circle cx="50" cy="58" r="4" fill="#f7e7bb" />
+</svg>
