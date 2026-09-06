@@ -18,6 +18,31 @@ export function BrandHeader() {
     { name: 'Contact', path: '/#contact' }
   ];
 
+  const handleNavClick = (e, path) => {
+    setMobileMenuOpen(false);
+
+    if (path === '/') {
+      if (location.pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.history.pushState(null, '', '/');
+      }
+      return;
+    }
+
+    if (path.startsWith('/#')) {
+      const targetId = path.replace('/#', '');
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.history.pushState(null, '', `/#${targetId}`);
+        }
+      }
+    }
+  };
+
   const isActive = (path) => {
     if (path.startsWith('/#')) return false;
     return location.pathname === path;
@@ -85,7 +110,7 @@ export function BrandHeader() {
       <div className="container main-nav-container" style={{ padding: '0.65rem 1.25rem' }}>
         <div className="main-nav-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Brand Logo & Tamil Title */}
-          <Link to="/" className="brand-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+          <Link to="/" onClick={(e) => handleNavClick(e, '/')} className="brand-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
             <LogoMark size={46} />
             <div>
               <div
@@ -119,6 +144,7 @@ export function BrandHeader() {
               <Link
                 key={link.path}
                 to={link.path}
+                onClick={(e) => handleNavClick(e, link.path)}
                 style={{
                   color: isActive(link.path) ? 'var(--maroon-700)' : 'var(--ink)',
                   fontWeight: isActive(link.path) ? 700 : 500,
@@ -176,7 +202,7 @@ export function BrandHeader() {
               <Link
                 key={link.path}
                 to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => handleNavClick(e, link.path)}
                 style={{
                   padding: '0.4rem 0',
                   color: 'var(--ink)',

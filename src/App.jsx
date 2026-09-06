@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 
@@ -12,10 +12,31 @@ import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { AdminRegistrationDetailPage } from './pages/AdminRegistrationDetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+function ScrollToHashElement() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '');
+      const element = document.getElementById(targetId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 120);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location]);
+
+  return null;
+}
+
 export function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToHashElement />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />

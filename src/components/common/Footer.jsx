@@ -1,10 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { LogoMark } from './LogoMark';
 import { BRAND } from '../../utils/constants';
 import { Phone, Mail, MapPin, Clock, ShieldCheck, Heart } from 'lucide-react';
 
 export function Footer() {
+  const location = useLocation();
+
+  const handleNavClick = (e, path) => {
+    if (path === '/') {
+      if (location.pathname === '/') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.history.pushState(null, '', '/');
+      }
+      return;
+    }
+
+    if (path.startsWith('/#')) {
+      const targetId = path.replace('/#', '');
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.history.pushState(null, '', `/#${targetId}`);
+        }
+      }
+    }
+  };
   return (
     <footer
       style={{
@@ -53,7 +77,7 @@ export function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>
-                <Link to="/" style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
+                <Link to="/" onClick={(e) => handleNavClick(e, '/')} style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
                   › Home Page
                 </Link>
               </li>
@@ -63,12 +87,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/#services" style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
+                <Link to="/#services" onClick={(e) => handleNavClick(e, '/#services')} style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
                   › Matrimonial Services
                 </Link>
               </li>
               <li>
-                <Link to="/#about" style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
+                <Link to="/#about" onClick={(e) => handleNavClick(e, '/#about')} style={{ color: 'var(--gold-100)', fontSize: '0.875rem' }}>
                   › About Our Service Center
                 </Link>
               </li>
@@ -93,7 +117,7 @@ export function Footer() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Phone size={16} color="var(--gold-300)" style={{ flexShrink: 0 }} />
                 <a href={`tel:${BRAND.phones[0]}`} style={{ color: 'var(--gold-100)', textDecoration: 'none' }}>
-                  {BRAND.displayPhones} / {BRAND.landline}
+                  {BRAND.displayPhones}
                 </a>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BrandHeader } from '../components/common/BrandHeader';
 import { Footer } from '../components/common/Footer';
-import { LogoMark } from '../components/common/LogoMark';
-import { GoldDivider, SectionHeader, OrnateCorner } from '../components/common/DecorativeElements';
+import { SectionHeader } from '../components/common/DecorativeElements';
 import { BRAND, SUCCESS_STORIES, FAQS } from '../utils/constants';
+import heroBg from '../assets/hero-bg.jpg';
 import {
   HeartHandshake,
   Phone,
@@ -18,7 +18,6 @@ import {
   Clock,
   Heart,
   Award,
-  CalendarCheck,
   CheckCircle2,
   MessageCircle,
   ChevronDown,
@@ -57,7 +56,7 @@ export function HomePage() {
       desc: 'Candidate photos and contact details are handled with strict privacy and shared only with verified prospects.'
     },
     {
-      icon: HeartHandshake,
+      icon: Heart,
       title: 'Personalized Match Assistance',
       desc: 'One-on-one consultation and direct guidance from our experienced team at our Nerkundram service center.'
     }
@@ -121,28 +120,43 @@ export function HomePage() {
           className="home-section hero-section"
           style={{
             position: 'relative',
-            backgroundColor: 'var(--paper)',
             borderBottom: '2px solid var(--border)',
-            padding: '4rem 1.25rem',
-            overflow: 'hidden'
+            padding: '5rem 1.25rem',
+            overflow: 'hidden',
+            backgroundColor: '#fffdf8'
           }}
         >
-          {/* Subtle Radial Gradient */}
+          {/* Background Artwork Layer - 100% Full Visibility */}
           <div
             style={{
               position: 'absolute',
-              top: '-150px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '850px',
-              height: '400px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(227, 189, 99, 0.18) 0%, rgba(255, 250, 240, 0) 70%)',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `url(${heroBg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              zIndex: 1
+            }}
+          />
+
+          {/* Subtle Directional Warm Vignette (Enhances Gold/White Text Readability & Preserves Background Art) */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(to right, rgba(18, 4, 8, 0.65) 0%, rgba(18, 4, 8, 0.40) 38%, rgba(18, 4, 8, 0.10) 65%, transparent 85%)',
+              zIndex: 2,
               pointerEvents: 'none'
             }}
           />
 
-          <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="container" style={{ position: 'relative', zIndex: 3 }}>
             <div
               className="hero-grid"
               style={{
@@ -155,18 +169,36 @@ export function HomePage() {
               {/* Hero Left Column: Brand & CTAs */}
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                  <span className="pill-title-gold">
-                    <span>❖</span> {BRAND.tagline} <span>❖</span>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      background: 'rgba(25, 6, 10, 0.85)',
+                      color: '#ffd269',
+                      border: '1px solid rgba(227, 189, 99, 0.65)',
+                      borderRadius: 'var(--radius-pill)',
+                      padding: '0.35rem 0.95rem',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      letterSpacing: '0.5px',
+                      backdropFilter: 'blur(8px)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.35)'
+                    }}
+                  >
+                    <span style={{ color: '#ffd700' }}>❖</span> {BRAND.tagline} <span style={{ color: '#ffd700' }}>❖</span>
                   </span>
                 </div>
 
                 <h1
                   className="font-tamil-serif"
                   style={{
-                    color: 'var(--maroon-950)',
+                    color: '#ffffff',
                     fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
                     lineHeight: 1.2,
-                    marginBottom: '0.5rem'
+                    marginBottom: '0.5rem',
+                    fontWeight: 800,
+                    textShadow: '0 2px 14px rgba(0, 0, 0, 0.9), 0 4px 28px rgba(0, 0, 0, 0.75)'
                   }}
                 >
                   {BRAND.tamilName}
@@ -175,11 +207,12 @@ export function HomePage() {
                 <div
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    color: 'var(--gold-800)',
+                    color: '#ffd56b',
                     fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
-                    fontWeight: 700,
+                    fontWeight: 800,
                     letterSpacing: '0.5px',
-                    marginBottom: '1.25rem'
+                    marginBottom: '1.25rem',
+                    textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
                   }}
                 >
                   {BRAND.englishName}
@@ -189,17 +222,28 @@ export function HomePage() {
                   style={{
                     fontSize: '1.15rem',
                     fontWeight: 600,
-                    color: 'var(--maroon-700)',
+                    color: '#fff1c5',
                     marginBottom: '1rem',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.5rem'
+                    gap: '0.5rem',
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.85)'
                   }}
                 >
                   <span>{BRAND.subTagline}</span>
                 </div>
 
-                <p style={{ color: 'var(--ink)', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '540px' }}>
+                <p
+                  style={{
+                    color: '#f8f8fa',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.7,
+                    marginBottom: '2rem',
+                    maxWidth: '540px',
+                    fontWeight: 500,
+                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.95)'
+                  }}
+                >
                   Find compatible matches tailored to your family's expectations, values, and traditions. Register your matrimonial profile today with Chennai's trusted matrimonial service center.
                 </p>
 
@@ -209,13 +253,16 @@ export function HomePage() {
                     to="/register"
                     className="btn btn-primary btn-lg"
                     style={{
-                      boxShadow: 'var(--shadow-hover)'
+                      background: 'linear-gradient(135deg, #8a0c20 0%, #5a0715 100%)',
+                      color: '#ffffff',
+                      border: '1.5px solid #e3bd63',
+                      boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
                     }}
                   >
-                    <HeartHandshake size={22} />
+                    <HeartHandshake size={22} color="#ffe082" />
                     <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
                       <div style={{ fontWeight: 700 }}>Register Profile</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.9 }}>Quick 7-Step Online Form</span>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.95, color: '#fceed1' }}>Quick 7-Step Online Form</span>
                     </div>
                   </Link>
 
@@ -223,87 +270,47 @@ export function HomePage() {
                     href={`tel:${BRAND.phones[0]}`}
                     className="btn btn-secondary btn-lg"
                     style={{
-                      border: '1.5px solid var(--maroon-800)'
+                      backgroundColor: '#ffffff',
+                      color: '#5a0715',
+                      border: '1.5px solid #e3bd63',
+                      boxShadow: '0 6px 20px rgba(0,0,0,0.35)'
                     }}
                   >
-                    <Phone size={20} color="var(--maroon-800)" />
+                    <Phone size={20} color="#5a0715" />
                     <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                      <div style={{ fontWeight: 700 }}>Call Helpline</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--muted)' }}>Direct Service Center</span>
+                      <div style={{ fontWeight: 700, color: '#5a0715' }}>Call Helpline</div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#5a0715', opacity: 0.85 }}>Direct Service Center</span>
                     </div>
                   </a>
                 </div>
 
                 {/* Quick Trust Badges */}
-                <div className="hero-trust-list" style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)', fontSize: '0.85rem', color: 'var(--maroon-900)' }}>
+                <div
+                  className="hero-trust-list"
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '1.5rem',
+                    marginTop: '2.5rem',
+                    paddingTop: '1.5rem',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.25)',
+                    fontSize: '0.85rem',
+                    color: '#ffffff',
+                    textShadow: '0 2px 6px rgba(0,0,0,0.9)'
+                  }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="var(--success)" />
+                    <CheckCircle2 size={16} color="#4ade80" />
                     <span>Verified Profiles</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="var(--success)" />
+                    <CheckCircle2 size={16} color="#4ade80" />
                     <span>Direct Center Guidance</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="var(--success)" />
+                    <CheckCircle2 size={16} color="#4ade80" />
                     <span>100% Confidentiality</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Hero Right Column: Traditional Card Motif Frame */}
-              <div className="hero-card-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div
-                  className="card-ornate"
-                  style={{
-                    width: '100%',
-                    maxWidth: '440px',
-                    padding: '2.5rem 2rem',
-                    textAlign: 'center',
-                    background: 'linear-gradient(135deg, #fffdf8 0%, #fdf5e6 100%)',
-                    border: '2px solid var(--gold-500)',
-                    boxShadow: 'var(--shadow-hover)'
-                  }}
-                >
-                  <OrnateCorner position="top-left" />
-                  <OrnateCorner position="top-right" />
-                  <OrnateCorner position="bottom-left" />
-                  <OrnateCorner position="bottom-right" />
-
-                  <LogoMark size={90} className="mx-auto" />
-
-                  <div style={{ marginTop: '1.25rem' }}>
-                    <div className="font-tamil-serif" style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--maroon-950)' }}>
-                      {BRAND.tamilName}
-                    </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--gold-800)', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>
-                      CHENNAI
-                    </div>
-                  </div>
-
-                  <GoldDivider />
-
-                  <div style={{ background: 'var(--cream)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', marginBottom: '1.5rem', textAlign: 'left', fontSize: '0.9rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--maroon-900)', fontWeight: 700, marginBottom: '0.5rem' }}>
-                      <CalendarCheck size={16} />
-                      <span>Registration Overview:</span>
-                    </div>
-                    <ul style={{ paddingLeft: '1.25rem', color: 'var(--ink)', lineHeight: 1.6, fontSize: '0.85rem', margin: 0 }}>
-                      <li>Candidate & Family Details</li>
-                      <li>Birth Star, Zodiac & Horoscope</li>
-                      <li>Education, Career & Income</li>
-                      <li>Photo Upload & Partner Expectations</li>
-                    </ul>
-                  </div>
-
-                  <Link
-                    to="/register"
-                    className="btn btn-primary"
-                    style={{ width: '100%', justifyContent: 'center' }}
-                  >
-                    <HeartHandshake size={18} />
-                    <span>Start Online Registration</span>
-                  </Link>
                 </div>
               </div>
             </div>
@@ -313,59 +320,65 @@ export function HomePage() {
         {/* =========================================================================
             SERVICES / HIGHLIGHTS SECTION
             ========================================================================= */}
-        <section id="services" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        <section id="services" className="home-section services-section">
           <div className="container">
-            <SectionHeader
-              title="Our Matrimonial Services"
-              subtitle="Personalized assistance, verified profiles, and traditional matching for all communities."
-            />
+            {/* Desktop Section Header */}
+            <div className="services-header-desktop">
+              <SectionHeader
+                title="Our Matrimonial Services"
+                subtitle="Personalized assistance, verified profiles, and traditional matching for all communities."
+              />
+            </div>
 
-            <div
-              className="services-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.75rem'
-              }}
-            >
+            {/* Mobile Section Header */}
+            <div className="services-header-mobile">
+              <div className="services-mobile-overline">
+                <span className="overline-line" />
+                <span className="overline-text">OUR SERVICES</span>
+                <span className="overline-line" />
+              </div>
+              <h2 className="services-mobile-title">Everything You Need for a Better Tomorrow</h2>
+              <p className="services-mobile-subtitle">Trusted support at every step of your matrimonial journey.</p>
+            </div>
+
+            <div className="services-grid">
               {serviceFeatures.map((svc, idx) => {
                 const Icon = svc.icon;
                 return (
-                  <div
-                    key={idx}
-                    className="card-ornate"
-                    style={{
-                      padding: '1.75rem 1.5rem',
-                      backgroundColor: 'var(--paper)',
-                      transition: 'all var(--transition-normal)'
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '52px',
-                        height: '52px',
-                        borderRadius: 'var(--radius-sm)',
-                        backgroundColor: 'var(--cream)',
-                        border: '1.5px solid var(--border)',
-                        color: 'var(--maroon-800)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '1.25rem'
-                      }}
-                    >
-                      <Icon size={26} />
+                  <div key={idx} className="card-ornate service-card">
+                    <div className="service-icon-box">
+                      <Icon className="service-icon" />
                     </div>
 
-                    <h3 style={{ fontSize: '1.15rem', color: 'var(--maroon-950)', marginBottom: '0.5rem', fontWeight: 700 }}>
-                      {svc.title}
-                    </h3>
-                    <p style={{ color: 'var(--ink)', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
-                      {svc.desc}
-                    </p>
+                    <div className="service-card-body">
+                      <h3 className="service-card-title">
+                        {svc.title}
+                      </h3>
+                      <p className="service-card-desc">
+                        {svc.desc}
+                      </p>
+                    </div>
+
+                    <Link to="/register" className="service-card-arrow" aria-label={`Register for ${svc.title}`}>
+                      <ArrowRight size={15} strokeWidth={2.2} />
+                    </Link>
                   </div>
                 );
               })}
+            </div>
+
+            {/* Mobile Bottom CTA */}
+            <div className="services-mobile-bottom">
+              <Link to="/register" className="services-mobile-cta">
+                <Heart size={18} fill="currentColor" strokeWidth={1.5} />
+                <span>Register Your Profile</span>
+                <ArrowRight size={18} strokeWidth={2} />
+              </Link>
+              <div className="services-mobile-footer-tag">
+                <span className="footer-line" />
+                <span>BEGIN YOUR JOURNEY TODAY</span>
+                <span className="footer-line" />
+              </div>
             </div>
           </div>
         </section>
@@ -492,7 +505,7 @@ export function HomePage() {
         {/* =========================================================================
             HAPPY COUPLES & SUCCESS STORIES SECTION
             ========================================================================= */}
-        <section className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        <section id="stories" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
               title="Happy Couples & Success Stories"
@@ -614,81 +627,145 @@ export function HomePage() {
         {/* =========================================================================
             CONTACT SECTION
             ========================================================================= */}
-        <section id="contact" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        {/* =========================================================================
+            CONTACT SECTION
+            ========================================================================= */}
+        <section id="contact" className="home-section contact-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
               title="Contact Our Service Center"
               subtitle="Visit our service center in Nerkundram, Chennai, or reach out to our team directly."
             />
 
-            <div
-              className="card-ornate"
-              style={{
-                backgroundColor: 'var(--paper)',
-                padding: '2.5rem 2rem',
-                maxWidth: '900px',
-                margin: '0 auto',
-                border: '2px solid var(--border)'
-              }}
-            >
+            {/* Desktop View: Ornate Card with 2 Columns */}
+            <div className="contact-desktop-wrapper">
               <div
-                className="contact-grid"
+                className="card-ornate"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                  gap: '2rem'
+                  backgroundColor: 'var(--paper)',
+                  padding: '2.5rem 2rem',
+                  maxWidth: '900px',
+                  margin: '0 auto',
+                  border: '2px solid var(--border)'
                 }}
               >
-                {/* Contact Card 1: Phones */}
-                <div style={{ background: 'var(--cream)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--maroon-900)' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: 'var(--paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
-                      <Phone size={20} color="var(--maroon-800)" />
+                <div
+                  className="contact-grid"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                    gap: '2rem'
+                  }}
+                >
+                  {/* Contact Card 1: Phones */}
+                  <div style={{ background: 'var(--cream)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--maroon-900)' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: 'var(--paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                        <Phone size={20} color="var(--maroon-800)" />
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
+                          Phone Numbers
+                        </h4>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Direct Service Center Lines</div>
+                      </div>
                     </div>
-                    <div>
-                      <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
-                        Phone Numbers
-                      </h4>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Direct Service Center Lines</div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '1rem' }}>
+                      <a href="tel:9092177888" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>📞</span> +91 9092177888
+                      </a>
+                      <a href="tel:9003192733" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>📞</span> +91 9003192733
+                      </a>
+                      <a href="tel:04446621102" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>☎</span> 044 4662 1102 (Landline)
+                      </a>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.95rem' }}>
-                    <a href={`tel:${BRAND.phones[0]}`} style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none' }}>
-                      📞 +91 {BRAND.phones[0]}
-                    </a>
-                    <a href={`tel:${BRAND.phones[1]}`} style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none' }}>
-                      📞 +91 {BRAND.phones[1]}
-                    </a>
-                    <a href={`tel:${BRAND.phones[2]}`} style={{ color: 'var(--maroon-800)', fontWeight: 600, textDecoration: 'none' }}>
-                      ☎ {BRAND.landline} (Landline)
-                    </a>
+                  {/* Contact Card 2: Email & Address */}
+                  <div style={{ background: 'var(--cream)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--maroon-900)' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: 'var(--paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
+                        <MapPin size={20} color="var(--maroon-800)" />
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
+                          Office Address & Timings
+                        </h4>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Chennai Service Center</div>
+                      </div>
+                    </div>
+
+                    <p style={{ color: 'var(--ink)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                      {BRAND.address}
+                    </p>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--maroon-800)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <span>🕒</span> {BRAND.hours}
+                    </div>
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <a href={`mailto:${BRAND.email}`} style={{ color: 'var(--maroon-700)', fontSize: '0.85rem', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <span>✉</span> {BRAND.email}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile View: 2 Standalone White Cards */}
+            <div className="contact-mobile-wrapper">
+              {/* Card 1: Phone Number */}
+              <div className="contact-mobile-card">
+                <div className="contact-mobile-header">
+                  <div className="contact-mobile-icon-circle">
+                    <Phone size={24} strokeWidth={1.8} />
+                  </div>
+                  <div>
+                    <h4 className="contact-mobile-title">Phone Number</h4>
+                    <div className="contact-mobile-subtitle">Direct Service Center Helpline</div>
                   </div>
                 </div>
 
-                {/* Contact Card 2: Email & Address */}
-                <div style={{ background: 'var(--cream)', padding: '1.5rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--maroon-900)' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: 'var(--paper)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
-                      <MapPin size={20} color="var(--maroon-800)" />
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: '1.1rem', margin: 0, fontWeight: 700 }}>
-                        Office Address & Timings
-                      </h4>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Chennai Service Center</div>
-                    </div>
+                <div className="contact-mobile-divider" />
+
+                <a href={`tel:${BRAND.phones[0]}`} className="contact-mobile-phone-val">
+                  {BRAND.displayPhones}
+                </a>
+              </div>
+
+              {/* Card 2: Office Address & Timings */}
+              <div className="contact-mobile-card" style={{ marginTop: '1rem' }}>
+                <div className="contact-mobile-header">
+                  <div className="contact-mobile-icon-circle">
+                    <MapPin size={24} strokeWidth={1.8} />
+                  </div>
+                  <div>
+                    <h4 className="contact-mobile-title">Office Address & Timings</h4>
+                    <div className="contact-mobile-subtitle">Chennai Service Center</div>
+                  </div>
+                </div>
+
+                <div className="contact-mobile-inset">
+                  <div className="contact-mobile-inset-item">
+                    <MapPin size={18} className="contact-mobile-inset-icon" />
+                    <span>{BRAND.address}</span>
                   </div>
 
-                  <p style={{ color: 'var(--ink)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                    {BRAND.address}
-                  </p>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--maroon-800)', fontWeight: 600 }}>
-                    🕒 {BRAND.hours}
+                  <div className="contact-mobile-inset-divider" />
+
+                  <div className="contact-mobile-inset-item">
+                    <Clock size={18} className="contact-mobile-inset-icon" />
+                    <span>{BRAND.hours}</span>
                   </div>
-                  <div style={{ marginTop: '0.5rem' }}>
-                    <a href={`mailto:${BRAND.email}`} style={{ color: 'var(--maroon-700)', fontSize: '0.85rem', textDecoration: 'none' }}>
-                      ✉ {BRAND.email}
+
+                  <div className="contact-mobile-inset-divider" />
+
+                  <div className="contact-mobile-inset-item">
+                    <Mail size={18} className="contact-mobile-inset-icon" />
+                    <a href={`mailto:${BRAND.email}`} className="contact-mobile-email-link">
+                      {BRAND.email}
                     </a>
                   </div>
                 </div>
