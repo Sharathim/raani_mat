@@ -121,13 +121,13 @@ export function HomePage() {
           style={{
             position: 'relative',
             borderBottom: '2px solid var(--border)',
-            padding: '5rem 1.25rem',
             overflow: 'hidden',
             backgroundColor: '#fffdf8'
           }}
         >
-          {/* Background Artwork Layer - 100% Full Visibility */}
+          {/* Background Artwork Layer */}
           <div
+            className="hero-bg-layer"
             style={{
               position: 'absolute',
               top: 0,
@@ -142,176 +142,251 @@ export function HomePage() {
             }}
           />
 
-          {/* Subtle Directional Warm Vignette (Enhances Gold/White Text Readability & Preserves Background Art) */}
+          {/* Vignette Layer */}
           <div
+            className="hero-vignette-layer"
             style={{
               position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'linear-gradient(to right, rgba(18, 4, 8, 0.65) 0%, rgba(18, 4, 8, 0.40) 38%, rgba(18, 4, 8, 0.10) 65%, transparent 85%)',
               zIndex: 2,
               pointerEvents: 'none'
             }}
           />
 
           <div className="container" style={{ position: 'relative', zIndex: 3 }}>
-            <div
-              className="hero-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '3rem',
-                alignItems: 'center'
-              }}
-            >
-              {/* Hero Left Column: Brand & CTAs */}
-              <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                  <span
+            {/* Desktop Hero Content */}
+            <div className="hero-desktop-content">
+              <div
+                className="hero-grid"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                  gap: '3rem',
+                  alignItems: 'center'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        background: 'rgba(25, 6, 10, 0.85)',
+                        color: '#ffd269',
+                        border: '1px solid rgba(227, 189, 99, 0.65)',
+                        borderRadius: 'var(--radius-pill)',
+                        padding: '0.35rem 0.95rem',
+                        fontSize: '0.8rem',
+                        fontWeight: 600,
+                        letterSpacing: '0.5px',
+                        backdropFilter: 'blur(8px)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.35)'
+                      }}
+                    >
+                      <span style={{ color: '#ffd700' }}>❖</span> {BRAND.tagline} <span style={{ color: '#ffd700' }}>❖</span>
+                    </span>
+                  </div>
+
+                  <h1
+                    className="font-tamil-serif"
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      background: 'rgba(25, 6, 10, 0.85)',
-                      color: '#ffd269',
-                      border: '1px solid rgba(227, 189, 99, 0.65)',
-                      borderRadius: 'var(--radius-pill)',
-                      padding: '0.35rem 0.95rem',
-                      fontSize: '0.8rem',
-                      fontWeight: 600,
-                      letterSpacing: '0.5px',
-                      backdropFilter: 'blur(8px)',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.35)'
-                    }}
-                  >
-                    <span style={{ color: '#ffd700' }}>❖</span> {BRAND.tagline} <span style={{ color: '#ffd700' }}>❖</span>
-                  </span>
-                </div>
-
-                <h1
-                  className="font-tamil-serif"
-                  style={{
-                    color: '#ffffff',
-                    fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
-                    lineHeight: 1.2,
-                    marginBottom: '0.5rem',
-                    fontWeight: 800,
-                    textShadow: '0 2px 14px rgba(0, 0, 0, 0.9), 0 4px 28px rgba(0, 0, 0, 0.75)'
-                  }}
-                >
-                  {BRAND.tamilName}
-                </h1>
-
-                <div
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    color: '#ffd56b',
-                    fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
-                    fontWeight: 800,
-                    letterSpacing: '0.5px',
-                    marginBottom: '1.25rem',
-                    textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
-                  }}
-                >
-                  {BRAND.englishName}
-                </div>
-
-                <div
-                  style={{
-                    fontSize: '1.15rem',
-                    fontWeight: 600,
-                    color: '#fff1c5',
-                    marginBottom: '1rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.85)'
-                  }}
-                >
-                  <span>{BRAND.subTagline}</span>
-                </div>
-
-                <p
-                  style={{
-                    color: '#f8f8fa',
-                    fontSize: '1.05rem',
-                    lineHeight: 1.7,
-                    marginBottom: '2rem',
-                    maxWidth: '540px',
-                    fontWeight: 500,
-                    textShadow: '0 2px 8px rgba(0, 0, 0, 0.95)'
-                  }}
-                >
-                  Find compatible matches tailored to your family's expectations, values, and traditions. Register your matrimonial profile today with Chennai's trusted matrimonial service center.
-                </p>
-
-                {/* Hero CTAs */}
-                <div className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
-                  <Link
-                    to="/register"
-                    className="btn btn-primary btn-lg"
-                    style={{
-                      background: 'linear-gradient(135deg, #8a0c20 0%, #5a0715 100%)',
                       color: '#ffffff',
-                      border: '1.5px solid #e3bd63',
-                      boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
+                      fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
+                      lineHeight: 1.2,
+                      marginBottom: '0.5rem',
+                      fontWeight: 800,
+                      textShadow: '0 2px 14px rgba(0, 0, 0, 0.9), 0 4px 28px rgba(0, 0, 0, 0.75)'
                     }}
                   >
-                    <HeartHandshake size={22} color="#ffe082" />
-                    <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                      <div style={{ fontWeight: 700 }}>Register Profile</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.95, color: '#fceed1' }}>Quick 7-Step Online Form</span>
-                    </div>
-                  </Link>
+                    {BRAND.tamilName}
+                  </h1>
 
-                  <a
-                    href={`tel:${BRAND.phones[0]}`}
-                    className="btn btn-secondary btn-lg"
+                  <div
                     style={{
-                      backgroundColor: '#ffffff',
-                      color: '#5a0715',
-                      border: '1.5px solid #e3bd63',
-                      boxShadow: '0 6px 20px rgba(0,0,0,0.35)'
+                      fontFamily: 'var(--font-heading)',
+                      color: '#ffd56b',
+                      fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
+                      fontWeight: 800,
+                      letterSpacing: '0.5px',
+                      marginBottom: '1.25rem',
+                      textShadow: '0 2px 10px rgba(0, 0, 0, 0.9)'
                     }}
                   >
-                    <Phone size={20} color="#5a0715" />
-                    <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                      <div style={{ fontWeight: 700, color: '#5a0715' }}>Call Helpline</div>
-                      <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#5a0715', opacity: 0.85 }}>Direct Service Center</span>
-                    </div>
-                  </a>
-                </div>
+                    {BRAND.englishName}
+                  </div>
 
-                {/* Quick Trust Badges */}
-                <div
-                  className="hero-trust-list"
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '1.5rem',
-                    marginTop: '2.5rem',
-                    paddingTop: '1.5rem',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.25)',
-                    fontSize: '0.85rem',
-                    color: '#ffffff',
-                    textShadow: '0 2px 6px rgba(0,0,0,0.9)'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="#4ade80" />
-                    <span>Verified Profiles</span>
+                  <div
+                    style={{
+                      fontSize: '1.15rem',
+                      fontWeight: 600,
+                      color: '#fff1c5',
+                      marginBottom: '1rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      textShadow: '0 2px 8px rgba(0, 0, 0, 0.85)'
+                    }}
+                  >
+                    <span>{BRAND.subTagline}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="#4ade80" />
-                    <span>Direct Center Guidance</span>
+
+                  <p
+                    style={{
+                      color: '#f8f8fa',
+                      fontSize: '1.05rem',
+                      lineHeight: 1.7,
+                      marginBottom: '2rem',
+                      maxWidth: '540px',
+                      fontWeight: 500,
+                      textShadow: '0 2px 8px rgba(0, 0, 0, 0.95)'
+                    }}
+                  >
+                    Find compatible matches tailored to your family's expectations, values, and traditions. Register your matrimonial profile today with Chennai's trusted matrimonial service center.
+                  </p>
+
+                  {/* Desktop Hero CTAs */}
+                  <div className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+                    <Link
+                      to="/register"
+                      className="btn btn-primary btn-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #8a0c20 0%, #5a0715 100%)',
+                        color: '#ffffff',
+                        border: '1.5px solid #e3bd63',
+                        boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
+                      }}
+                    >
+                      <HeartHandshake size={22} color="#ffe082" />
+                      <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
+                        <div style={{ fontWeight: 700 }}>Register Profile</div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 400, opacity: 0.95, color: '#fceed1' }}>Quick 7-Step Online Form</span>
+                      </div>
+                    </Link>
+
+                    <a
+                      href={`tel:${BRAND.phones[0]}`}
+                      className="btn btn-secondary btn-lg"
+                      style={{
+                        backgroundColor: '#ffffff',
+                        color: '#5a0715',
+                        border: '1.5px solid #e3bd63',
+                        boxShadow: '0 6px 20px rgba(0,0,0,0.35)'
+                      }}
+                    >
+                      <Phone size={20} color="#5a0715" />
+                      <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
+                        <div style={{ fontWeight: 700, color: '#5a0715' }}>Call Helpline</div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#5a0715', opacity: 0.85 }}>Direct Service Center</span>
+                      </div>
+                    </a>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
-                    <CheckCircle2 size={16} color="#4ade80" />
-                    <span>100% Confidentiality</span>
+
+                  {/* Quick Trust Badges */}
+                  <div
+                    className="hero-trust-list"
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '1.5rem',
+                      marginTop: '2.5rem',
+                      paddingTop: '1.5rem',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.25)',
+                      fontSize: '0.85rem',
+                      color: '#ffffff',
+                      textShadow: '0 2px 6px rgba(0,0,0,0.9)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
+                      <CheckCircle2 size={16} color="#4ade80" />
+                      <span>Verified Profiles</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
+                      <CheckCircle2 size={16} color="#4ade80" />
+                      <span>Direct Center Guidance</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
+                      <CheckCircle2 size={16} color="#4ade80" />
+                      <span>100% Confidentiality</span>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Mobile Hero Content */}
+            <div className="hero-mobile-content">
+              {/* Pill Badge */}
+              <div className="hero-mobile-badge-wrap">
+                <span className="hero-mobile-badge">
+                  <span className="badge-star">❖</span>
+                  <span>{BRAND.tagline}</span>
+                  <span className="badge-star">❖</span>
+                </span>
+              </div>
+
+              {/* Tamil Title */}
+              <h1 className="hero-mobile-title font-tamil-serif">
+                {BRAND.tamilName}
+              </h1>
+
+              {/* English Subtitle */}
+              <div className="hero-mobile-subtitle">
+                {BRAND.englishName}
+              </div>
+
+              {/* Decorative Accent Divider Line */}
+              <div className="hero-mobile-line-accent" />
+
+              {/* Sub-tagline */}
+              <div className="hero-mobile-tagline">
+                {BRAND.subTagline}
+              </div>
+
+              {/* Description */}
+              <p className="hero-mobile-desc">
+                Find a meaningful match that fits your family's values and traditions.
+              </p>
+
+              {/* Mobile CTA Cards */}
+              <div className="hero-mobile-actions">
+                {/* Button 1: Register Profile */}
+                <Link to="/register" className="hero-mobile-btn-primary">
+                  <div className="btn-icon-wrap">
+                    <Heart size={22} color="#f4eee3" strokeWidth={1.8} />
+                  </div>
+                  <div className="btn-text-wrap">
+                    <div className="btn-main-text">Register Profile</div>
+                    <div className="btn-sub-text">Quick 7-Step Online Form</div>
+                  </div>
+                  <div className="btn-arrow-wrap">
+                    <ArrowRight size={20} color="#f4eee3" strokeWidth={2.2} />
+                  </div>
+                </Link>
+
+                {/* Button 2: Call Helpline */}
+                <a href={`tel:${BRAND.phones[0]}`} className="hero-mobile-btn-secondary">
+                  <div className="btn-icon-wrap">
+                    <Phone size={20} color="#5a0715" strokeWidth={1.8} />
+                  </div>
+                  <div className="btn-text-wrap">
+                    <div className="btn-main-text">Call Helpline</div>
+                    <div className="btn-sub-text">Direct Service Center</div>
+                  </div>
+                  <div className="btn-arrow-wrap">
+                    <ArrowRight size={20} color="#5a0715" strokeWidth={2.2} />
+                  </div>
+                </a>
+              </div>
+
+              {/* Bottom Carousel / Pagination Dots */}
+              <div className="hero-mobile-dots">
+                <span className="dot active" />
+                <span className="dot" />
+                <span className="dot" />
               </div>
             </div>
           </div>
