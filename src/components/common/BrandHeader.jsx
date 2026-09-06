@@ -25,6 +25,7 @@ export function BrandHeader() {
 
   return (
     <header
+      className="brand-header"
       style={{
         backgroundColor: '#ffffff',
         borderBottom: '1px solid var(--border)',
@@ -36,6 +37,7 @@ export function BrandHeader() {
     >
       {/* Top Announcement Bar */}
       <div
+        className="announcement-bar"
         style={{
           background: 'linear-gradient(90deg, var(--maroon-950) 0%, var(--maroon-900) 50%, var(--maroon-950) 100%)',
           color: 'var(--gold-100)',
@@ -44,7 +46,7 @@ export function BrandHeader() {
           borderBottom: '1px solid rgba(199, 150, 47, 0.3)'
         }}
       >
-        <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+        <div className="container announcement-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span style={{ color: 'var(--gold-300)' }}>❖</span>
             <span style={{ fontWeight: 500 }}>
@@ -80,10 +82,10 @@ export function BrandHeader() {
       </div>
 
       {/* Main Navbar */}
-      <div className="container" style={{ padding: '0.65rem 1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="container main-nav-container" style={{ padding: '0.65rem 1.25rem' }}>
+        <div className="main-nav-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Brand Logo & Tamil Title */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+          <Link to="/" className="brand-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
             <LogoMark size={46} />
             <div>
               <div
@@ -160,6 +162,7 @@ export function BrandHeader() {
         {/* Mobile Dropdown */}
         {mobileMenuOpen && (
           <div
+            className="mobile-nav-panel"
             style={{
               marginTop: '0.75rem',
               paddingTop: '0.75rem',

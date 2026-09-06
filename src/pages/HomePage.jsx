@@ -110,7 +110,7 @@ export function HomePage() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="site-shell home-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <BrandHeader />
 
       <main style={{ flex: 1 }}>
@@ -118,6 +118,7 @@ export function HomePage() {
             HERO SECTION
             ========================================================================= */}
         <section
+          className="home-section hero-section"
           style={{
             position: 'relative',
             backgroundColor: 'var(--paper)',
@@ -143,6 +144,7 @@ export function HomePage() {
 
           <div className="container" style={{ position: 'relative', zIndex: 2 }}>
             <div
+              className="hero-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -202,7 +204,7 @@ export function HomePage() {
                 </p>
 
                 {/* Hero CTAs */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+                <div className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
                   <Link
                     to="/register"
                     className="btn btn-primary btn-lg"
@@ -233,7 +235,7 @@ export function HomePage() {
                 </div>
 
                 {/* Quick Trust Badges */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)', fontSize: '0.85rem', color: 'var(--maroon-900)' }}>
+                <div className="hero-trust-list" style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--line)', fontSize: '0.85rem', color: 'var(--maroon-900)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}>
                     <CheckCircle2 size={16} color="var(--success)" />
                     <span>Verified Profiles</span>
@@ -250,7 +252,7 @@ export function HomePage() {
               </div>
 
               {/* Hero Right Column: Traditional Card Motif Frame */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="hero-card-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
                 <div
                   className="card-ornate"
                   style={{
@@ -311,7 +313,7 @@ export function HomePage() {
         {/* =========================================================================
             SERVICES / HIGHLIGHTS SECTION
             ========================================================================= */}
-        <section id="services" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        <section id="services" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
               title="Our Matrimonial Services"
@@ -319,6 +321,7 @@ export function HomePage() {
             />
 
             <div
+              className="services-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -370,7 +373,7 @@ export function HomePage() {
         {/* =========================================================================
             WHY CHOOSE US & PROCESS SECTION
             ========================================================================= */}
-        <section id="about" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+        <section id="about" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
           <div className="container">
             <SectionHeader
               title="Why Choose Rani Matrimony?"
@@ -378,6 +381,7 @@ export function HomePage() {
             />
 
             <div
+              className="benefits-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -420,7 +424,7 @@ export function HomePage() {
 
             {/* Step-by-Step Registration Process */}
             <div
-              className="card-ornate"
+              className="card-ornate process-card"
               style={{
                 padding: '2.5rem 2rem',
                 backgroundColor: 'var(--paper)',
@@ -437,6 +441,7 @@ export function HomePage() {
               </div>
 
               <div
+                className="process-grid"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -444,7 +449,7 @@ export function HomePage() {
                 }}
               >
                 {processSteps.map((p, idx) => (
-                  <div key={idx} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <div key={idx} className="process-step" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <div
                       style={{
                         width: '46px',
@@ -487,7 +492,7 @@ export function HomePage() {
         {/* =========================================================================
             HAPPY COUPLES & SUCCESS STORIES SECTION
             ========================================================================= */}
-        <section style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        <section className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
               title="Happy Couples & Success Stories"
@@ -495,6 +500,7 @@ export function HomePage() {
             />
 
             <div
+              className="stories-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -547,7 +553,7 @@ export function HomePage() {
         {/* =========================================================================
             FAQS SECTION
             ========================================================================= */}
-        <section style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
+        <section className="home-section faq-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
           <div className="container-narrow">
             <SectionHeader
               title="Frequently Asked Questions (FAQs)"
@@ -608,7 +614,7 @@ export function HomePage() {
         {/* =========================================================================
             CONTACT SECTION
             ========================================================================= */}
-        <section id="contact" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
+        <section id="contact" className="home-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
               title="Contact Our Service Center"
@@ -626,6 +632,7 @@ export function HomePage() {
               }}
             >
               <div
+                className="contact-grid"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
@@ -693,6 +700,7 @@ export function HomePage() {
 
       {/* Floating Quick Helpline Action on Bottom Right */}
       <div
+        className="floating-contact-actions"
         style={{
           position: 'fixed',
           bottom: '24px',

@@ -7,7 +7,7 @@ export function SearchBar({
   placeholder = 'Search by name, phone, location, education, ID...'
 }) {
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
+    <div className="admin-search-bar" style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
       <Search
         size={16}
         style={{

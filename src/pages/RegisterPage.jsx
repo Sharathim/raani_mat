@@ -159,7 +159,7 @@ export function RegisterPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--ivory)' }}>
+    <div className="registration-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--ivory)' }}>
       <BrandHeader />
 
       <main style={{ flex: 1, padding: '2rem 1.25rem 5rem' }}>

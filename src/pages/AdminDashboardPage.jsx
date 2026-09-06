@@ -264,13 +264,14 @@ export function AdminDashboardPage() {
 
   return (
     <ErrorBoundary>
-      <div style={{ minHeight: '100vh', backgroundColor: 'var(--saas-bg)', display: 'flex', flexDirection: 'column' }}>
+      <div className="admin-dashboard" style={{ minHeight: '100vh', backgroundColor: 'var(--saas-bg)', display: 'flex', flexDirection: 'column' }}>
         <AdminHeader onRefresh={() => loadData(true)} isRefreshing={isRefreshing} />
 
-        <main style={{ flex: 1, padding: '1.75rem 1.25rem 3.5rem' }}>
+        <main className="admin-main" style={{ flex: 1, padding: '1.75rem 1.25rem 3.5rem' }}>
           <div className="container">
             {/* Dashboard Title & Actions Bar */}
             <div
+              className="admin-titlebar"
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -289,7 +290,7 @@ export function AdminDashboardPage() {
                 </p>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+              <div className="admin-title-actions" style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   onClick={handleExportCSV}
@@ -309,6 +310,7 @@ export function AdminDashboardPage() {
 
             {/* SaaS Metrics Stats Grid */}
             <div
+              className="admin-stats-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
@@ -358,8 +360,8 @@ export function AdminDashboardPage() {
             <ErrorBanner message={error} onDismiss={() => setError(null)} />
 
             {/* Search & Filter Controls */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div className="admin-filters" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+              <div className="admin-search-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <SearchBar
                   searchTerm={searchTerm}
                   onSearchChange={setSearchTerm}

@@ -20,6 +20,7 @@ export function AdminHeader({ onRefresh, isRefreshing = false }) {
 
   return (
     <header
+      className="admin-header"
       style={{
         backgroundColor: '#ffffff',
         borderBottom: '1px solid var(--border)',
@@ -30,7 +31,7 @@ export function AdminHeader({ onRefresh, isRefreshing = false }) {
         zIndex: 50
       }}
     >
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+      <div className="container admin-header-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
         {/* Left: Brand Identity with Tamil Name */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <Link to="/admin" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
@@ -52,7 +53,7 @@ export function AdminHeader({ onRefresh, isRefreshing = false }) {
         </div>
 
         {/* Right: Modern SaaS Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="admin-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Link
             to="/"
             className="btn btn-secondary btn-sm"

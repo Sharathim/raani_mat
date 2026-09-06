@@ -22,6 +22,7 @@ export function FilterBar({
 
   return (
     <div
+      className="filter-bar"
       style={{
         display: 'flex',
         flexWrap: 'wrap',
@@ -36,7 +37,7 @@ export function FilterBar({
       }}
     >
       {/* Left: Status Filter Pills */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+      <div className="status-filter-tabs" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
         {statusTabs.map((tab) => (
           <button
             key={tab.value}
@@ -50,7 +51,7 @@ export function FilterBar({
       </div>
 
       {/* Right: Gender, Photo & Sort Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <div className="filter-selects" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
         {/* Gender Filter */}
         <select
           value={genderFilter}

@@ -13,7 +13,7 @@ export function RegistrationCard({
 }) {
   return (
     <div
-      className="card-clean"
+      className="card-clean registration-card"
       onClick={onClick}
       style={{
         padding: '1rem',
@@ -79,7 +79,7 @@ export function RegistrationCard({
       </div>
 
       {/* Meta Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.775rem', background: 'var(--surface-alt)', padding: '0.5rem 0.65rem', borderRadius: 'var(--radius-xs)' }}>
+      <div className="registration-card-meta" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.775rem', background: 'var(--surface-alt)', padding: '0.5rem 0.65rem', borderRadius: 'var(--radius-xs)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           <MapPin size={12} color="var(--maroon-700)" />
           <span>{registration.location || '—'}</span>
@@ -96,6 +96,7 @@ export function RegistrationCard({
 
       {/* Actions */}
       <div
+        className="registration-card-actions"
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-subtle)' }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -105,6 +106,17 @@ export function RegistrationCard({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <button
+            type="button"
+            onClick={onClick}
+            className="btn btn-secondary btn-sm registration-preview-btn"
+            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
+            title="Quick Preview"
+          >
+            <Eye size={12} />
+            <span>Preview</span>
+          </button>
+
           <select
             value={registration.status || REGISTRATION_STATUS.NEW}
             onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
