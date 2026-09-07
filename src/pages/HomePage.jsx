@@ -20,6 +20,8 @@ import {
   Award,
   CheckCircle2,
   MessageCircle,
+  Send,
+  UserRound,
   ChevronDown,
   ChevronUp,
   Quote,
@@ -28,6 +30,32 @@ import {
 
 export function HomePage() {
   const [openFaq, setOpenFaq] = useState(0);
+  const [contactForm, setContactForm] = useState({ name: '', phone: '', query: '' });
+  const [contactErrors, setContactErrors] = useState({});
+
+  const handleContactChange = (event) => {
+    const { name, value } = event.target;
+    setContactForm((current) => ({ ...current, [name]: value }));
+    setContactErrors((current) => ({ ...current, [name]: '' }));
+  };
+
+  const handleContactSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = {};
+    const phoneDigits = contactForm.phone.replace(/\D/g, '');
+
+    if (!contactForm.name.trim()) nextErrors.name = 'Please enter your name.';
+    if (phoneDigits.length !== 10) nextErrors.phone = 'Please enter a valid 10-digit phone number.';
+    if (!contactForm.query.trim()) nextErrors.query = 'Please enter your query or message.';
+
+    if (Object.keys(nextErrors).length) {
+      setContactErrors(nextErrors);
+      return;
+    }
+
+    const message = `Hello Rani Matrimony,\n\nName: ${contactForm.name.trim()}\nPhone: ${contactForm.phone.trim()}\n\nQuery:\n${contactForm.query.trim()}\n\nI would like to know more about your matrimonial services.`;
+    window.open(`https://wa.me/91${BRAND.whatsapp}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+  };
 
   const serviceFeatures = [
     {
@@ -641,57 +669,39 @@ export function HomePage() {
         {/* =========================================================================
             FAQS SECTION
             ========================================================================= */}
-        <section className="home-section faq-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
+        <section className="home-section faq-section" style={{ padding: '4.75rem 1.25rem', backgroundColor: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
           <div className="container-narrow">
             <SectionHeader
-              title="Frequently Asked Questions (FAQs)"
-              subtitle="Clear information regarding profile registration, verification, and match assistance."
+              title="Frequently Asked Questions"
+              subtitle="Helpful answers about registration, profile review, match introductions, and visiting our service center."
             />
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="faq-list">
               {FAQS.map((faq, idx) => {
                 const isOpen = openFaq === idx;
                 return (
                   <div
                     key={idx}
-                    className="card-ornate"
-                    style={{
-                      backgroundColor: 'var(--paper)',
-                      borderRadius: 'var(--radius-sm)',
-                      overflow: 'hidden'
-                    }}
+                    className={`faq-card ${isOpen ? 'is-open' : ''}`}
                   >
                     <button
                       type="button"
                       onClick={() => setOpenFaq(isOpen ? -1 : idx)}
-                      style={{
-                        width: '100%',
-                        padding: '1.2rem 1.5rem',
-                        background: 'none',
-                        border: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        gap: '1rem'
-                      }}
+                      className="faq-trigger"
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-answer-${idx}`}
                     >
-                      <div>
-                        <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--maroon-950)' }}>
-                          {faq.q}
-                        </div>
-                      </div>
-                      <span style={{ color: 'var(--maroon-800)', flexShrink: 0 }}>
+                      <span className="faq-question">{faq.q}</span>
+                      <span className="faq-icon" aria-hidden="true">
                         {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                       </span>
                     </button>
 
-                    {isOpen && (
-                      <div style={{ padding: '0 1.5rem 1.25rem', color: 'var(--ink)', fontSize: '0.92rem', lineHeight: 1.6, borderTop: '1px solid var(--line)', paddingTop: '0.85rem' }}>
-                        {faq.a}
+                    <div id={`faq-answer-${idx}`} className="faq-answer" aria-hidden={!isOpen}>
+                      <div className="faq-answer-inner">
+                        <p>{faq.a}</p>
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })}
@@ -708,12 +718,77 @@ export function HomePage() {
         <section id="contact" className="home-section contact-section" style={{ padding: '4.5rem 1.25rem', backgroundColor: 'var(--ivory)' }}>
           <div className="container">
             <SectionHeader
-              title="Contact Our Service Center"
-              subtitle="Visit our service center in Nerkundram, Chennai, or reach out to our team directly."
+              title="Talk to Our Matrimony Team"
+              subtitle="Send an inquiry on WhatsApp, call us, or visit our Nerkundram service center."
             />
 
-            {/* Desktop View: Ornate Card with 2 Columns */}
-            <div className="contact-desktop-wrapper">
+            <div className="contact-experience">
+              <form className="contact-inquiry-form" onSubmit={handleContactSubmit} noValidate>
+                <div className="contact-panel-heading">
+                  <span className="contact-panel-icon"><UserRound size={20} /></span>
+                  <div>
+                    <p className="contact-panel-eyebrow">Quick inquiry</p>
+                    <h3>How can we help?</h3>
+                  </div>
+                </div>
+                <p className="contact-panel-copy">Share your details and your message will open directly in WhatsApp for our team.</p>
+
+                <div className="contact-field">
+                  <label htmlFor="contact-name">Name</label>
+                  <input id="contact-name" className={contactErrors.name ? 'has-error' : ''} name="name" value={contactForm.name} onChange={handleContactChange} autoComplete="name" />
+                  {contactErrors.name && <span className="contact-field-error">{contactErrors.name}</span>}
+                </div>
+                <div className="contact-field">
+                  <label htmlFor="contact-phone">Phone Number</label>
+                  <input id="contact-phone" className={contactErrors.phone ? 'has-error' : ''} name="phone" value={contactForm.phone} onChange={handleContactChange} inputMode="tel" autoComplete="tel" />
+                  {contactErrors.phone && <span className="contact-field-error">{contactErrors.phone}</span>}
+                </div>
+                <div className="contact-field">
+                  <label htmlFor="contact-query">Query / Message</label>
+                  <textarea id="contact-query" className={contactErrors.query ? 'has-error' : ''} name="query" value={contactForm.query} onChange={handleContactChange} rows="5" />
+                  {contactErrors.query && <span className="contact-field-error">{contactErrors.query}</span>}
+                </div>
+                <button type="submit" className="contact-whatsapp-button">
+                  <MessageCircle size={20} />
+                  <span>Send Message on WhatsApp</span>
+                  <Send size={17} />
+                </button>
+              </form>
+
+              <aside className="contact-info-panel" aria-label="Rani Matrimony contact information">
+                <div className="contact-panel-heading">
+                  <span className="contact-panel-icon"><HeartHandshake size={20} /></span>
+                  <div>
+                    <p className="contact-panel-eyebrow">Service center</p>
+                    <h3>Rani Matrimony</h3>
+                  </div>
+                </div>
+                <p className="contact-panel-copy">We are here to support families at every stage of their matrimonial journey.</p>
+
+                <div className="contact-info-list">
+                  <div className="contact-info-item">
+                    <span className="contact-info-icon"><MapPin size={19} /></span>
+                    <div><strong>Office Address</strong><span>{BRAND.address}</span></div>
+                  </div>
+                  <div className="contact-info-item">
+                    <span className="contact-info-icon"><Clock size={19} /></span>
+                    <div><strong>Office Hours</strong><span>{BRAND.hours}</span></div>
+                  </div>
+                  <div className="contact-info-item">
+                    <span className="contact-info-icon"><MessageCircle size={19} /></span>
+                    <div><strong>WhatsApp</strong><a href={`https://wa.me/91${BRAND.whatsapp}`} target="_blank" rel="noopener noreferrer">{BRAND.displayPhones}</a></div>
+                  </div>
+                  <div className="contact-info-item">
+                    <span className="contact-info-icon"><Mail size={19} /></span>
+                    <div><strong>Email</strong><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></div>
+                  </div>
+                </div>
+                <a href={`tel:${BRAND.phones[0]}`} className="contact-call-link"><Phone size={18} /> Call {BRAND.displayPhones}</a>
+              </aside>
+            </div>
+
+            {/* Replaced by the responsive inquiry experience above. */}
+            <div className="legacy-contact-wrapper contact-desktop-wrapper">
               <div
                 className="card-ornate"
                 style={{
@@ -747,14 +822,14 @@ export function HomePage() {
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '1rem' }}>
-                      <a href="tel:9092177888" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <span>📞</span> +91 9092177888
+                      <a href={`tel:${BRAND.phones[0]}`} style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>📞</span> {BRAND.displayPhones}
                       </a>
-                      <a href="tel:9003192733" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <span>📞</span> +91 9003192733
+                      <a href={`tel:${BRAND.phones[0]}`} style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>📞</span> {BRAND.displayPhones}
                       </a>
-                      <a href="tel:04446621102" style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <span>☎</span> 044 4662 1102 (Landline)
+                      <a href={`tel:${BRAND.phones[0]}`} style={{ color: 'var(--maroon-900)', fontWeight: 700, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>☎</span> {BRAND.displayPhones}
                       </a>
                     </div>
                   </div>
@@ -790,7 +865,7 @@ export function HomePage() {
             </div>
 
             {/* Mobile View: 2 Standalone White Cards */}
-            <div className="contact-mobile-wrapper">
+            <div className="legacy-contact-wrapper contact-mobile-wrapper">
               {/* Card 1: Phone Number */}
               <div className="contact-mobile-card">
                 <div className="contact-mobile-header">

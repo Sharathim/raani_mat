@@ -226,20 +226,44 @@ export const SUCCESS_STORIES = [
 
 export const FAQS = [
   {
-    q: 'How do I register a matrimonial profile?',
-    a: 'Click on the "Register Profile" button on our website and complete the 7 simple steps with basic, family, horoscope, and career details.'
+    q: 'How does Rani Matrimony work?',
+    a: 'Create a profile online or speak with our service center. Our team reviews the details, understands your family preferences, and introduces suitable profiles for your consideration.'
   },
   {
-    q: 'Is profile photo upload required?',
-    a: 'Uploading a clear portrait photo is strongly recommended as profiles with photos receive significantly higher interest and faster matchmaking.'
+    q: 'How can I register a matrimonial profile?',
+    a: 'Select “Register Profile” and complete the guided seven-step form. Our team will follow up after reviewing the submitted details.'
   },
   {
-    q: 'How are prospective matches shared with us?',
-    a: 'Once your profile is reviewed by our matchmaking team, compatible profiles will be shared with you via phone call and WhatsApp.'
+    q: 'Is profile verification available?',
+    a: 'Yes. Submitted profile details are reviewed by the matrimonial service center before active match assistance begins. Please provide accurate information to help the review go smoothly.'
   },
   {
-    q: 'Are profiles from all communities accepted?',
-    a: 'Yes, Rani Thirumana Sevai Maiyam serves and respects all communities, helping families find ideal matches according to their tradition.'
+    q: 'What information is required to create a profile?',
+    a: 'The form asks for basic personal details, family background, education and career information, horoscope details, location, a photo, and partner preferences.'
+  },
+  {
+    q: 'How are suitable matches introduced?',
+    a: 'After review, the team considers your stated preferences and shares compatible profiles through direct service-center communication, phone calls, and WhatsApp.'
+  },
+  {
+    q: 'Can families contact the matrimony service directly?',
+    a: 'Yes. Families are welcome to call, WhatsApp, or visit the service center to discuss a profile, preferences, registration support, or match introductions.'
+  },
+  {
+    q: 'How can I update my profile?',
+    a: 'Contact the service center with the changes you would like to make. The team can guide you on updating contact information, preferences, or other profile details.'
+  },
+  {
+    q: 'How can I contact Rani Matrimony?',
+    a: 'Call or WhatsApp us at 9003192733, use the inquiry form below, or visit the Nerkundram service center during office hours.'
+  },
+  {
+    q: 'Where is the service center located?',
+    a: 'Rani Matrimony is located at No 29, Mettukuppam Main Road, Sridevi Karumariamman Nagar, Nerkundram, Chennai 600107.'
+  },
+  {
+    q: 'What are the office timings?',
+    a: 'The service center is open Monday through Sunday, from 9:00 AM to 8:00 PM.'
   }
 ];
 

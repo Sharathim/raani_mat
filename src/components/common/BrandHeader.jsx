@@ -60,7 +60,8 @@ export function BrandHeader() {
         boxShadow: 'var(--shadow-sm)'
       }}
     >
-      {/* Top Announcement Bar */}
+      {/* The public header starts directly with the main navigation. */}
+      {false && (
       <div
         className="announcement-bar"
         style={{
@@ -105,6 +106,8 @@ export function BrandHeader() {
           </div>
         </div>
       </div>
+
+      )}
 
       {/* Main Navbar */}
       <div className="container main-nav-container" style={{ padding: '0.65rem 1.25rem' }}>
