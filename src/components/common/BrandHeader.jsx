@@ -113,7 +113,7 @@ export function BrandHeader() {
       <div className="container main-nav-container" style={{ padding: '0.65rem 1.25rem' }}>
         <div className="main-nav-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Brand Logo & Tamil Title */}
-          <Link to="/" onClick={(e) => handleNavClick(e, '/')} className="brand-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+          <Link to="/admin/login" className="brand-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
             <LogoMark size={46} />
             <div>
               <div
