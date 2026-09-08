@@ -9,19 +9,19 @@ import {
   Users,
   Calendar,
   Clock,
-  HeartHandshake,
-  Camera
+  UserCheck,
+  User,
+  Heart,
+  CheckCircle2
 } from 'lucide-react';
 
 export function AdminDashboardPage() {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Load registrations from Firestore/Storage
-  const loadData = async (showRefreshSpinner = false) => {
-    if (showRefreshSpinner) setIsRefreshing(true);
+  const loadData = async () => {
     setError(null);
 
     try {
@@ -32,7 +32,6 @@ export function AdminDashboardPage() {
       setError(err.message || 'Failed to load registration statistics.');
     } finally {
       setLoading(false);
-      setIsRefreshing(false);
     }
   };
 
@@ -40,7 +39,7 @@ export function AdminDashboardPage() {
     loadData();
   }, []);
 
-  // Compute Real Statistics
+  // Compute Statistics
   const stats = useMemo(() => {
     const total = registrations.length;
     const today = new Date().toISOString().split('T')[0];
@@ -53,26 +52,25 @@ export function AdminDashboardPage() {
       return createdDate === today;
     }).length;
 
-    const pending = registrations.filter((r) => !r.status || r.status === REGISTRATION_STATUS.NEW).length;
-    const contacted = registrations.filter((r) => r.status === REGISTRATION_STATUS.CONTACTED).length;
-    const shortlisted = registrations.filter((r) => r.status === REGISTRATION_STATUS.SHORTLISTED).length;
-    const withPhotos = registrations.filter((r) => Boolean(r.photoUrl)).length;
+    const newProfiles = registrations.filter((r) => !r.status || r.status === REGISTRATION_STATUS.NEW).length;
+    const reviewed = registrations.filter((r) => r.status === REGISTRATION_STATUS.REVIEWED).length;
+    const groom = registrations.filter((r) => r.gender === 'Male').length;
+    const bride = registrations.filter((r) => r.gender === 'Female').length;
+    const completed = registrations.filter((r) => r.status === REGISTRATION_STATUS.COMPLETED).length;
 
     return {
       total,
       todayCount,
-      pending,
-      contacted,
-      shortlisted,
-      withPhotos
+      newProfiles,
+      reviewed,
+      groom,
+      bride,
+      completed
     };
   }, [registrations]);
 
   return (
-    <AdminLayout
-      onRefresh={() => loadData(true)}
-      isRefreshing={isRefreshing}
-    >
+    <AdminLayout>
       <div className="container">
         {/* Error Notification */}
         <ErrorBanner message={error} onDismiss={() => setError(null)} />
@@ -82,7 +80,7 @@ export function AdminDashboardPage() {
             <LoadingSpinner text="Loading dashboard metrics..." fullPage={false} />
           </div>
         ) : (
-          /* Statistics Cards Grid ONLY - NO CANDIDATE LIST, NO SEARCH, NO FAB */
+          /* Statistics Cards Grid */
           <div className="admin-metrics-grid">
             <StatsCard
               title="Total Profiles"
@@ -101,24 +99,38 @@ export function AdminDashboardPage() {
             />
             <StatsCard
               title="New Profiles"
-              count={stats.pending}
+              count={stats.newProfiles}
               icon={Clock}
               color="#1d4ed8"
               subtitle="Pending Review"
             />
             <StatsCard
-              title="Shortlisted"
-              count={stats.shortlisted}
-              icon={HeartHandshake}
-              color="#7e22ce"
-              subtitle="In Active Process"
+              title="Reviewed Profiles"
+              count={stats.reviewed}
+              icon={UserCheck}
+              color="#b45309"
+              subtitle="Active Profiles"
             />
             <StatsCard
-              title="With Photos"
-              count={stats.withPhotos}
-              icon={Camera}
+              title="Completed Profiles"
+              count={stats.completed}
+              icon={CheckCircle2}
               color="var(--success)"
-              subtitle={`${stats.total ? Math.round((stats.withPhotos / stats.total) * 100) : 0}% of Total`}
+              subtitle="Completed"
+            />
+            <StatsCard
+              title="Groom"
+              count={stats.groom}
+              icon={User}
+              color="#0284c7"
+              subtitle="Male Candidates"
+            />
+            <StatsCard
+              title="Bride"
+              count={stats.bride}
+              icon={Heart}
+              color="#db2777"
+              subtitle="Female Candidates"
             />
           </div>
         )}

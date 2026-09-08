@@ -12,148 +12,170 @@ export function RegistrationCard({
   onShareClick,
   isSharing = false
 }) {
+  if (!registration) return null;
+
+  const demographics = [
+    registration.age ? `${registration.age} Yrs` : null,
+    registration.gender === 'Female' ? 'Bride' : 'Groom',
+    registration.maritalStatus || 'Never Married'
+  ].filter(Boolean).join(' • ');
+
+  const careerInfo = [registration.occupation, registration.education].filter(Boolean).join(' • ');
+
   return (
     <div
-      className="card-clean registration-card"
+      className="admin-candidate-card"
       onClick={onClick}
-      style={{
-        padding: '1rem',
-        backgroundColor: '#ffffff',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        border: '1px solid var(--border)',
-        cursor: 'pointer'
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick && onClick();
+        }
       }}
     >
-      <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-        {/* Photo Thumbnail */}
-        <div
-          style={{
-            width: '56px',
-            height: '68px',
-            borderRadius: 'var(--radius-sm)',
-            border: '1.5px solid var(--border)',
-            overflow: 'hidden',
-            flexShrink: 0,
-            backgroundColor: 'var(--cream)'
-          }}
-        >
+      {/* Top Header Row: Photo + Primary Identity */}
+      <div className="admin-card-header">
+        {/* Profile Photo Thumbnail */}
+        <div className="admin-card-photo-wrap">
           {registration.photoUrl ? (
             <img
               src={registration.photoUrl}
-              alt={registration.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              alt={registration.name || 'Candidate Photo'}
+              className="admin-card-photo"
+              loading="lazy"
             />
           ) : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
-              <User size={20} />
+            <div className="admin-card-photo-fallback">
+              <User size={24} />
             </div>
           )}
         </div>
 
-        {/* Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.4rem', flexWrap: 'wrap' }}>
-            <h4
-              style={{
-                fontSize: '1rem',
-                fontWeight: 700,
-                color: 'var(--ink)',
-                margin: 0,
-                lineHeight: 1.2
-              }}
-            >
+        {/* Candidate Identity */}
+        <div className="admin-card-identity">
+          <div className="admin-card-name-row">
+            <h3 className="admin-card-name">
               {registration.name || 'Unnamed Candidate'}
-            </h4>
+            </h3>
             <StatusBadge status={registration.status} />
           </div>
 
-          <div style={{ fontSize: '0.8rem', color: 'var(--maroon-800)', fontWeight: 600, marginTop: '2px' }}>
-            {registration.age ? `${registration.age} Yrs` : ''} • {registration.gender === 'Female' ? 'Bride' : 'Groom'} • {registration.maritalStatus || 'Unmarried'}
+          {/* Age • Gender • Marital Status */}
+          <div className="admin-card-demographics">
+            {demographics}
           </div>
 
-          <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '2px' }}>
-            ID: <span style={{ fontWeight: 600, color: 'var(--ink)' }}>{registration.registrationId || registration.id}</span>
+          {/* Registration ID (Subtle) */}
+          <div className="admin-card-id-pill">
+            <span>ID:</span>
+            <strong>{registration.registrationId || registration.id}</strong>
           </div>
         </div>
       </div>
 
-      {/* Meta Grid */}
-      <div className="registration-card-meta" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.775rem', background: 'var(--surface-alt)', padding: '0.5rem 0.65rem', borderRadius: 'var(--radius-xs)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <MapPin size={12} color="var(--maroon-700)" />
-          <span>{registration.location || '—'}</span>
+      {/* Metadata Grid (Location, Phone, Career) */}
+      <div className="admin-card-meta-grid">
+        <div className="admin-card-meta-item" title="Candidate Location">
+          <MapPin size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
+          <span>{registration.location || 'Location not specified'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <Phone size={12} color="var(--maroon-700)" />
+
+        <div className="admin-card-meta-item" title="Contact Phone">
+          <Phone size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
           <span>{registration.phone || '—'}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', gridColumn: '1 / -1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          <Briefcase size={12} color="var(--maroon-700)" />
-          <span>{registration.occupation} • {registration.education}</span>
-        </div>
+
+        {careerInfo && (
+          <div className="admin-card-meta-item full-width" title="Career & Education">
+            <Briefcase size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
+            <span>{careerInfo}</span>
+          </div>
+        )}
       </div>
 
-      {/* Actions */}
+      {/* Card Footer: Registration Date & Controls */}
       <div
-        className="registration-card-actions"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', paddingTop: '0.4rem', borderTop: '1px solid var(--border-subtle)' }}
+        className="admin-card-footer"
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ fontSize: '0.7rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-          <Calendar size={11} />
-          <span>{formatDate(registration.createdAt)}</span>
+        {/* Registration Date */}
+        <div className="admin-card-registered-date">
+          <Calendar size={12} />
+          <span>Registered: {formatDate(registration.createdAt)}</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+        {/* Action Controls */}
+        <div className="admin-card-controls">
+          {/* Status Dropdown */}
+          <select
+            className="admin-card-select-status"
+            value={registration.status || REGISTRATION_STATUS.NEW}
+            onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
+            aria-label="Update candidate status"
+          >
+            <option value={REGISTRATION_STATUS.NEW}>New</option>
+            <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
+            <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
+          </select>
+
+          {/* Primary Utility Action: Quick Preview */}
           <button
             type="button"
             onClick={onClick}
-            className="btn btn-secondary btn-sm registration-preview-btn"
-            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
-            title="Quick Preview"
+            className="btn btn-primary btn-sm"
+            style={{
+              padding: '0.3rem 0.7rem',
+              fontSize: '0.775rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              fontWeight: 600
+            }}
+            title="Quick Preview Profile"
           >
-            <Eye size={12} />
+            <Eye size={13} />
             <span>Preview</span>
           </button>
 
-          <select
-            value={registration.status || REGISTRATION_STATUS.NEW}
-            onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
-            style={{
-              padding: '0.2rem 0.4rem',
-              fontSize: '0.75rem',
-              borderRadius: 'var(--radius-xs)',
-              border: '1px solid var(--border)',
-              backgroundColor: '#ffffff'
-            }}
-          >
-            <option value={REGISTRATION_STATUS.NEW}>New</option>
-            <option value={REGISTRATION_STATUS.CONTACTED}>Contacted</option>
-            <option value={REGISTRATION_STATUS.SHORTLISTED}>Shortlisted</option>
-            <option value={REGISTRATION_STATUS.CLOSED}>Closed</option>
-          </select>
-
+          {/* Secondary Action: WhatsApp Share */}
           <button
             type="button"
             onClick={() => onShareClick && onShareClick(registration)}
             disabled={isSharing}
             className="btn btn-secondary btn-sm"
-            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', color: '#25D366' }}
-            title="Share via WhatsApp"
+            style={{
+              padding: '0.3rem 0.6rem',
+              fontSize: '0.775rem',
+              color: '#15803d',
+              borderColor: '#bbf7d0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.3rem',
+              fontWeight: 600
+            }}
+            title="Share Profile via WhatsApp"
+            aria-label="Share Profile via WhatsApp"
           >
-            {isSharing ? <Loader2 size={12} className="spin" /> : <Share2 size={12} />}
+            {isSharing ? <Loader2 size={13} className="spin" /> : <Share2 size={13} />}
           </button>
 
+          {/* Destructive Action: Delete */}
           <button
             type="button"
             onClick={() => onDeleteClick(registration)}
-            className="btn btn-danger btn-sm"
-            style={{ padding: '0.2rem 0.45rem', fontSize: '0.75rem' }}
-            title="Delete profile"
+            className="btn btn-secondary btn-sm"
+            style={{
+              padding: '0.3rem 0.5rem',
+              color: 'var(--danger)',
+              borderColor: 'transparent',
+              background: 'transparent'
+            }}
+            title="Delete candidate profile"
+            aria-label="Delete profile"
           >
-            <Trash2 size={12} />
+            <Trash2 size={14} />
           </button>
         </div>
       </div>

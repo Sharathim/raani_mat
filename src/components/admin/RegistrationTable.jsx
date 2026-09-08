@@ -165,9 +165,8 @@ export function RegistrationTable({
                       }}
                     >
                       <option value={REGISTRATION_STATUS.NEW}>New</option>
-                      <option value={REGISTRATION_STATUS.CONTACTED}>Contacted</option>
-                      <option value={REGISTRATION_STATUS.SHORTLISTED}>Shortlisted</option>
-                      <option value={REGISTRATION_STATUS.CLOSED}>Closed</option>
+                      <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
+                      <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
                     </select>
                   </div>
                 </td>

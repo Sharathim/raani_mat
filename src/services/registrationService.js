@@ -73,7 +73,7 @@ function getDemoRegistrations() {
     {
       id: 'RANI-9K2M4P67',
       registrationId: 'RANI-9K2M4P67',
-      status: REGISTRATION_STATUS.CONTACTED,
+      status: REGISTRATION_STATUS.REVIEWED,
       profileFor: 'Son',
       gender: 'Male',
       name: 'Vijayakumar Sundaram',
@@ -126,7 +126,7 @@ export async function createRegistration(formData) {
   const registrationRecord = {
     ...formData,
     registrationId: regId,
-    status: REGISTRATION_STATUS.NEW,
+    status: formData.status || REGISTRATION_STATUS.NEW,
     createdAt: isFirebaseConfigured ? serverTimestamp() : new Date().toISOString(),
     updatedAt: isFirebaseConfigured ? serverTimestamp() : new Date().toISOString()
   };

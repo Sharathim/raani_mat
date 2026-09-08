@@ -34,16 +34,11 @@ export function AdminLayout({
       <div className="admin-app-root">
         {/* Desktop Header (Visible on >= 769px, Hidden on <= 768px) */}
         <DesktopHeader
-          onRefresh={onRefresh}
-          isRefreshing={isRefreshing}
           onRequestLogout={() => setIsLogoutModalOpen(true)}
         />
 
         {/* Mobile Header (Visible on <= 768px, Hidden on >= 769px) */}
-        <MobileHeader
-          onRefresh={onRefresh}
-          isRefreshing={isRefreshing}
-        />
+        <MobileHeader />
 
         {/* Main Content Area */}
         <main className="admin-main-content">

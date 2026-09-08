@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../../assets/logo.jpg';
+import logoImg from '../../assets/logo.png';
 
 export function LogoMark({ size = 48, className = '' }) {
   return (

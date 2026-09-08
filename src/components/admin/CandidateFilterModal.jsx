@@ -125,9 +125,8 @@ export function CandidateFilterModal({
   const statusOptions = [
     { value: 'all', label: 'All Status' },
     { value: REGISTRATION_STATUS.NEW, label: 'New' },
-    { value: REGISTRATION_STATUS.CONTACTED, label: 'Contacted' },
-    { value: REGISTRATION_STATUS.SHORTLISTED, label: 'Shortlisted' },
-    { value: REGISTRATION_STATUS.CLOSED, label: 'Closed' }
+    { value: REGISTRATION_STATUS.REVIEWED, label: 'Reviewed' },
+    { value: REGISTRATION_STATUS.COMPLETED, label: 'Completed' }
   ];
 
   const genderOptions = [
@@ -211,7 +210,7 @@ export function CandidateFilterModal({
             </div>
             <div>
               <h3 id="candidate-filter-title" className="filter-sheet-title">
-                Filter Candidates
+                Filter Profiles
               </h3>
               <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
                 Refine profiles by age, horoscope, caste & religion
@@ -530,7 +529,7 @@ export function CandidateFilterModal({
           <div className="filter-sheet-group">
             <h4 className="filter-sheet-group-title">
               <Scroll size={15} />
-              <span>Sort Candidates By</span>
+              <span>Sort Profiles By</span>
             </h4>
 
             <div className="filter-options-grid">

@@ -2,18 +2,16 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogoMark } from '../common/LogoMark';
 import { BRAND } from '../../utils/constants';
-import { LayoutDashboard, Users, LogOut, Globe, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, Clock, Users, CheckCircle2, LogOut, Globe } from 'lucide-react';
 
-export function DesktopHeader({
-  onRefresh,
-  isRefreshing = false,
-  onRequestLogout
-}) {
+export function DesktopHeader({ onRequestLogout }) {
   const location = useLocation();
   const currentPath = location.pathname;
 
   const isDashboardActive = currentPath === '/admin';
-  const isCandidatesActive = currentPath.startsWith('/admin/candidates');
+  const isNewActive = currentPath.startsWith('/admin/new');
+  const isProfilesActive = currentPath.startsWith('/admin/profiles') || currentPath.startsWith('/admin/candidates');
+  const isCompletedActive = currentPath.startsWith('/admin/completed');
 
   return (
     <header className="admin-desktop-header" aria-label="Desktop Header Navigation">
@@ -49,11 +47,27 @@ export function DesktopHeader({
           </Link>
 
           <Link
-            to="/admin/candidates"
-            className={`admin-desktop-nav-link ${isCandidatesActive ? 'active' : ''}`}
+            to="/admin/new"
+            className={`admin-desktop-nav-link ${isNewActive ? 'active' : ''}`}
+          >
+            <Clock size={17} />
+            <span>New</span>
+          </Link>
+
+          <Link
+            to="/admin/profiles"
+            className={`admin-desktop-nav-link ${isProfilesActive ? 'active' : ''}`}
           >
             <Users size={17} />
-            <span>Candidates</span>
+            <span>Profiles</span>
+          </Link>
+
+          <Link
+            to="/admin/completed"
+            className={`admin-desktop-nav-link ${isCompletedActive ? 'active' : ''}`}
+          >
+            <CheckCircle2 size={17} />
+            <span>Completed</span>
           </Link>
 
           <div className="admin-desktop-nav-divider" />
@@ -68,22 +82,6 @@ export function DesktopHeader({
             <Globe size={15} />
             <span>Public Site</span>
           </Link>
-
-          {onRefresh && (
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="admin-desktop-utility-btn"
-              title="Refresh Data"
-            >
-              <RefreshCw
-                size={15}
-                style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}}
-              />
-              <span>Refresh</span>
-            </button>
-          )}
 
           <button
             type="button"

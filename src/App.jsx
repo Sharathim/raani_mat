@@ -57,20 +57,44 @@ export function App() {
             }
           />
           <Route
-            path="/admin/candidates"
+            path="/admin/new"
             element={
               <ProtectedRoute>
-                <AdminCandidatesPage />
+                <AdminCandidatesPage statusScope="new" />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/candidates/new"
+            path="/admin/profiles"
+            element={
+              <ProtectedRoute>
+                <AdminCandidatesPage statusScope="reviewed" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates"
+            element={<Navigate to="/admin/profiles" replace />}
+          />
+          <Route
+            path="/admin/completed"
+            element={
+              <ProtectedRoute>
+                <AdminCandidatesPage statusScope="completed" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/profiles/new"
             element={
               <ProtectedRoute>
                 <AdminCandidateNewPage />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/admin/candidates/new"
+            element={<Navigate to="/admin/profiles/new" replace />}
           />
 
           {/* 404 Not Found */}

@@ -38,11 +38,10 @@ export const DEFAULT_CANDIDATE_FILTERS = {
   sortBy: 'newest'
 };
 
-export function AdminCandidatesPage() {
+export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
@@ -61,19 +60,17 @@ export function AdminCandidatesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Load registrations from Firestore/Storage
-  const loadData = async (showRefreshSpinner = false) => {
-    if (showRefreshSpinner) setIsRefreshing(true);
+  const loadData = async () => {
     setError(null);
 
     try {
       const list = await getRegistrations();
       setRegistrations(list || []);
     } catch (err) {
-      console.error('Failed to load candidates:', err);
-      setError(err.message || 'Failed to load candidate records.');
+      console.error('Failed to load candidate records:', err);
+      setError(err.message || 'Failed to load records.');
     } finally {
       setLoading(false);
-      setIsRefreshing(false);
     }
   };
 
@@ -174,9 +171,58 @@ export function AdminCandidatesPage() {
     return count;
   }, [filters]);
 
+  // Section configurations based on current status scope
+  const sectionConfig = useMemo(() => {
+    switch (statusScope) {
+      case 'new':
+        return {
+          title: 'New Registrations',
+          entityName: 'new registrations',
+          searchPlaceholder: 'Search new registrations by name, phone, location...',
+          emptyTitle: 'No new registrations found',
+          emptyDesc: 'New applicant profile submissions from the website will automatically appear here.',
+          showAddButton: false
+        };
+      case 'completed':
+        return {
+          title: 'Completed Profiles',
+          entityName: 'completed profiles',
+          searchPlaceholder: 'Search completed profiles by name, phone, location...',
+          emptyTitle: 'No completed profiles found',
+          emptyDesc: 'Profiles marked as completed will appear here.',
+          showAddButton: false
+        };
+      case 'reviewed':
+      default:
+        return {
+          title: 'Profiles',
+          entityName: 'profiles',
+          searchPlaceholder: 'Search profiles by name, phone, location...',
+          emptyTitle: 'No profiles found',
+          emptyDesc: 'Profiles marked as reviewed will appear here.',
+          showAddButton: true
+        };
+    }
+  }, [statusScope]);
+
+  // Base registrations scoped to current section
+  const scopedRegistrations = useMemo(() => {
+    return registrations.filter((reg) => {
+      const status = reg.status || REGISTRATION_STATUS.NEW;
+      if (statusScope === 'new') {
+        return status === REGISTRATION_STATUS.NEW;
+      }
+      if (statusScope === 'completed') {
+        return status === REGISTRATION_STATUS.COMPLETED;
+      }
+      // 'reviewed' (Profiles section)
+      return status === REGISTRATION_STATUS.REVIEWED;
+    });
+  }, [registrations, statusScope]);
+
   // Filtered & Sorted Registrations
   const filteredRegistrations = useMemo(() => {
-    return registrations
+    return scopedRegistrations
       .filter((reg) => {
         // 1. Search query matching
         if (searchTerm.trim()) {
@@ -359,13 +405,10 @@ export function AdminCandidatesPage() {
         }
         return 0;
       });
-  }, [registrations, searchTerm, filters]);
+  }, [scopedRegistrations, searchTerm, filters]);
 
   return (
-    <AdminLayout
-      onRefresh={() => loadData(true)}
-      isRefreshing={isRefreshing}
-    >
+    <AdminLayout>
       <div className="container">
         {/* Error Notification */}
         <ErrorBanner message={error} onDismiss={() => setError(null)} />
@@ -421,14 +464,14 @@ export function AdminCandidatesPage() {
             onSearchChange={setSearchTerm}
             onOpenFilter={() => setIsFilterModalOpen(true)}
             activeFilterCount={activeFilterCount}
-            placeholder="Search candidates by name, phone, location..."
+            placeholder={sectionConfig.searchPlaceholder}
           />
         </div>
 
         {/* 3. Candidate Count & Status Information */}
         <div className="admin-candidate-info-bar">
           <div className="admin-count-indicator">
-            Showing <strong className="admin-count-highlight">{filteredRegistrations.length}</strong> of {registrations.length} candidates
+            Showing <strong className="admin-count-highlight">{filteredRegistrations.length}</strong> of {scopedRegistrations.length} {sectionConfig.entityName}
             {activeFilterCount > 0 && (
               <span className="admin-active-filters-pill">
                 {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
@@ -464,11 +507,11 @@ export function AdminCandidatesPage() {
             />
           ) : (
             <EmptyState
-              titleEn={searchTerm || activeFilterCount > 0 ? 'No candidates match your search filters' : 'No candidate registrations yet'}
+              titleEn={searchTerm || activeFilterCount > 0 ? `No ${sectionConfig.entityName} match your search filters` : sectionConfig.emptyTitle}
               description={
                 searchTerm || activeFilterCount > 0
                   ? 'Try adjusting your search query or reset active filters.'
-                  : 'New applicant profile submissions will automatically appear here.'
+                  : sectionConfig.emptyDesc
               }
               action={
                 (searchTerm || activeFilterCount > 0) && (
@@ -489,8 +532,10 @@ export function AdminCandidatesPage() {
         </div>
       </div>
 
-      {/* Floating Action Button '+' (Rendered ONLY on Candidates page, at bottom-left) */}
-      <FloatingAddButton to="/admin/candidates/new" title="Add New Candidate" />
+      {/* Floating Action Button '+' (Rendered on Profiles section) */}
+      {sectionConfig.showAddButton && (
+        <FloatingAddButton to="/admin/profiles/new" title="Add New Profile" />
+      )}
 
       {/* Filter Modal / Bottom Sheet */}
       <CandidateFilterModal

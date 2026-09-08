@@ -39,9 +39,8 @@ export function FilterBar({
   const statusTabs = [
     { value: 'all', label: 'All Status' },
     { value: REGISTRATION_STATUS.NEW, label: 'New' },
-    { value: REGISTRATION_STATUS.CONTACTED, label: 'Contacted' },
-    { value: REGISTRATION_STATUS.SHORTLISTED, label: 'Shortlisted' },
-    { value: REGISTRATION_STATUS.CLOSED, label: 'Closed' }
+    { value: REGISTRATION_STATUS.REVIEWED, label: 'Reviewed' },
+    { value: REGISTRATION_STATUS.COMPLETED, label: 'Completed' }
   ];
 
   // Count active non-status filters

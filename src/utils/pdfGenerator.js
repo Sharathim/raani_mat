@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { BRAND } from './constants';
 import { formatDate } from './helpers';
-import logoUrl from '../assets/logo.jpg';
+import logoUrl from '../assets/logo.png';
 
 // Cached logo base64 string
 let cachedLogoBase64 = null;

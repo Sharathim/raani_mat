@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogoMark } from '../common/LogoMark';
 import { BRAND } from '../../utils/constants';
-import { LayoutDashboard, Users, LogOut, Globe, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, Users, Clock, CheckCircle2, LogOut, Globe } from 'lucide-react';
 
 export function AdminHeader({
   onRefresh,
@@ -44,18 +44,34 @@ export function AdminHeader({
         <nav className="admin-desktop-nav" aria-label="Desktop Admin Navigation">
           <Link
             to="/admin"
-            className={`admin-desktop-nav-link ${isDashboardActive ? 'active' : ''}`}
+            className={`admin-desktop-nav-link ${location.pathname === '/admin' ? 'active' : ''}`}
           >
             <LayoutDashboard size={17} />
             <span>Dashboard</span>
           </Link>
 
           <Link
-            to="/admin/candidates"
-            className={`admin-desktop-nav-link ${isCandidatesActive ? 'active' : ''}`}
+            to="/admin/new"
+            className={`admin-desktop-nav-link ${location.pathname.startsWith('/admin/new') ? 'active' : ''}`}
+          >
+            <Clock size={17} />
+            <span>New</span>
+          </Link>
+
+          <Link
+            to="/admin/profiles"
+            className={`admin-desktop-nav-link ${location.pathname.startsWith('/admin/profiles') || location.pathname.startsWith('/admin/candidates') ? 'active' : ''}`}
           >
             <Users size={17} />
-            <span>Candidates</span>
+            <span>Profiles</span>
+          </Link>
+
+          <Link
+            to="/admin/completed"
+            className={`admin-desktop-nav-link ${location.pathname.startsWith('/admin/completed') ? 'active' : ''}`}
+          >
+            <CheckCircle2 size={17} />
+            <span>Completed</span>
           </Link>
 
           {/* Secondary Actions on Desktop */}
@@ -72,19 +88,6 @@ export function AdminHeader({
             <span>Public Site</span>
           </Link>
 
-          {onRefresh && (
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="admin-desktop-utility-btn"
-              title="Refresh Data"
-            >
-              <RefreshCw size={15} className={isRefreshing ? 'animate-spin' : ''} style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}} />
-              <span>Refresh</span>
-            </button>
-          )}
-
           <button
             type="button"
             onClick={onRequestLogout}
@@ -96,22 +99,6 @@ export function AdminHeader({
             <span>Logout</span>
           </button>
         </nav>
-
-        {/* Mobile Header Right: Optional subtle refresh indicator if needed */}
-        {onRefresh && (
-          <div className="admin-mobile-header-right">
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="admin-mobile-refresh-icon-btn"
-              title="Refresh Data"
-              aria-label="Refresh data"
-            >
-              <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}} />
-            </button>
-          </div>
-        )}
       </div>
     </header>
   );

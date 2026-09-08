@@ -14,9 +14,8 @@ export const BRAND = {
 
 export const REGISTRATION_STATUS = {
   NEW: 'new',
-  CONTACTED: 'contacted',
-  SHORTLISTED: 'shortlisted',
-  CLOSED: 'closed'
+  REVIEWED: 'reviewed',
+  COMPLETED: 'completed'
 };
 
 export const STATUS_CONFIG = {
@@ -27,34 +26,52 @@ export const STATUS_CONFIG = {
     color: '#175cd3',
     border: '#b2ddff'
   },
+  reviewed: {
+    label: 'Reviewed',
+    badgeClass: 'status-reviewed',
+    bg: '#fefce8',
+    color: '#a16207',
+    border: '#fef08a'
+  },
+  completed: {
+    label: 'Completed',
+    badgeClass: 'status-completed',
+    bg: '#ecfdf5',
+    color: '#047857',
+    border: '#a7f3d0'
+  },
+  // Legacy status fallbacks
   contacted: {
-    label: 'Contacted',
-    badgeClass: 'status-contacted',
-    bg: '#fef7ec',
-    color: '#b54708',
-    border: '#fedf89'
+    label: 'Reviewed',
+    badgeClass: 'status-reviewed',
+    bg: '#fefce8',
+    color: '#a16207',
+    border: '#fef08a'
   },
   shortlisted: {
-    label: 'Shortlisted',
-    badgeClass: 'status-shortlisted',
-    bg: '#f6eefe',
-    color: '#6927da',
-    border: '#d8b4fe'
+    label: 'Reviewed',
+    badgeClass: 'status-reviewed',
+    bg: '#fefce8',
+    color: '#a16207',
+    border: '#fef08a'
   },
   closed: {
-    label: 'Closed / Married',
-    badgeClass: 'status-closed',
-    bg: '#f3f4f6',
-    color: '#4b5563',
-    border: '#d1d5db'
+    label: 'Completed',
+    badgeClass: 'status-completed',
+    bg: '#ecfdf5',
+    color: '#047857',
+    border: '#a7f3d0'
   }
 };
 
 export const STATUS_LABELS = {
   new: { label: 'New', class: 'status-new' },
-  contacted: { label: 'Contacted', class: 'status-contacted' },
-  shortlisted: { label: 'Shortlisted', class: 'status-shortlisted' },
-  closed: { label: 'Closed / Married', class: 'status-closed' }
+  reviewed: { label: 'Reviewed', class: 'status-reviewed' },
+  completed: { label: 'Completed', class: 'status-completed' },
+  // Legacy status fallbacks
+  contacted: { label: 'Reviewed', class: 'status-reviewed' },
+  shortlisted: { label: 'Reviewed', class: 'status-reviewed' },
+  closed: { label: 'Completed', class: 'status-completed' }
 };
 
 export const FORM_STEPS = [

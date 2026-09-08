@@ -6,6 +6,7 @@ import { ErrorBanner } from '../components/common/ErrorBanner';
 import { createRegistration } from '../services/registrationService';
 import {
   INITIAL_FORM_STATE,
+  REGISTRATION_STATUS,
   PROFILE_FOR_OPTIONS,
   GENDER_OPTIONS,
   MARITAL_STATUS_OPTIONS,
@@ -38,6 +39,7 @@ export function AdminCandidateNewPage() {
 
   const [formData, setFormData] = useState({
     ...INITIAL_FORM_STATE,
+    status: REGISTRATION_STATUS.REVIEWED,
     consentAccepted: true // Auto-accepted for admin created records
   });
 
@@ -150,7 +152,7 @@ export function AdminCandidateNewPage() {
       setIsSuccess(true);
       setCreatedId(created.registrationId || created.id);
       setTimeout(() => {
-        navigate('/admin/candidates');
+        navigate('/admin/profiles');
       }, 1500);
     } catch (err) {
       console.error('Failed to create candidate:', err);
@@ -162,11 +164,11 @@ export function AdminCandidateNewPage() {
   return (
     <AdminLayout>
       <div className="container" style={{ maxWidth: '860px' }}>
-            {/* Back to Candidates Link */}
+            {/* Back to Profiles Link */}
             <div style={{ marginBottom: '1rem' }}>
-              <Link to="/admin/candidates" className="admin-back-link">
+              <Link to="/admin/profiles" className="admin-back-link">
                 <ArrowLeft size={16} />
-                <span>Back to Candidates</span>
+                <span>Back to Profiles</span>
               </Link>
             </div>
 
@@ -174,7 +176,7 @@ export function AdminCandidateNewPage() {
             <div className="admin-page-titlebar" style={{ marginBottom: '1.25rem' }}>
               <div className="admin-page-title-group">
                 <h1 className="admin-page-heading">
-                  Register New Candidate
+                  Register New Profile
                 </h1>
                 <p className="admin-page-subheading">
                   Create and register a matrimonial applicant profile in the database.
@@ -213,6 +215,20 @@ export function AdminCandidateNewPage() {
                 </div>
 
                 <div className="admin-form-grid">
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Profile Status</label>
+                    <select
+                      name="status"
+                      value={formData.status || REGISTRATION_STATUS.REVIEWED}
+                      onChange={handleChange}
+                      className="admin-form-input"
+                    >
+                      <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed (Default)</option>
+                      <option value={REGISTRATION_STATUS.NEW}>New</option>
+                      <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
+                    </select>
+                  </div>
+
                   <div className="admin-form-group">
                     <label className="admin-form-label">Profile Created For *</label>
                     <select
