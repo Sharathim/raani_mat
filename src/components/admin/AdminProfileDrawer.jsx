@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS, STATUS_CONFIG } from '../../utils/constants';
+import { generateCandidateBioDataPdf } from '../../utils/pdfGenerator';
 import {
   X,
   Phone,
@@ -14,6 +15,8 @@ import {
   GraduationCap,
   Sparkles,
   Share2,
+  Download,
+  CheckCircle2,
   MessageCircle,
   Clock,
   Printer,
@@ -30,6 +33,9 @@ export function AdminProfileDrawer({
   onShareClick,
   isSharing = false
 }) {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -43,6 +49,21 @@ export function AdminProfileDrawer({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
+
+  const handleDownloadPdf = async () => {
+    if (!registration || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const { doc, filename } = await generateCandidateBioDataPdf(registration);
+      doc.save(filename);
+      setDownloadSuccess(true);
+      setTimeout(() => setDownloadSuccess(false), 3000);
+    } catch (err) {
+      console.error('Failed to download candidate PDF:', err);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (!isOpen || !registration) return null;
 
@@ -86,23 +107,50 @@ export function AdminProfileDrawer({
             <StatusBadge status={registration.status} />
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--muted)',
-              cursor: 'pointer',
-              padding: '0.35rem',
-              borderRadius: 'var(--radius-xs)',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-            aria-label="Close drawer"
-          >
-            <X size={20} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isDownloading}
+              className="btn btn-secondary btn-sm"
+              style={{
+                padding: '0.3rem 0.65rem',
+                fontSize: '0.775rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                color: downloadSuccess ? 'var(--success)' : 'var(--ink)'
+              }}
+              title="Download Matrimonial Biodata PDF"
+            >
+              {isDownloading ? (
+                <Loader2 size={13} className="spin" />
+              ) : downloadSuccess ? (
+                <CheckCircle2 size={13} color="var(--success)" />
+              ) : (
+                <Download size={13} />
+              )}
+              <span>{downloadSuccess ? 'Downloaded' : 'Download PDF'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--muted)',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                borderRadius: 'var(--radius-xs)',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+              aria-label="Close drawer"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Drawer Content */}
@@ -358,6 +406,8 @@ export function AdminProfileDrawer({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '0.65rem',
+            flexWrap: 'wrap',
             position: 'sticky',
             bottom: 0,
             zIndex: 10
@@ -373,16 +423,41 @@ export function AdminProfileDrawer({
             <span>Delete Profile</span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => onShareClick && onShareClick(registration)}
-            disabled={isSharing}
-            className="btn btn-primary btn-sm"
-            style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
-          >
-            {isSharing ? <Loader2 size={14} className="spin" /> : <Share2 size={14} />}
-            <span>{isSharing ? 'Preparing...' : 'Share via WhatsApp'}</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isDownloading}
+              className="btn btn-secondary btn-sm"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                fontWeight: 500
+              }}
+              title="Download PDF Biodata"
+            >
+              {isDownloading ? (
+                <Loader2 size={14} className="spin" />
+              ) : downloadSuccess ? (
+                <CheckCircle2 size={14} color="var(--success)" />
+              ) : (
+                <Download size={14} />
+              )}
+              <span>{downloadSuccess ? 'Downloaded!' : 'Download PDF'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onShareClick && onShareClick(registration)}
+              disabled={isSharing}
+              className="btn btn-primary btn-sm"
+              style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
+            >
+              {isSharing ? <Loader2 size={14} className="spin" /> : <Share2 size={14} />}
+              <span>{isSharing ? 'Preparing...' : 'Share via WhatsApp'}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
