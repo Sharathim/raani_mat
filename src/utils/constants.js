@@ -99,10 +99,9 @@ export const GENDER_OPTIONS = [
 ];
 
 export const MARITAL_STATUS_OPTIONS = [
-  { value: 'Never Married', label: 'Never Married (Unmarried)' },
+  { value: 'Single', label: 'Single (Unmarried)' },
   { value: 'Widowed', label: 'Widowed' },
-  { value: 'Divorced', label: 'Divorced' },
-  { value: 'Separated', label: 'Separated' }
+  { value: 'Divorced', label: 'Divorced' }
 ];
 
 export const ZODIAC_SIGNS = [
@@ -434,7 +433,7 @@ export const INITIAL_FORM_STATE = {
   dateOfBirth: '',
   phone: '',
   email: '',
-  maritalStatus: 'Never Married',
+  maritalStatus: 'Single',
 
   // Step 2: Family
   fatherName: '',

@@ -1,8 +1,7 @@
 import React from 'react';
-import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, Share2, Loader2 } from 'lucide-react';
+import { User, Briefcase, Trash2, Calendar, Share2, Loader2, Edit } from 'lucide-react';
 
 export function RegistrationCard({
   registration,
@@ -10,6 +9,7 @@ export function RegistrationCard({
   onDeleteClick,
   onClick,
   onShareClick,
+  onEditClick,
   isSharing = false
 }) {
   if (!registration) return null;
@@ -17,10 +17,8 @@ export function RegistrationCard({
   const demographics = [
     registration.age ? `${registration.age} Yrs` : null,
     registration.gender === 'Female' ? 'Bride' : 'Groom',
-    registration.maritalStatus || 'Never Married'
+    registration.maritalStatus === 'Never Married' ? 'Single' : (registration.maritalStatus || 'Single')
   ].filter(Boolean).join(' • ');
-
-  const careerInfo = [registration.occupation, registration.education].filter(Boolean).join(' • ');
 
   return (
     <div
@@ -55,128 +53,128 @@ export function RegistrationCard({
 
         {/* Candidate Identity */}
         <div className="admin-card-identity">
-          <div className="admin-card-name-row">
-            <h3 className="admin-card-name">
-              {registration.name || 'Unnamed Candidate'}
-            </h3>
-            <StatusBadge status={registration.status} />
-          </div>
+          <h3 className="admin-card-name" style={{ margin: 0, fontSize: '1.05rem', color: 'var(--maroon-950)', fontWeight: 700 }}>
+            {registration.name || 'Unnamed Candidate'}
+          </h3>
 
-          {/* Age • Gender • Marital Status */}
-          <div className="admin-card-demographics">
+          {/* Age • Gender • Marital Status (e.g. 20 Yrs • Groom • Single) */}
+          <div className="admin-card-demographics" style={{ marginTop: '0.2rem', fontSize: '0.825rem', color: 'var(--maroon-800)', fontWeight: 600 }}>
             {demographics}
           </div>
 
-          {/* Registration ID (Subtle) */}
-          <div className="admin-card-id-pill">
-            <span>ID:</span>
-            <strong>{registration.registrationId || registration.id}</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Metadata Grid (Location, Phone, Career) */}
-      <div className="admin-card-meta-grid">
-        <div className="admin-card-meta-item" title="Candidate Location">
-          <MapPin size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
-          <span>{registration.location || 'Location not specified'}</span>
-        </div>
-
-        <div className="admin-card-meta-item" title="Contact Phone">
-          <Phone size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
-          <span>{registration.phone || '—'}</span>
-        </div>
-
-        {careerInfo && (
-          <div className="admin-card-meta-item full-width" title="Career & Education">
+          {/* Occupation below demographics */}
+          <div className="admin-card-occupation" style={{ marginTop: '0.25rem', fontSize: '0.825rem', color: 'var(--ink)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <Briefcase size={13} color="var(--maroon-700)" style={{ flexShrink: 0 }} />
-            <span>{careerInfo}</span>
+            <span>{registration.occupation || 'Occupation not specified'}</span>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Card Footer: Registration Date & Controls */}
+      {/* Card Footer: Action Controls (Same Line) & Date Below */}
       <div
         className="admin-card-footer"
+        style={{ marginTop: '0.75rem', paddingTop: '0.65rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Registration Date */}
-        <div className="admin-card-registered-date">
-          <Calendar size={12} />
-          <span>Registered: {formatDate(registration.createdAt)}</span>
-        </div>
-
-        {/* Action Controls */}
-        <div className="admin-card-controls">
+        {/* Same Line Action Row: Status + Edit + Share + Delete */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', width: '100%' }}>
           {/* Status Dropdown */}
           <select
             className="admin-card-select-status"
             value={registration.status || REGISTRATION_STATUS.NEW}
             onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
             aria-label="Update candidate status"
+            style={{ flex: 1, height: '36px', minWidth: '110px' }}
           >
             <option value={REGISTRATION_STATUS.NEW}>New</option>
             <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
             <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
           </select>
 
-          {/* Primary Utility Action: Quick Preview */}
-          <button
-            type="button"
-            onClick={onClick}
-            className="btn btn-primary btn-sm"
-            style={{
-              padding: '0.3rem 0.7rem',
-              fontSize: '0.775rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              fontWeight: 600
-            }}
-            title="Quick Preview Profile"
-          >
-            <Eye size={13} />
-            <span>Preview</span>
-          </button>
+          {/* Action Icon Buttons: Edit, Share, Delete */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
+            {/* Edit Button (Icon Only) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditClick && onEditClick(registration);
+              }}
+              className="btn btn-secondary btn-sm"
+              style={{
+                width: '36px',
+                height: '36px',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-sm)',
+                color: 'var(--maroon-900)'
+              }}
+              title="Edit Profile"
+              aria-label="Edit candidate profile"
+            >
+              <Edit size={16} />
+            </button>
 
-          {/* Secondary Action: WhatsApp Share */}
-          <button
-            type="button"
-            onClick={() => onShareClick && onShareClick(registration)}
-            disabled={isSharing}
-            className="btn btn-secondary btn-sm"
-            style={{
-              padding: '0.3rem 0.6rem',
-              fontSize: '0.775rem',
-              color: '#15803d',
-              borderColor: '#bbf7d0',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.3rem',
-              fontWeight: 600
-            }}
-            title="Share Profile via WhatsApp"
-            aria-label="Share Profile via WhatsApp"
-          >
-            {isSharing ? <Loader2 size={13} className="spin" /> : <Share2 size={13} />}
-          </button>
+            {/* Share Button (Icon Only) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onShareClick && onShareClick(registration);
+              }}
+              disabled={isSharing}
+              className="btn btn-secondary btn-sm"
+              style={{
+                width: '36px',
+                height: '36px',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-sm)',
+                color: '#15803d',
+                borderColor: '#bbf7d0'
+              }}
+              title="Share via WhatsApp"
+              aria-label="Share profile via WhatsApp"
+            >
+              {isSharing ? <Loader2 size={16} className="spin" /> : <Share2 size={16} />}
+            </button>
 
-          {/* Destructive Action: Delete */}
-          <button
-            type="button"
-            onClick={() => onDeleteClick(registration)}
-            className="btn btn-secondary btn-sm"
-            style={{
-              padding: '0.3rem 0.5rem',
-              color: 'var(--danger)',
-              borderColor: 'transparent',
-              background: 'transparent'
-            }}
-            title="Delete candidate profile"
-            aria-label="Delete profile"
-          >
-            <Trash2 size={14} />
-          </button>
+            {/* Delete Button (Icon Only) */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteClick(registration);
+              }}
+              className="btn btn-secondary btn-sm"
+              style={{
+                width: '36px',
+                height: '36px',
+                padding: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 'var(--radius-sm)',
+                color: 'var(--danger)',
+                borderColor: 'var(--danger-border)',
+                background: 'var(--danger-bg)'
+              }}
+              title="Delete Profile"
+              aria-label="Delete profile"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Registered Date & Time Pushed Below */}
+        <div className="admin-card-registered-date" style={{ fontSize: '0.75rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <Calendar size={12} />
+          <span>Registered: {formatDate(registration.createdAt)}</span>
         </div>
       </div>
     </div>

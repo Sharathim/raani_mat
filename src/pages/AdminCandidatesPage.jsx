@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AdminLayout } from '../components/admin/AdminLayout';
 import { SearchBar } from '../components/admin/SearchBar';
 import { CandidateFilterModal } from '../components/admin/CandidateFilterModal';
@@ -22,7 +23,6 @@ import { REGISTRATION_STATUS } from '../utils/constants';
 export const DEFAULT_CANDIDATE_FILTERS = {
   status: 'all',
   gender: 'all',
-  photo: 'all',
   maritalStatus: 'all',
   minAge: '',
   maxAge: '',
@@ -39,6 +39,7 @@ export const DEFAULT_CANDIDATE_FILTERS = {
 };
 
 export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
+  const navigate = useNavigate();
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -114,6 +115,14 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
     }
   };
 
+  // Handle Edit Candidate Profile navigation
+  const handleEditCandidate = (reg) => {
+    if (!reg) return;
+    const regId = reg.id || reg.registrationId;
+    setSelectedDrawerProfile(null);
+    navigate(`/admin/profiles/edit/${regId}`);
+  };
+
   // Auto-dismiss share notice after 7 seconds
   useEffect(() => {
     if (shareNotice) {
@@ -155,7 +164,6 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
     let count = 0;
     if (filters.status !== 'all') count++;
     if (filters.gender !== 'all') count++;
-    if (filters.photo !== 'all') count++;
     if (filters.maritalStatus !== 'all') count++;
     if (filters.minAge || filters.maxAge) count++;
     if (filters.religion !== 'all') count++;
@@ -179,8 +187,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
           title: 'New Registrations',
           entityName: 'new registrations',
           searchPlaceholder: 'Search new registrations by name, phone, location...',
-          emptyTitle: 'No new registrations found',
-          emptyDesc: 'New applicant profile submissions from the website will automatically appear here.',
+          emptyTitle: 'no new profiles found',
+          emptyDesc: 'New applicant registration submissions will automatically appear here once registered online.',
           showAddButton: false
         };
       case 'completed':
@@ -188,8 +196,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
           title: 'Completed Profiles',
           entityName: 'completed profiles',
           searchPlaceholder: 'Search completed profiles by name, phone, location...',
-          emptyTitle: 'No completed profiles found',
-          emptyDesc: 'Profiles marked as completed will appear here.',
+          emptyTitle: 'no completed profiles found',
+          emptyDesc: 'Matrimonial profiles marked as completed or settled will appear here.',
           showAddButton: false
         };
       case 'reviewed':
@@ -198,8 +206,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
           title: 'Profiles',
           entityName: 'profiles',
           searchPlaceholder: 'Search profiles by name, phone, location...',
-          emptyTitle: 'No profiles found',
-          emptyDesc: 'Profiles marked as reviewed will appear here.',
+          emptyTitle: 'no reviewed profiles found',
+          emptyDesc: 'Candidate profiles that have been reviewed by admin will appear here.',
           showAddButton: true
         };
     }
@@ -278,13 +286,10 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
           }
         }
 
-        // 4. Photo Filter
-        if (filters.photo === 'withPhoto' && !reg.photoUrl) return false;
-        if (filters.photo === 'noPhoto' && reg.photoUrl) return false;
-
-        // 5. Marital Status Filter
+        // 4. Marital Status Filter
         if (filters.maritalStatus !== 'all') {
-          const mStatus = (reg.maritalStatus || 'Never Married').toLowerCase();
+          const rawM = (reg.maritalStatus || 'Single').toLowerCase();
+          const mStatus = rawM === 'never married' ? 'single' : rawM;
           if (mStatus !== filters.maritalStatus.toLowerCase()) {
             return false;
           }
@@ -503,6 +508,7 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
               onDeleteClick={(target) => setDeleteTarget(target)}
               onRowClick={(reg) => setSelectedDrawerProfile(reg)}
               onShareClick={handleShareCandidate}
+              onEditClick={handleEditCandidate}
               sharingId={sharingId}
             />
           ) : (
@@ -554,6 +560,7 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
         onStatusChange={handleStatusChange}
         onDeleteClick={(reg) => setDeleteTarget(reg)}
         onShareClick={handleShareCandidate}
+        onEditClick={handleEditCandidate}
         isSharing={sharingId === (selectedDrawerProfile?.id || selectedDrawerProfile?.registrationId)}
       />
 

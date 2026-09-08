@@ -39,7 +39,7 @@ function getDemoRegistrations() {
       dateOfBirth: '2001-04-18',
       phone: '9840123456',
       email: 'karthika.s@example.com',
-      maritalStatus: 'Never Married',
+      maritalStatus: 'Single',
       fatherName: 'Subramanian',
       motherName: 'Meenakshi',
       fatherOccupation: 'Retired Government Officer',
@@ -81,7 +81,7 @@ function getDemoRegistrations() {
       dateOfBirth: '1998-08-12',
       phone: '9790876543',
       email: 'vijay.kumar@example.com',
-      maritalStatus: 'Never Married',
+      maritalStatus: 'Single',
       fatherName: 'Sundaram',
       motherName: 'Parvathi',
       fatherOccupation: 'Business (Textiles)',
@@ -222,6 +222,36 @@ export async function updateRegistrationStatus(registrationId, newStatus) {
       return true;
     }
     throw new Error('Registration not found.');
+  }
+}
+
+/**
+ * Updates complete details of a registration document
+ */
+export async function updateRegistration(registrationId, updateData) {
+  const payload = {
+    ...updateData,
+    updatedAt: isFirebaseConfigured ? serverTimestamp() : new Date().toISOString()
+  };
+
+  if (isFirebaseConfigured && db) {
+    try {
+      const docRef = doc(db, 'registrations', registrationId);
+      await updateDoc(docRef, payload);
+      return { id: registrationId, ...payload };
+    } catch (error) {
+      console.error('Firestore update registration error:', error);
+      throw new Error('Failed to update registration profile. Please try again.');
+    }
+  } else {
+    const list = getDemoRegistrations();
+    const index = list.findIndex((r) => r.id === registrationId || r.registrationId === registrationId);
+    if (index !== -1) {
+      list[index] = { ...list[index], ...payload };
+      localStorage.setItem(DEMO_REGISTRATIONS_KEY, JSON.stringify(list));
+      return list[index];
+    }
+    throw new Error('Registration profile not found.');
   }
 }
 

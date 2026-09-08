@@ -123,14 +123,14 @@ export function AdminDashboardPage() {
               count={stats.groom}
               icon={User}
               color="#0284c7"
-              subtitle="Male Candidates"
+              subtitle="Male Profile"
             />
             <StatsCard
               title="Bride"
               count={stats.bride}
               icon={Heart}
               color="#db2777"
-              subtitle="Female Candidates"
+              subtitle="Female Profile"
             />
           </div>
         )}

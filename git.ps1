@@ -1,6 +1,6 @@
 git init
 git add .
-git commit -m "feat: v1"
+git commit -m "feat: 80% completed"
 git branch -M main
 git remote add origin https://github.com/Sharathim/raani_mat.git
 git push -u origin main

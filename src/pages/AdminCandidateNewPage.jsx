@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { AdminLayout } from '../components/admin/AdminLayout';
 import { ProfilePhotoUploader } from '../components/registration/ProfilePhotoUploader';
 import { ErrorBanner } from '../components/common/ErrorBanner';
-import { createRegistration } from '../services/registrationService';
+import { createRegistration, getRegistration, updateRegistration } from '../services/registrationService';
 import {
   INITIAL_FORM_STATE,
   REGISTRATION_STATUS,
@@ -31,11 +31,14 @@ import {
   Camera,
   HeartHandshake,
   Save,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 
 export function AdminCandidateNewPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
 
   const [formData, setFormData] = useState({
     ...INITIAL_FORM_STATE,
@@ -44,10 +47,34 @@ export function AdminCandidateNewPage() {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(isEditMode);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdId, setCreatedId] = useState('');
+
+  useEffect(() => {
+    if (id) {
+      setIsLoading(true);
+      getRegistration(id)
+        .then((data) => {
+          if (data) {
+            setFormData((prev) => ({
+              ...prev,
+              ...data,
+              maritalStatus: data.maritalStatus === 'Never Married' ? 'Single' : (data.maritalStatus || 'Single')
+            }));
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch candidate for edit:', err);
+          setSubmitError(err.message || 'Failed to load candidate profile details.');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -148,14 +175,20 @@ export function AdminCandidateNewPage() {
     setSubmitError(null);
 
     try {
-      const created = await createRegistration(formData);
-      setIsSuccess(true);
-      setCreatedId(created.registrationId || created.id);
+      if (isEditMode) {
+        await updateRegistration(id, formData);
+        setIsSuccess(true);
+        setCreatedId(id);
+      } else {
+        const created = await createRegistration(formData);
+        setIsSuccess(true);
+        setCreatedId(created.registrationId || created.id);
+      }
       setTimeout(() => {
         navigate('/admin/profiles');
       }, 1500);
     } catch (err) {
-      console.error('Failed to create candidate:', err);
+      console.error(isEditMode ? 'Failed to update candidate:' : 'Failed to create candidate:', err);
       setSubmitError(err.message || 'Failed to save candidate. Please verify the input values.');
       setIsSubmitting(false);
     }
@@ -176,10 +209,12 @@ export function AdminCandidateNewPage() {
             <div className="admin-page-titlebar" style={{ marginBottom: '1.25rem' }}>
               <div className="admin-page-title-group">
                 <h1 className="admin-page-heading">
-                  Register New Profile
+                  {isEditMode ? 'Edit Candidate Profile' : 'Register New Profile'}
                 </h1>
                 <p className="admin-page-subheading">
-                  Create and register a matrimonial applicant profile in the database.
+                  {isEditMode
+                    ? `Updating details for profile ${id}`
+                    : 'Create and register a matrimonial applicant profile in the database.'}
                 </p>
               </div>
             </div>
@@ -189,7 +224,7 @@ export function AdminCandidateNewPage() {
               <div className="admin-success-banner" role="alert">
                 <CheckCircle2 size={22} color="var(--success)" />
                 <div>
-                  <strong>Candidate Created Successfully!</strong>
+                  <strong>{isEditMode ? 'Candidate Profile Updated Successfully!' : 'Candidate Created Successfully!'}</strong>
                   <p style={{ margin: '2px 0 0', fontSize: '0.85rem' }}>
                     Registration ID: <strong>{createdId}</strong>. Redirecting to candidates list...
                   </p>
@@ -197,8 +232,16 @@ export function AdminCandidateNewPage() {
               </div>
             )}
 
-            {/* Error Notification */}
-            <ErrorBanner message={submitError} onDismiss={() => setSubmitError(null)} />
+            {/* Loading Indicator */}
+            {isLoading ? (
+              <div style={{ padding: '3rem', textAlign: 'center' }}>
+                <Loader2 size={32} className="spin" style={{ color: 'var(--maroon-800)', margin: '0 auto 1rem' }} />
+                <p style={{ color: 'var(--muted)', fontWeight: 500 }}>Loading profile data for editing...</p>
+              </div>
+            ) : (
+              <>
+                {/* Error Notification */}
+                <ErrorBanner message={submitError} onDismiss={() => setSubmitError(null)} />
 
             {/* Candidate Registration Form */}
             <form onSubmit={handleSubmit} className="admin-register-form card-clean">
@@ -771,10 +814,12 @@ export function AdminCandidateNewPage() {
                   className="btn btn-primary admin-form-submit-btn"
                 >
                   <Save size={18} />
-                  <span>{isSubmitting ? 'Saving Profile...' : 'Save Candidate'}</span>
+                  <span>{isSubmitting ? (isEditMode ? 'Updating Profile...' : 'Saving Profile...') : (isEditMode ? 'Update Candidate Profile' : 'Save Candidate')}</span>
                 </button>
               </div>
             </form>
+          </>
+        )}
       </div>
     </AdminLayout>
   );

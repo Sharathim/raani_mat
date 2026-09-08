@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, ZoomIn, ZoomOut, RotateCcw, User } from 'lucide-react';
+
+const MIN_SCALE = 1;
+const MAX_SCALE = 3;
 
 export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo', isOpen, onClose }) {
   const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const scaleRef = useRef(1);
+  const translateRef = useRef({ x: 0, y: 0 });
+  const gestureRef = useRef(null);
+  const lastTapRef = useRef(0);
+  const lastTouchRef = useRef(0);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -15,7 +24,11 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     } else {
+      scaleRef.current = 1;
+      translateRef.current = { x: 0, y: 0 };
       setScale(1);
+      setTranslate({ x: 0, y: 0 });
+      gestureRef.current = null;
     }
 
     return () => {
@@ -26,24 +39,99 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
 
   if (!isOpen) return null;
 
+  const applyScale = (nextScale) => {
+    const clamped = Math.min(MAX_SCALE, Math.max(MIN_SCALE, nextScale));
+    scaleRef.current = clamped;
+    setScale(clamped);
+    if (clamped === 1) {
+      translateRef.current = { x: 0, y: 0 };
+      setTranslate({ x: 0, y: 0 });
+    }
+  };
+
   const handleZoomIn = (e) => {
     e?.stopPropagation();
-    setScale((prev) => Math.min(prev + 0.35, 3));
+    applyScale(scaleRef.current + 0.35);
   };
 
   const handleZoomOut = (e) => {
     e?.stopPropagation();
-    setScale((prev) => Math.max(prev - 0.35, 0.65));
+    applyScale(scaleRef.current - 0.35);
   };
 
   const handleResetZoom = (e) => {
     e?.stopPropagation();
-    setScale(1);
+    applyScale(1);
   };
 
   const handleImageDoubleClick = (e) => {
     e.stopPropagation();
-    setScale((prev) => (prev > 1.2 ? 1 : 2));
+    // On touch devices the double-tap is handled by the touch handlers;
+    // ignore the synthesized dblclick so zoom doesn't toggle twice.
+    if (Date.now() - lastTouchRef.current < 500) return;
+    applyScale(scaleRef.current > 1.2 ? 1 : 2);
+  };
+
+  const touchDistance = (touches) =>
+    touches.length >= 2
+      ? Math.hypot(touches[0].clientX - touches[1].clientX, touches[0].clientY - touches[1].clientY)
+      : 0;
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length >= 2) {
+      gestureRef.current = {
+        mode: 'pinch',
+        startDist: touchDistance(e.touches),
+        startScale: scaleRef.current
+      };
+    } else if (e.touches.length === 1) {
+      const t = e.touches[0];
+      gestureRef.current = {
+        mode: 'pan',
+        startX: t.clientX,
+        startY: t.clientY,
+        startTx: translateRef.current.x,
+        startTy: translateRef.current.y,
+        moved: false
+      };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    const g = gestureRef.current;
+    if (!g) return;
+
+    if (g.mode === 'pinch' && e.touches.length >= 2) {
+      const dist = touchDistance(e.touches);
+      if (dist > 0) {
+        const next = g.startScale * (dist / g.startDist);
+        applyScale(next);
+      }
+    } else if (g.mode === 'pan' && e.touches.length === 1 && scaleRef.current > 1) {
+      const t = e.touches[0];
+      const dx = t.clientX - g.startX;
+      const dy = t.clientY - g.startY;
+      if (Math.abs(dx) + Math.abs(dy) > 10) g.moved = true;
+      if (g.moved) {
+        translateRef.current = { x: g.startTx + dx, y: g.startTy + dy };
+        setTranslate(translateRef.current);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    const g = gestureRef.current;
+    if (g && g.mode === 'pan' && !g.moved) {
+      const now = Date.now();
+      lastTouchRef.current = now;
+      if (now - lastTapRef.current < 300) {
+        applyScale(scaleRef.current > 1.2 ? 1 : 2);
+        lastTapRef.current = 0;
+      } else {
+        lastTapRef.current = now;
+      }
+    }
+    gestureRef.current = null;
   };
 
   return (
@@ -66,7 +154,7 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
             type="button"
             className="image-viewer-btn"
             onClick={handleZoomOut}
-            disabled={scale <= 0.65}
+            disabled={scale <= MIN_SCALE}
             title="Zoom Out"
             aria-label="Zoom out photo"
           >
@@ -77,7 +165,7 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
             type="button"
             className="image-viewer-btn"
             onClick={handleZoomIn}
-            disabled={scale >= 3}
+            disabled={scale >= MAX_SCALE}
             title="Zoom In"
             aria-label="Zoom in photo"
           >
@@ -109,14 +197,20 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
       </div>
 
       {/* Main Image Stage */}
-      <div className="image-viewer-stage" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="image-viewer-stage"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={altText}
             className="image-viewer-img"
             style={{
-              transform: `scale(${scale})`,
+              transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
             }}
             onDoubleClick={handleImageDoubleClick}
@@ -132,7 +226,7 @@ export function ImageViewerModal({ imageUrl, altText = 'Candidate Profile Photo'
 
       {/* Touch/Desktop Helper Caption */}
       <div className="image-viewer-hint">
-        <span>Double-click or tap controls to zoom • Esc or tap backdrop to close</span>
+        <span>Pinch, double-tap, or use controls to zoom • Esc or tap backdrop to close</span>
       </div>
     </div>
   );

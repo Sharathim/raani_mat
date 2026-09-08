@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogoMark } from '../common/LogoMark';
 import { BRAND } from '../../utils/constants';
-import { LayoutDashboard, Clock, Users, CheckCircle2, LogOut, Globe } from 'lucide-react';
+import { LayoutDashboard, Clock, Users, CheckCircle2, LogOut } from 'lucide-react';
 
 export function DesktopHeader({ onRequestLogout }) {
   const location = useLocation();
@@ -17,23 +17,20 @@ export function DesktopHeader({ onRequestLogout }) {
     <header className="admin-desktop-header" aria-label="Desktop Header Navigation">
       <div className="container admin-header-inner">
         {/* Left: Brand Logo & Website Title */}
-        <div className="admin-header-brand-wrap">
-          <Link to="/admin" className="admin-header-brand-link" title="Rani Matrimony Admin">
-            <LogoMark size={38} />
-            <div className="admin-header-brand-text">
-              <div className="admin-header-title-row">
-                <span className="font-tamil-brand admin-header-brand-name">
-                  {BRAND.tamilName}
-                </span>
-                <span className="admin-badge-desktop">
-                  ADMIN
-                </span>
-              </div>
-              <div className="admin-subtitle-desktop">
-                Matrimonial Management Portal
-              </div>
-            </div>
+        <div className="admin-header-brand-wrap" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Link to="/admin" className="admin-header-logo-link" title="Rani Matrimony Admin" style={{ display: 'flex', alignItems: 'center' }}>
+            <LogoMark size={46} />
           </Link>
+          <div className="admin-header-brand-text">
+            <div className="admin-header-title-row">
+              <span className="font-tamil-brand admin-header-brand-name">
+                {BRAND.tamilName}
+              </span>
+            </div>
+            <div className="admin-subtitle-desktop">
+              Matrimonial Management Portal
+            </div>
+          </div>
         </div>
 
         {/* Center/Right: Desktop Primary Navigation Tabs & Utilities */}
@@ -71,17 +68,6 @@ export function DesktopHeader({ onRequestLogout }) {
           </Link>
 
           <div className="admin-desktop-nav-divider" />
-
-          <Link
-            to="/"
-            className="admin-desktop-utility-btn"
-            title="Open Public Website"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Globe size={15} />
-            <span>Public Site</span>
-          </Link>
 
           <button
             type="button"

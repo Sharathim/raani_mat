@@ -19,25 +19,21 @@ export function AdminHeader({
     <header className="admin-header">
       <div className="container admin-header-inner">
         {/* Left: Brand Logo & COMPLETE Tamil Website Name */}
-        <div className="admin-header-brand-wrap">
-          <Link to="/admin" className="admin-header-brand-link" title="Rani Matrimony Admin">
-            <LogoMark size={36} />
-            <div className="admin-header-brand-text">
-              <div className="admin-header-title-row">
-                <span className="font-tamil-brand admin-header-brand-name">
-                  {BRAND.tamilName}
-                </span>
-                {/* Desktop-only ADMIN badge */}
-                <span className="admin-badge-desktop">
-                  ADMIN
-                </span>
-              </div>
-              {/* Desktop-only subtitle */}
-              <div className="admin-subtitle-desktop">
-                Matrimonial Management Portal
-              </div>
-            </div>
+        <div className="admin-header-brand-wrap" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <Link to="/admin" className="admin-header-logo-link" title="Rani Matrimony Admin" style={{ display: 'flex', alignItems: 'center' }}>
+            <LogoMark size={46} />
           </Link>
+          <div className="admin-header-brand-text">
+            <div className="admin-header-title-row">
+              <span className="font-tamil-brand admin-header-brand-name">
+                {BRAND.tamilName}
+              </span>
+            </div>
+            {/* Desktop-only subtitle */}
+            <div className="admin-subtitle-desktop">
+              Matrimonial Management Portal
+            </div>
+          </div>
         </div>
 
         {/* Center/Right: Desktop Primary Navigation Tabs */}
@@ -76,17 +72,6 @@ export function AdminHeader({
 
           {/* Secondary Actions on Desktop */}
           <div className="admin-desktop-nav-divider" />
-
-          <Link
-            to="/"
-            className="admin-desktop-utility-btn"
-            title="Open Public Website"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Globe size={15} />
-            <span>Public Site</span>
-          </Link>
 
           <button
             type="button"

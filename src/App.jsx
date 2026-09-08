@@ -96,6 +96,18 @@ export function App() {
             path="/admin/candidates/new"
             element={<Navigate to="/admin/profiles/new" replace />}
           />
+          <Route
+            path="/admin/profiles/edit/:id"
+            element={
+              <ProtectedRoute>
+                <AdminCandidateNewPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates/edit/:id"
+            element={<Navigate to="/admin/profiles/edit/:id" replace />}
+          />
 
           {/* 404 Not Found */}
           <Route path="/404" element={<NotFoundPage />} />

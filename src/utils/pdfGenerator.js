@@ -7,6 +7,52 @@ import logoUrl from '../assets/logo.png';
 let cachedLogoBase64 = null;
 
 /**
+ * Renders Tamil text onto a high-DPI HTML5 canvas and exports as base64 PNG data URL.
+ * Ensures Tamil Unicode characters ("ராணி திருமண சேவை மையம்") render perfectly inside jsPDF.
+ */
+function createTamilTextDataUrl(text, fontSize = 28, color = '#ffffff', fontWeight = '800') {
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const fontSpec = `${fontWeight} ${fontSize}px "Mukta Malar", "Noto Sans Tamil", "Latha", "Nirmala UI", "Tiro Tamil", system-ui, sans-serif`;
+    ctx.font = fontSpec;
+    const textMetrics = ctx.measureText(text);
+    const textWidth = Math.ceil(textMetrics.width) + 24;
+    const textHeight = Math.ceil(fontSize * 1.4);
+
+    const scale = 3; // 3x scale for ultra-crisp 300+ DPI print quality
+    canvas.width = textWidth * scale;
+    canvas.height = textHeight * scale;
+
+    ctx.scale(scale, scale);
+    ctx.font = fontSpec;
+    ctx.fillStyle = color;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 2, textHeight / 2);
+
+    return {
+      dataUrl: canvas.toDataURL('image/png'),
+      widthMm: (textWidth / 3.7795) * 0.72,
+      heightMm: (textHeight / 3.7795) * 0.72
+    };
+  } catch (e) {
+    console.warn('Tamil text canvas export error:', e);
+    return null;
+  }
+}
+
+/**
+ * Sanitizes text strings for standard jsPDF fonts (Helvetica), converting unsupported
+ * Unicode currency symbols like ₹ (\u20B9) into clean 'Rs.' strings.
+ */
+function sanitizePdfText(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/₹\s*/g, 'Rs. ')
+    .replace(/\u20B9\s*/g, 'Rs. ');
+}
+
+/**
  * Loads a standard image URL and converts it to a base64 Data URL.
  */
 function loadImageAsBase64(url, timeoutMs = 3500) {
@@ -200,10 +246,16 @@ export async function generateCandidateBioDataPdf(candidate) {
   const headerTextX = logoBase64 ? logoX + logoBoxSize + 5 : margin + contentWidth / 2;
   const headerAlign = logoBase64 ? 'left' : 'center';
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
-  doc.setTextColor(255, 255, 255);
-  doc.text('RANI THIRUMANA SEVAI MAIYAM', headerTextX, currentY + 7.5, { align: headerAlign });
+  // Main Header Title: "ராணி திருமண சேவை மையம்"
+  const headerTitleImg = createTamilTextDataUrl('ராணி திருமண சேவை மையம்', 28, '#ffffff', '800');
+  if (headerTitleImg) {
+    doc.addImage(headerTitleImg.dataUrl, 'PNG', headerTextX, currentY + 1.2, headerTitleImg.widthMm, headerTitleImg.heightMm);
+  } else {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(255, 255, 255);
+    doc.text('RANI THIRUMANA SEVAI MAIYAM', headerTextX, currentY + 7.5, { align: headerAlign });
+  }
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
@@ -258,7 +310,8 @@ export async function generateCandidateBioDataPdf(candidate) {
   // Subtitle Pill / Quick Demographics Badge
   const genderLabel = candidate.gender === 'Female' ? 'Bride (Female)' : 'Groom (Male)';
   const ageLabel = candidate.age ? `${candidate.age} Yrs` : '';
-  const maritalLabel = candidate.maritalStatus || 'Never Married';
+  const rawMarital = candidate.maritalStatus || 'Single';
+  const maritalLabel = rawMarital === 'Never Married' ? 'Single' : rawMarital;
   const badgeText = [ageLabel, genderLabel, maritalLabel].filter(Boolean).join('   •   ');
 
   doc.setFillColor(...maroonLight);
@@ -295,7 +348,7 @@ export async function generateCandidateBioDataPdf(candidate) {
       doc.text(left.label, heroCardX + 6, currentHeroRowY);
 
       const maxW = heroColW - 27;
-      const rawStr = String(left.value || '—');
+      const rawStr = sanitizePdfText(left.value || '—');
       doc.setFont('helvetica', 'bold');
       if (doc.getTextWidth(rawStr) > maxW) {
         doc.setFontSize(7.2);
@@ -316,7 +369,7 @@ export async function generateCandidateBioDataPdf(candidate) {
       doc.text(right.label, heroCardX + 6 + heroColW, currentHeroRowY);
 
       const maxW = heroColW - 27;
-      const rawStr = String(right.value || '—');
+      const rawStr = sanitizePdfText(right.value || '—');
       doc.setFont('helvetica', 'bold');
       if (doc.getTextWidth(rawStr) > maxW) {
         doc.setFontSize(7.2);
@@ -354,10 +407,15 @@ export async function generateCandidateBioDataPdf(candidate) {
       doc.setFillColor(...gold);
       doc.rect(margin, currentY + 12, contentWidth, 1, 'F');
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10.5);
-      doc.setTextColor(255, 255, 255);
-      doc.text(`RANI THIRUMANA SEVAI MAIYAM — ${candidate.name || 'Candidate'} (Page 2)`, margin + 6, currentY + 8);
+      const page2TitleImg = createTamilTextDataUrl(`ராணி திருமண சேவை மையம் — ${candidate.name || 'Candidate'} (Page 2)`, 22, '#ffffff', '700');
+      if (page2TitleImg) {
+        doc.addImage(page2TitleImg.dataUrl, 'PNG', margin + 6, currentY + 2.2, page2TitleImg.widthMm, page2TitleImg.heightMm);
+      } else {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor(255, 255, 255);
+        doc.text(`RANI THIRUMANA SEVAI MAIYAM — ${candidate.name || 'Candidate'} (Page 2)`, margin + 6, currentY + 8);
+      }
       currentY += 17;
     }
 
@@ -400,7 +458,7 @@ export async function generateCandidateBioDataPdf(candidate) {
 
         doc.setFont('helvetica', 'bold');
         const maxW = colWidth - 42;
-        const rawStr = String(left.value || '—');
+        const rawStr = sanitizePdfText(left.value || '—');
         if (doc.getTextWidth(rawStr) > maxW) {
           doc.setFontSize(7.4);
           if (doc.getTextWidth(rawStr) > maxW) {
@@ -424,7 +482,7 @@ export async function generateCandidateBioDataPdf(candidate) {
 
         doc.setFont('helvetica', 'bold');
         const maxW = colWidth - 42;
-        const rawStr = String(right.value || '—');
+        const rawStr = sanitizePdfText(right.value || '—');
         if (doc.getTextWidth(rawStr) > maxW) {
           doc.setFontSize(7.4);
           if (doc.getTextWidth(rawStr) > maxW) {
@@ -481,11 +539,11 @@ export async function generateCandidateBioDataPdf(candidate) {
     { label: 'Native Place', value: candidate.nativePlace },
     { label: 'Current Location', value: candidate.location },
     { label: 'Contact Phone', value: candidate.phone },
-    { label: 'Marital Status', value: candidate.maritalStatus || 'Never Married' }
+    { label: 'Marital Status', value: (candidate.maritalStatus === 'Never Married' ? 'Single' : candidate.maritalStatus) || 'Single' }
   ]);
 
   // --- SECTION 5: PARTNER EXPECTATIONS ---
-  const expectationText = candidate.expectation?.trim() || 'Open to suitable matrimonial alliances with mutual understanding and family values.';
+  const expectationText = sanitizePdfText(candidate.expectation?.trim() || 'Open to suitable matrimonial alliances with mutual understanding and family values.');
   const expHeaderH = 6.2;
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.2);
@@ -556,10 +614,15 @@ export async function generateCandidateBioDataPdf(candidate) {
   doc.setLineWidth(0.6);
   doc.line(margin, footerY - 1.5, margin + contentWidth, footerY - 1.5);
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7.5);
-  doc.setTextColor(...maroon);
-  doc.text('RANI THIRUMANA SEVAI MAIYAM', margin, footerY + 2.5);
+  const footerTitleImg = createTamilTextDataUrl('ராணி திருமண சேவை மையம்', 20, '#5a0715', '800');
+  if (footerTitleImg) {
+    doc.addImage(footerTitleImg.dataUrl, 'PNG', margin, footerY - 1, footerTitleImg.widthMm, footerTitleImg.heightMm);
+  } else {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(...maroon);
+    doc.text('RANI THIRUMANA SEVAI MAIYAM', margin, footerY + 2.5);
+  }
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6.8);

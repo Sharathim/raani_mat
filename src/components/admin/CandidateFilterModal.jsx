@@ -106,7 +106,6 @@ export function CandidateFilterModal({
     let count = 0;
     if (tempFilters.status !== 'all') count++;
     if (tempFilters.gender !== 'all') count++;
-    if (tempFilters.photo !== 'all') count++;
     if (tempFilters.maritalStatus !== 'all') count++;
     if (tempFilters.minAge || tempFilters.maxAge) count++;
     if (tempFilters.religion !== 'all') count++;
@@ -135,11 +134,7 @@ export function CandidateFilterModal({
     { value: 'Male', label: 'Groom (Male)' }
   ];
 
-  const photoOptions = [
-    { value: 'all', label: 'All Profiles' },
-    { value: 'withPhoto', label: 'With Photo' },
-    { value: 'noPhoto', label: 'No Photo' }
-  ];
+
 
   const sortOptions = [
     { value: 'newest', label: 'Newest First' },
@@ -163,7 +158,6 @@ export function CandidateFilterModal({
     const defaultState = {
       status: 'all',
       gender: 'all',
-      photo: 'all',
       maritalStatus: 'all',
       minAge: '',
       maxAge: '',
@@ -294,21 +288,8 @@ export function CandidateFilterModal({
               </div>
             </div>
 
-            {/* Photo & Marital Status Row */}
-            <div className="filter-sheet-row">
-              <div className="filter-sheet-section">
-                <label className="filter-sheet-label">Profile Photo</label>
-                <select
-                  value={tempFilters.photo}
-                  onChange={(e) => handleFieldChange('photo', e.target.value)}
-                  className="filter-select-input"
-                >
-                  {photoOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-
+            {/* Marital Status Section */}
+            <div className="filter-sheet-group">
               <div className="filter-sheet-section">
                 <label className="filter-sheet-label">Marital Status</label>
                 <select

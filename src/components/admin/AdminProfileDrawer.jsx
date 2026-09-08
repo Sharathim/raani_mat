@@ -1,29 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StatusBadge } from '../common/StatusBadge';
 import { ImageViewerModal } from '../common/ImageViewerModal';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
 import { generateCandidateBioDataPdf } from '../../utils/pdfGenerator';
 import {
-  X,
+  ArrowLeft,
   Phone,
-  Mail,
-  MapPin,
-  Calendar,
+  MessageCircle,
   User,
   Users,
   HeartHandshake,
   Briefcase,
   Sparkles,
-  Share2,
   Download,
   CheckCircle2,
-  MessageCircle,
   Trash2,
   Loader2,
   ZoomIn,
-  ArrowLeft
+  MoreVertical,
+  Copy,
+  Check,
+  Edit
 } from 'lucide-react';
+
+/* ---------------------------------------------------------------------------
+   Reusable detail building blocks
+--------------------------------------------------------------------------- */
+
+function DetailField({ label, value, hint, fullWidth = false, maroon = false }) {
+  return (
+    <div className={`admin-detail-item${fullWidth ? ' full-width' : ''}`}>
+      <span className="admin-detail-label">{label}</span>
+      <span className={`admin-detail-value${maroon ? ' highlight-maroon' : ''}`}>{value || '—'}</span>
+      {hint ? <span className="admin-detail-hint">{hint}</span> : null}
+    </div>
+  );
+}
+
+function DetailSection({ icon: Icon, title, children }) {
+  return (
+    <section className="admin-detail-section-card">
+      <h3 className="admin-detail-section-title">
+        <Icon size={16} strokeWidth={1.9} aria-hidden="true" />
+        <span>{title}</span>
+      </h3>
+      <div className="admin-detail-grid">{children}</div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Candidate Profile Drawer
+--------------------------------------------------------------------------- */
 
 export function AdminProfileDrawer({
   registration,
@@ -32,25 +62,42 @@ export function AdminProfileDrawer({
   onStatusChange,
   onDeleteClick,
   onShareClick,
+  onEditClick,
   isSharing = false
 }) {
+  const navigate = useNavigate();
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [copiedId, setCopiedId] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && !isImageViewerOpen) onClose();
+      if (e.key !== 'Escape') return;
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+        return;
+      }
+      if (!isImageViewerOpen) onClose();
+    };
+    const handlePointerDown = (e) => {
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
     };
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('pointerdown', handlePointerDown);
     }
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('pointerdown', handlePointerDown);
     };
-  }, [isOpen, isImageViewerOpen, onClose]);
+  }, [isOpen, isImageViewerOpen, isMenuOpen, onClose]);
 
   const handleDownloadPdf = async () => {
     if (!registration || isDownloading) return;
@@ -67,6 +114,30 @@ export function AdminProfileDrawer({
     }
   };
 
+  const handleCopyId = async () => {
+    const id = String(registration.registrationId || registration.id || '');
+    if (!id) return;
+    try {
+      await navigator.clipboard.writeText(id);
+      setCopiedId(true);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = id;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        setCopiedId(true);
+      } catch {
+        /* clipboard unavailable */
+      }
+      document.body.removeChild(ta);
+    }
+    setTimeout(() => setCopiedId(false), 2000);
+  };
+
   if (!isOpen || !registration) return null;
 
   const cleanPhone = (registration.phone || '').replace(/\D/g, '');
@@ -74,474 +145,330 @@ export function AdminProfileDrawer({
     `Hello ${registration.name || ''}, greetings from Rani Thirumana Sevai Maiyam regarding your matrimonial profile.`
   )}`;
 
+  const maritalStatusDisplay = registration.maritalStatus === 'Never Married' ? 'Single' : (registration.maritalStatus || 'Single');
+
   const demographics = [
     registration.age ? `${registration.age} Years` : null,
     registration.gender === 'Female' ? 'Bride' : 'Groom',
-    registration.maritalStatus || 'Never Married'
+    maritalStatusDisplay
   ].filter(Boolean).join(' • ');
+
+  const candidateId = registration.registrationId || registration.id;
+  const name = registration.name || 'Unnamed Candidate';
 
   return (
     <>
       <div className="drawer-backdrop" onClick={onClose} aria-modal="true" role="dialog">
         <div className="drawer-panel" onClick={(e) => e.stopPropagation()}>
-          {/* Drawer Top Header */}
-          <div
-            style={{
-              padding: '1rem 1.25rem',
-              borderBottom: '1px solid var(--border)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              backgroundColor: '#ffffff',
-              position: 'sticky',
-              top: 0,
-              zIndex: 15
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--ink)',
-                  cursor: 'pointer',
-                  padding: '0.2rem',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-                aria-label="Back / Close"
-                title="Back to List"
-              >
-                <ArrowLeft size={18} />
-              </button>
+          {/* Sticky compact header */}
+          <header className="candidate-header">
+            <button
+              type="button"
+              className="candidate-header-back"
+              onClick={onClose}
+              aria-label="Back to candidate list"
+              title="Back to List"
+            >
+              <ArrowLeft size={18} />
+            </button>
 
-              <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>
-                Candidate Profile
-              </h2>
-
-              <span
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontWeight: 600,
-                  fontSize: '0.75rem',
-                  color: 'var(--maroon-800)',
-                  background: 'var(--maroon-50)',
-                  padding: '0.15rem 0.5rem',
-                  borderRadius: 'var(--radius-xs)',
-                  border: '1px solid rgba(138, 16, 38, 0.15)'
-                }}
-              >
-                {registration.registrationId || registration.id}
-              </span>
+            <div className="candidate-header-titles">
+              <h1 className="candidate-header-title">Candidate Profile</h1>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <StatusBadge status={registration.status} />
+            <div className="candidate-header-actions" ref={menuRef}>
+              <div className="candidate-menu-wrap">
+                <button
+                  type="button"
+                  className="candidate-menu-trigger"
+                  onClick={() => setIsMenuOpen((v) => !v)}
+                  aria-label="More actions"
+                  aria-expanded={isMenuOpen}
+                  title="More actions"
+                >
+                  <MoreVertical size={18} />
+                </button>
 
-              <button
-                type="button"
-                onClick={handleDownloadPdf}
-                disabled={isDownloading}
-                className="btn btn-secondary btn-sm"
-                style={{
-                  padding: '0.3rem 0.6rem',
-                  fontSize: '0.775rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  color: downloadSuccess ? 'var(--success)' : 'var(--ink)'
-                }}
-                title="Download Matrimonial Biodata PDF"
-              >
-                {isDownloading ? (
-                  <Loader2 size={13} className="spin" />
-                ) : downloadSuccess ? (
-                  <CheckCircle2 size={13} color="var(--success)" />
-                ) : (
-                  <Download size={13} />
+                {isMenuOpen && (
+                  <div className="candidate-menu" role="menu">
+                    <button
+                      type="button"
+                      className="candidate-menu-item"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        if (onEditClick) {
+                          onEditClick(registration);
+                        } else {
+                          const regId = registration.id || registration.registrationId;
+                          onClose();
+                          navigate(`/admin/profiles/edit/${regId}`);
+                        }
+                      }}
+                    >
+                      <Edit size={16} />
+                      <span>Edit Profile</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="candidate-menu-item"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleDownloadPdf();
+                      }}
+                      disabled={isDownloading}
+                    >
+                      {isDownloading ? (
+                        <Loader2 size={16} className="spin" />
+                      ) : downloadSuccess ? (
+                        <CheckCircle2 size={16} color="var(--success)" />
+                      ) : (
+                        <Download size={16} />
+                      )}
+                      <span>{isDownloading ? 'Preparing PDF…' : downloadSuccess ? 'PDF Downloaded' : 'Download PDF'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="candidate-menu-item"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onShareClick && onShareClick(registration);
+                      }}
+                      disabled={isSharing}
+                    >
+                      {isSharing ? <Loader2 size={16} className="spin" /> : <MessageCircle size={16} color="#25d366" />}
+                      <span>{isSharing ? 'Preparing…' : 'Share via WhatsApp'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="candidate-menu-item candidate-menu-item-danger"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onDeleteClick(registration);
+                      }}
+                    >
+                      <Trash2 size={16} color="var(--danger)" />
+                      <span style={{ color: 'var(--danger)' }}>Delete Profile</span>
+                    </button>
+                  </div>
                 )}
-                <span className="hide-mobile">{downloadSuccess ? 'Downloaded' : 'PDF'}</span>
-              </button>
+              </div>
+            </div>
+          </header>
 
+          {/* Scrollable body */}
+          <div className="candidate-body">
+            {/* 1. Profile Hero */}
+            <section className="candidate-hero">
               <button
                 type="button"
-                onClick={onClose}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--muted)',
-                  cursor: 'pointer',
-                  padding: '0.25rem',
-                  borderRadius: 'var(--radius-xs)',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-                aria-label="Close drawer"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-
-          {/* Drawer Body Scroll Container */}
-          <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {/* 1. Profile Hero Summary Card */}
-            <div className="admin-hero-card">
-              {/* Photo Thumbnail */}
-              <div
-                className="admin-hero-photo-wrap"
+                className="candidate-hero-photo"
                 onClick={() => setIsImageViewerOpen(true)}
-                title="Click to view full photo"
+                aria-label={`View full profile photo of ${name}`}
+                title="View full photo"
               >
                 {registration.photoUrl ? (
-                  <img
-                    src={registration.photoUrl}
-                    alt={registration.name || 'Candidate Photo'}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+                  <img src={registration.photoUrl} alt={name} />
                 ) : (
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'var(--muted)',
-                      background: 'var(--surface-alt)'
-                    }}
-                  >
-                    <User size={36} />
-                    <span style={{ fontSize: '0.65rem' }}>No Photo</span>
-                  </div>
+                  <span className="candidate-hero-photo-placeholder">
+                    <User size={34} aria-hidden="true" />
+                    <span>No Photo</span>
+                  </span>
                 )}
                 {registration.photoUrl && (
-                  <div className="admin-hero-photo-badge">
-                    <ZoomIn size={10} style={{ display: 'inline', marginRight: '2px' }} /> Expand
+                  <span className="candidate-hero-photo-expand" aria-hidden="true">
+                    <ZoomIn size={14} />
+                  </span>
+                )}
+              </button>
+
+              <div className="candidate-hero-info">
+                <h2 className="candidate-hero-name">{name}</h2>
+                <p className="candidate-hero-demographics">{demographics}</p>
+
+                {cleanPhone && (
+                  <div className="candidate-hero-contact">
+                    <a
+                      href={`tel:${cleanPhone}`}
+                      className="candidate-contact-btn candidate-contact-call"
+                      title={`Call ${registration.phone}`}
+                    >
+                      <Phone size={17} aria-hidden="true" />
+                      <span>Call</span>
+                    </a>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="candidate-contact-btn candidate-contact-wa"
+                      title="Chat on WhatsApp"
+                    >
+                      <MessageCircle size={17} aria-hidden="true" />
+                      <span>WhatsApp</span>
+                    </a>
                   </div>
                 )}
               </div>
-
-              {/* Identity & Status Actions */}
-              <div className="admin-hero-info">
-                <h2 className="admin-hero-name">
-                  {registration.name || 'Unnamed Candidate'}
-                </h2>
-                <div className="admin-hero-demographics">
-                  {demographics}
-                </div>
-
-                <div className="admin-hero-id">
-                  ID: <span>{registration.registrationId || registration.id}</span>
-                </div>
-
-                {/* Status Dropdown & Quick Actions */}
-                <div className="admin-hero-actions-row">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500 }}>Status:</span>
-                    <select
-                      value={registration.status || REGISTRATION_STATUS.NEW}
-                      onChange={(e) => onStatusChange(registration.id || registration.registrationId, e.target.value)}
-                      className="admin-card-select-status"
-                      aria-label="Update profile status"
-                    >
-                      <option value={REGISTRATION_STATUS.NEW}>New</option>
-                      <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
-                      <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
-                    </select>
-                  </div>
-
-                  {cleanPhone && (
-                    <>
-                      <a
-                        href={`tel:${cleanPhone}`}
-                        className="btn btn-secondary btn-sm"
-                        style={{ padding: '0.25rem 0.55rem', fontSize: '0.75rem' }}
-                        title={`Call ${registration.phone}`}
-                      >
-                        <Phone size={13} color="var(--maroon-700)" />
-                        <span>Call</span>
-                      </a>
-
-                      <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-secondary btn-sm"
-                        style={{ padding: '0.25rem 0.55rem', fontSize: '0.75rem', color: '#15803d', borderColor: '#bbf7d0' }}
-                        title="Chat on WhatsApp"
-                      >
-                        <MessageCircle size={13} color="#15803d" />
-                        <span>WhatsApp</span>
-                      </a>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
+            </section>
 
             {/* 2. Quick Information Grid */}
-            <div className="admin-quick-info-grid">
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Location</span>
-                <span className="admin-quick-info-value">{registration.location || '—'}</span>
+            <section className="candidate-quick-grid" aria-label="Profile summary">
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Location</span>
+                <span className="candidate-quick-value">{registration.location || '—'}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Age</span>
-                <span className="admin-quick-info-value">{registration.age ? `${registration.age} Yrs` : '—'}</span>
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Age</span>
+                <span className="candidate-quick-value">{registration.age ? `${registration.age} Years` : '—'}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Gender</span>
-                <span className="admin-quick-info-value">{registration.gender === 'Female' ? 'Bride' : 'Groom'}</span>
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Gender</span>
+                <span className="candidate-quick-value">{registration.gender === 'Female' ? 'Bride' : 'Groom'}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Marital Status</span>
-                <span className="admin-quick-info-value">{registration.maritalStatus || 'Never Married'}</span>
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Marital Status</span>
+                <span className="candidate-quick-value">{maritalStatusDisplay}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Education</span>
-                <span className="admin-quick-info-value">{registration.education || '—'}</span>
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Education</span>
+                <span className="candidate-quick-value">{registration.education || '—'}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Occupation</span>
-                <span className="admin-quick-info-value">{registration.occupation || '—'}</span>
+              <div className="candidate-quick-cell">
+                <span className="candidate-quick-label">Occupation</span>
+                <span className="candidate-quick-value">{registration.occupation || '—'}</span>
               </div>
-              <div className="admin-quick-info-cell">
-                <span className="admin-quick-info-label">Monthly Income</span>
-                <span className="admin-quick-info-value">{registration.income || '—'}</span>
+              <div className="candidate-quick-cell full">
+                <span className="candidate-quick-label">Monthly Income</span>
+                <span className="candidate-quick-value maroon">{registration.income || '—'}</span>
               </div>
-            </div>
+            </section>
 
-            {/* 3. Categorized Details Cards */}
+            {/* 3. Detailed Information Sections */}
+            <div className="candidate-sections">
+              {/* SECTION 1: Basic & Social Details */}
+              <DetailSection icon={User} title="1. Basic & Social Details">
+                <DetailField label="Profile Created For" value={registration.profileFor} />
+                <DetailField label="Date of Birth" value={registration.dateOfBirth} />
+                <DetailField label="Religion" value={registration.religion} maroon />
+                <DetailField label="Community Category" value={registration.community} />
+                <DetailField label="Caste" value={registration.caste || registration.casteReligion} maroon />
+                <DetailField label="Subcaste / Division" value={registration.subCaste} />
+                <DetailField label="Location / Address" value={registration.location} />
+                <DetailField label="Native Place" value={registration.nativePlace} />
+                <DetailField label="Email Address" value={registration.email} fullWidth />
+              </DetailSection>
 
-            {/* SECTION 1: Basic & Social Details */}
-            <div className="admin-detail-section-card">
-              <h3 className="admin-detail-section-title">
-                <User size={15} />
-                <span>1. Basic & Social Details</span>
-              </h3>
+              {/* SECTION 2: Family Information */}
+              <DetailSection icon={Users} title="2. Family Information">
+                <DetailField label="Father Name" value={registration.fatherName} hint={registration.fatherOccupation} />
+                <DetailField label="Mother Name" value={registration.motherName} hint={registration.motherOccupation} />
+                <DetailField label="Family Type" value={registration.familyType} />
+                <DetailField label="Siblings" value={registration.siblings} />
+              </DetailSection>
 
-              <div className="admin-detail-grid">
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Profile Created For</span>
-                  <span className="admin-detail-value">{registration.profileFor || 'Self'}</span>
-                </div>
+              {/* SECTION 3: Horoscope & Astrology */}
+              <DetailSection icon={Sparkles} title="3. Horoscope & Astrology">
+                <DetailField label="Birth Star (Nakshatra)" value={registration.birthStar} maroon />
+                <DetailField label="Zodiac Sign (Rasi)" value={registration.zodiacSign} maroon />
+                <DetailField label="Lagnam" value={registration.lagnam} />
+                <DetailField
+                  label="Gothram / Dosham"
+                  value={`${registration.gothram || '—'} (${registration.dosham || 'None'})`}
+                />
+              </DetailSection>
 
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Date of Birth</span>
-                  <span className="admin-detail-value">{registration.dateOfBirth || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Religion</span>
-                  <span className="admin-detail-value highlight-maroon">{registration.religion || 'Hindu'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Community Category</span>
-                  <span className="admin-detail-value">{registration.community || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Caste</span>
-                  <span className="admin-detail-value highlight-maroon">{registration.caste || registration.casteReligion || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Subcaste / Division</span>
-                  <span className="admin-detail-value">{registration.subCaste || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Location / Address</span>
-                  <span className="admin-detail-value">{registration.location || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Native Place</span>
-                  <span className="admin-detail-value">{registration.nativePlace || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item full-width">
-                  <span className="admin-detail-label">Email Address</span>
-                  <span className="admin-detail-value" style={{ wordBreak: 'break-all' }}>{registration.email || '—'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 2: Family Information */}
-            <div className="admin-detail-section-card">
-              <h3 className="admin-detail-section-title">
-                <Users size={15} />
-                <span>2. Family Information</span>
-              </h3>
-
-              <div className="admin-detail-grid">
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Father Name</span>
-                  <span className="admin-detail-value">{registration.fatherName || '—'}</span>
-                  {registration.fatherOccupation && (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{registration.fatherOccupation}</span>
-                  )}
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Mother Name</span>
-                  <span className="admin-detail-value">{registration.motherName || '—'}</span>
-                  {registration.motherOccupation && (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{registration.motherOccupation}</span>
-                  )}
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Family Type</span>
-                  <span className="admin-detail-value">{registration.familyType || 'Nuclear Family'}</span>
-                </div>
-
-                <div className="admin-detail-item full-width">
-                  <span className="admin-detail-label">Siblings</span>
-                  <span className="admin-detail-value">{registration.siblings || 'None'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 3: Horoscope & Astrology */}
-            <div className="admin-detail-section-card">
-              <h3 className="admin-detail-section-title">
-                <Sparkles size={15} />
-                <span>3. Horoscope & Astrology</span>
-              </h3>
-
-              <div className="admin-detail-grid">
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Birth Star (Nakshatra)</span>
-                  <span className="admin-detail-value highlight-maroon">{registration.birthStar || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Zodiac Sign (Rasi)</span>
-                  <span className="admin-detail-value highlight-maroon">{registration.zodiacSign || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Lagnam</span>
-                  <span className="admin-detail-value">{registration.lagnam || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Gothram / Dosham</span>
-                  <span className="admin-detail-value">
-                    {registration.gothram || '—'} ({registration.dosham || 'None'})
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* SECTION 4: Education & Career */}
-            <div className="admin-detail-section-card">
-              <h3 className="admin-detail-section-title">
-                <Briefcase size={15} />
-                <span>4. Education & Career</span>
-              </h3>
-
-              <div className="admin-detail-grid">
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Height</span>
-                  <span className="admin-detail-value">{registration.height || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item">
-                  <span className="admin-detail-label">Monthly Income</span>
-                  <span className="admin-detail-value highlight-maroon">{registration.income || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item full-width">
-                  <span className="admin-detail-label">Education / Qualification</span>
-                  <span className="admin-detail-value">{registration.education || '—'}</span>
-                </div>
-
-                <div className="admin-detail-item full-width">
-                  <span className="admin-detail-label">Occupation & Sector</span>
-                  <span className="admin-detail-value">
-                    {registration.occupation || '—'} ({registration.employedIn || 'Private'})
-                  </span>
-                </div>
-              </div>
+              {/* SECTION 4: Education & Career */}
+              <DetailSection icon={Briefcase} title="4. Education & Career">
+                <DetailField label="Height" value={registration.height} />
+                <DetailField label="Monthly Income" value={registration.income} maroon />
+                <DetailField label="Education / Qualification" value={registration.education} fullWidth />
+                <DetailField
+                  label="Occupation & Sector"
+                  value={`${registration.occupation || '—'} (${registration.employedIn || 'Private'})`}
+                  fullWidth
+                />
+              </DetailSection>
             </div>
 
             {/* SECTION 5: Partner Expectations */}
-            <div className="admin-expectation-card">
-              <h3 className="admin-detail-section-title" style={{ borderColor: 'rgba(234, 179, 8, 0.3)' }}>
-                <HeartHandshake size={15} />
+            <section className="candidate-expectation-card">
+              <h3 className="admin-detail-section-title">
+                <HeartHandshake size={16} strokeWidth={1.9} aria-hidden="true" />
                 <span>5. Partner Expectations</span>
               </h3>
-              <p className="admin-expectation-text">
+              <p className="candidate-expectation-text">
                 {registration.expectation && registration.expectation.trim() !== 'nothing'
                   ? registration.expectation
                   : 'No specific preference provided'}
               </p>
-            </div>
+            </section>
 
-            {/* Registration Metadata Footer */}
-            <div style={{ fontSize: '0.75rem', color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', padding: '0 0.25rem' }}>
-              <span>Registered: {formatDate(registration.createdAt)}</span>
-              <span>Candidate ID: {registration.registrationId || registration.id}</span>
-            </div>
+            {/* Registration Metadata */}
+            <section className="candidate-meta" aria-label="Registration information">
+              <div className="candidate-meta-cell">
+                <span className="candidate-meta-label">Registered</span>
+                <span className="candidate-meta-value">{formatDate(registration.createdAt)}</span>
+              </div>
+              <div className="candidate-meta-cell">
+                <span className="candidate-meta-label">Candidate ID</span>
+                <span className="candidate-meta-value">{candidateId}</span>
+              </div>
+            </section>
           </div>
 
-          {/* Sticky Drawer Footer Actions */}
-          <div className="admin-drawer-sticky-footer">
+          {/* Sticky Bottom Action Bar */}
+          <footer className="candidate-action-bar">
             <button
               type="button"
+              className="btn candidate-action-delete"
               onClick={() => onDeleteClick(registration)}
-              className="btn btn-danger btn-sm"
               title="Delete candidate profile permanently"
             >
-              <Trash2 size={14} />
+              <Trash2 size={16} aria-hidden="true" />
               <span>Delete Profile</span>
             </button>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={handleDownloadPdf}
-                disabled={isDownloading}
-                className="btn btn-secondary btn-sm"
-                title="Download Candidate Biodata PDF"
-              >
-                {isDownloading ? (
-                  <Loader2 size={14} className="spin" />
-                ) : downloadSuccess ? (
-                  <CheckCircle2 size={14} color="var(--success)" />
-                ) : (
-                  <Download size={14} />
-                )}
-                <span>{downloadSuccess ? 'Downloaded!' : 'Download PDF'}</span>
-              </button>
+            <button
+              type="button"
+              className="btn btn-secondary candidate-action-secondary"
+              onClick={handleDownloadPdf}
+              disabled={isDownloading}
+              title="Download Candidate Biodata PDF"
+            >
+              {isDownloading ? (
+                <Loader2 size={16} className="spin" />
+              ) : downloadSuccess ? (
+                <CheckCircle2 size={16} color="var(--success)" />
+              ) : (
+                <Download size={16} />
+              )}
+              <span>{isDownloading ? 'Preparing…' : downloadSuccess ? 'Downloaded!' : 'Download PDF'}</span>
+            </button>
 
-              <button
-                type="button"
-                onClick={() => onShareClick && onShareClick(registration)}
-                disabled={isSharing}
-                className="btn btn-primary btn-sm"
-                style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
-                title="Share candidate PDF via WhatsApp"
-              >
-                {isSharing ? <Loader2 size={14} className="spin" /> : <Share2 size={14} />}
-                <span>{isSharing ? 'Preparing...' : 'Share via WhatsApp'}</span>
-              </button>
-            </div>
-          </div>
+            <button
+              type="button"
+              className="btn candidate-action-share"
+              onClick={() => onShareClick && onShareClick(registration)}
+              disabled={isSharing}
+              title="Share candidate PDF via WhatsApp"
+            >
+              {isSharing ? <Loader2 size={16} className="spin" /> : <MessageCircle size={16} aria-hidden="true" />}
+              <span>{isSharing ? 'Preparing…' : 'Share via WhatsApp'}</span>
+            </button>
+          </footer>
         </div>
       </div>
 
       {/* Full-Screen Interactive Photo Viewer */}
       <ImageViewerModal
         imageUrl={registration.photoUrl}
-        altText={`${registration.name || 'Candidate'} Profile Photo`}
+        altText={`${name} Profile Photo`}
         isOpen={isImageViewerOpen}
         onClose={() => setIsImageViewerOpen(false)}
       />

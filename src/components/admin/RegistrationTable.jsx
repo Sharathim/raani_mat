@@ -1,9 +1,8 @@
 import React from 'react';
-import { StatusBadge } from '../common/StatusBadge';
 import { RegistrationCard } from './RegistrationCard';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { Eye, Trash2, User, Phone, MapPin, Share2, Loader2 } from 'lucide-react';
+import { Trash2, User, Briefcase, Share2, Loader2, Edit } from 'lucide-react';
 
 export function RegistrationTable({
   registrations,
@@ -11,6 +10,7 @@ export function RegistrationTable({
   onDeleteClick,
   onRowClick,
   onShareClick,
+  onEditClick,
   sharingId = null
 }) {
   return (
@@ -37,13 +37,11 @@ export function RegistrationTable({
                 letterSpacing: '0.5px'
               }}
             >
-              <th style={{ padding: '0.85rem 1rem', width: '56px' }}>Photo</th>
-              <th style={{ padding: '0.85rem 1rem' }}>Candidate / ID</th>
+              <th style={{ padding: '0.85rem 1rem' }}>Name</th>
               <th style={{ padding: '0.85rem 1rem' }}>Age / Gender</th>
-              <th style={{ padding: '0.85rem 1rem' }}>Location & Caste</th>
-              <th style={{ padding: '0.85rem 1rem' }}>Education & Career</th>
+              <th style={{ padding: '0.85rem 1rem' }}>Occupation</th>
               <th style={{ padding: '0.85rem 1rem' }}>Status</th>
-              <th style={{ padding: '0.85rem 1rem' }}>Registered</th>
+              <th style={{ padding: '0.85rem 1rem' }}>Registered Date & Time</th>
               <th style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>Actions</th>
             </tr>
           </thead>
@@ -59,135 +57,110 @@ export function RegistrationTable({
                   cursor: 'pointer'
                 }}
               >
-                {/* Photo Avatar */}
-                <td style={{ padding: '0.65rem 1rem' }}>
-                  <div
-                    style={{
-                      width: '42px',
-                      height: '52px',
-                      borderRadius: 'var(--radius-xs)',
-                      border: '1px solid var(--border)',
-                      overflow: 'hidden',
-                      backgroundColor: 'var(--cream)',
-                      flexShrink: 0
-                    }}
-                  >
-                    {reg.photoUrl ? (
-                      <img
-                        src={reg.photoUrl}
-                        alt={reg.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'var(--muted)'
-                        }}
-                      >
-                        <User size={18} />
-                      </div>
-                    )}
-                  </div>
-                </td>
-
-                {/* Candidate Name & ID */}
-                <td style={{ padding: '0.65rem 1rem' }}>
-                  <div
-                    style={{
-                      fontWeight: 700,
-                      color: 'var(--ink)',
-                      fontSize: '0.925rem'
-                    }}
-                  >
-                    {reg.name || 'Unnamed Candidate'}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--maroon-800)', fontWeight: 600, marginTop: '2px' }}>
-                    {reg.registrationId || reg.id}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                    <Phone size={11} />
-                    <span>{reg.phone || 'No phone'}</span>
+                {/* Candidate Name & Photo Avatar */}
+                <td style={{ padding: '0.75rem 1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div
+                      style={{
+                        width: '38px',
+                        height: '46px',
+                        borderRadius: 'var(--radius-xs)',
+                        border: '1px solid var(--border)',
+                        overflow: 'hidden',
+                        backgroundColor: 'var(--cream)',
+                        flexShrink: 0
+                      }}
+                    >
+                      {reg.photoUrl ? (
+                        <img
+                          src={reg.photoUrl}
+                          alt={reg.name}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'var(--muted)'
+                          }}
+                        >
+                          <User size={18} />
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        color: 'var(--ink)',
+                        fontSize: '0.925rem'
+                      }}
+                    >
+                      {reg.name || 'Unnamed Candidate'}
+                    </div>
                   </div>
                 </td>
 
                 {/* Age & Gender */}
-                <td style={{ padding: '0.65rem 1rem' }}>
+                <td style={{ padding: '0.75rem 1rem' }}>
                   <div style={{ fontWeight: 600, color: 'var(--ink)' }}>
                     {reg.age ? `${reg.age} Yrs` : '—'}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
-                    {reg.gender === 'Female' ? 'Bride' : 'Groom'}
-                  </div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--muted-light)' }}>
-                    {reg.maritalStatus || 'Unmarried'}
+                    {reg.gender === 'Female' ? 'Bride' : 'Groom'} • {reg.maritalStatus === 'Never Married' ? 'Single' : (reg.maritalStatus || 'Single')}
                   </div>
                 </td>
 
-                {/* Location & Caste */}
-                <td style={{ padding: '0.65rem 1rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 500, color: 'var(--ink)' }}>
-                    <MapPin size={12} color="var(--maroon-700)" />
-                    <span>{reg.location || '—'}</span>
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '2px' }}>
-                    {reg.casteReligion || '—'}
+                {/* Occupation */}
+                <td style={{ padding: '0.75rem 1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontWeight: 500, color: 'var(--ink)' }}>
+                    <Briefcase size={13} color="var(--maroon-700)" />
+                    <span>{reg.occupation || '—'}</span>
                   </div>
                 </td>
 
-                {/* Career & Education */}
-                <td style={{ padding: '0.65rem 1rem', maxWidth: '180px' }}>
-                  <div style={{ fontWeight: 600, color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {reg.occupation || '—'}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {reg.education || '—'}
-                  </div>
+                {/* Status Dropdown (ONLY Dropdown, No Chip) */}
+                <td style={{ padding: '0.75rem 1rem' }} onClick={(e) => e.stopPropagation()}>
+                  <select
+                    value={reg.status || REGISTRATION_STATUS.NEW}
+                    onChange={(e) => onStatusChange(reg.id || reg.registrationId, e.target.value)}
+                    style={{
+                      padding: '0.35rem 0.6rem',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      borderRadius: 'var(--radius-xs)',
+                      border: '1px solid var(--border)',
+                      backgroundColor: '#ffffff',
+                      color: 'var(--ink)',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value={REGISTRATION_STATUS.NEW}>New</option>
+                    <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
+                    <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
+                  </select>
                 </td>
 
-                {/* Status Dropdown */}
-                <td style={{ padding: '0.65rem 1rem' }} onClick={(e) => e.stopPropagation()}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                    <StatusBadge status={reg.status} />
-                    <select
-                      value={reg.status || REGISTRATION_STATUS.NEW}
-                      onChange={(e) => onStatusChange(reg.id || reg.registrationId, e.target.value)}
-                      style={{
-                        padding: '0.2rem 0.4rem',
-                        fontSize: '0.75rem',
-                        borderRadius: 'var(--radius-xs)',
-                        border: '1px solid var(--border)',
-                        backgroundColor: '#ffffff'
-                      }}
-                    >
-                      <option value={REGISTRATION_STATUS.NEW}>New</option>
-                      <option value={REGISTRATION_STATUS.REVIEWED}>Reviewed</option>
-                      <option value={REGISTRATION_STATUS.COMPLETED}>Completed</option>
-                    </select>
-                  </div>
-                </td>
-
-                {/* Registered Date */}
-                <td style={{ padding: '0.65rem 1rem', fontSize: '0.75rem', color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+                {/* Registered Date & Time */}
+                <td style={{ padding: '0.75rem 1rem', fontSize: '0.775rem', color: 'var(--muted)', whiteSpace: 'nowrap' }}>
                   {formatDate(reg.createdAt)}
                 </td>
 
-                {/* Row Actions */}
-                <td style={{ padding: '0.65rem 1rem', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}>
+                {/* Row Actions: Edit, Share, Delete */}
+                <td style={{ padding: '0.75rem 1rem', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
                     <button
                       type="button"
-                      onClick={() => onRowClick && onRowClick(reg)}
+                      onClick={() => onEditClick && onEditClick(reg)}
                       className="btn btn-secondary btn-sm"
-                      style={{ padding: '0.3rem 0.55rem', fontSize: '0.75rem' }}
-                      title="Quick Preview"
+                      style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', color: 'var(--maroon-900)' }}
+                      title="Edit Candidate Details"
                     >
-                      <Eye size={13} />
-                      <span>Preview</span>
+                      <Edit size={13} />
+                      <span style={{ marginLeft: '4px' }}>Edit</span>
                     </button>
 
                     <button
@@ -195,7 +168,7 @@ export function RegistrationTable({
                       onClick={() => onShareClick && onShareClick(reg)}
                       disabled={sharingId === (reg.id || reg.registrationId)}
                       className="btn btn-secondary btn-sm"
-                      style={{ padding: '0.3rem 0.55rem', fontSize: '0.75rem', color: '#25D366' }}
+                      style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem', color: '#25D366' }}
                       title="Share via WhatsApp"
                     >
                       {sharingId === (reg.id || reg.registrationId) ? (
@@ -210,10 +183,11 @@ export function RegistrationTable({
                       type="button"
                       onClick={() => onDeleteClick(reg)}
                       className="btn btn-danger btn-sm"
-                      style={{ padding: '0.3rem 0.45rem', fontSize: '0.75rem' }}
+                      style={{ padding: '0.3rem 0.6rem', fontSize: '0.75rem' }}
                       title="Delete profile"
                     >
                       <Trash2 size={13} />
+                      <span style={{ marginLeft: '4px' }}>Delete</span>
                     </button>
                   </div>
                 </td>
@@ -233,6 +207,7 @@ export function RegistrationTable({
             onDeleteClick={onDeleteClick}
             onClick={() => onRowClick && onRowClick(reg)}
             onShareClick={onShareClick}
+            onEditClick={onEditClick}
             isSharing={sharingId === (reg.id || reg.registrationId)}
           />
         ))}
