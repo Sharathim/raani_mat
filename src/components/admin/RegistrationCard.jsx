@@ -2,14 +2,15 @@ import React from 'react';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, Share2 } from 'lucide-react';
+import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, Share2, Loader2 } from 'lucide-react';
 
 export function RegistrationCard({
   registration,
   onStatusChange,
   onDeleteClick,
   onClick,
-  onShareClick
+  onShareClick,
+  isSharing = false
 }) {
   return (
     <div
@@ -137,11 +138,12 @@ export function RegistrationCard({
           <button
             type="button"
             onClick={() => onShareClick && onShareClick(registration)}
+            disabled={isSharing}
             className="btn btn-secondary btn-sm"
             style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', color: '#25D366' }}
             title="Share via WhatsApp"
           >
-            <Share2 size={12} />
+            {isSharing ? <Loader2 size={12} className="spin" /> : <Share2 size={12} />}
           </button>
 
           <button

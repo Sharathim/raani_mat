@@ -4,12 +4,13 @@ import { SearchBar } from '../components/admin/SearchBar';
 import { CandidateFilterModal } from '../components/admin/CandidateFilterModal';
 import { RegistrationTable } from '../components/admin/RegistrationTable';
 import { AdminProfileDrawer } from '../components/admin/AdminProfileDrawer';
-import { ShareCandidateModal } from '../components/admin/ShareCandidateModal';
 import { FloatingAddButton } from '../components/admin/FloatingAddButton';
 import { ConfirmDialog } from '../components/common/ConfirmDialog';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { ErrorBanner } from '../components/common/ErrorBanner';
 import { EmptyState } from '../components/common/EmptyState';
+import { CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { shareCandidatePdf } from '../utils/shareCandidate';
 import {
   getRegistrations,
   updateRegistrationStatus,
@@ -34,8 +35,9 @@ export function AdminCandidatesPage() {
   // Drawer Profile Preview
   const [selectedDrawerProfile, setSelectedDrawerProfile] = useState(null);
 
-  // WhatsApp Share Modal state
-  const [shareTarget, setShareTarget] = useState(null);
+  // Direct Candidate Share state & Feedback notice
+  const [sharingId, setSharingId] = useState(null);
+  const [shareNotice, setShareNotice] = useState(null);
 
   // Deletion Modal state
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -95,6 +97,42 @@ export function AdminCandidatesPage() {
       setError(err.message || 'Failed to delete candidate record.');
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  // Auto-dismiss share notice after 7 seconds
+  useEffect(() => {
+    if (shareNotice) {
+      const timer = setTimeout(() => {
+        setShareNotice(null);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [shareNotice]);
+
+  // Handle Direct Candidate PDF Share via Web Share API (WhatsApp) or Download fallback
+  const handleShareCandidate = async (candidate) => {
+    if (!candidate) return;
+    const cid = candidate.id || candidate.registrationId;
+    setSharingId(cid);
+    setShareNotice(null);
+
+    try {
+      const result = await shareCandidatePdf(candidate);
+      if (result.method === 'download') {
+        setShareNotice({
+          type: 'info',
+          message: result.message || 'Candidate PDF downloaded! You can attach and share it via WhatsApp.'
+        });
+      }
+    } catch (err) {
+      console.error('Failed to share candidate:', err);
+      setShareNotice({
+        type: 'error',
+        message: 'Failed to generate candidate PDF. Please try again.'
+      });
+    } finally {
+      setSharingId(null);
     }
   };
 
@@ -177,6 +215,50 @@ export function AdminCandidatesPage() {
         {/* Error Notification */}
         <ErrorBanner message={error} onDismiss={() => setError(null)} />
 
+        {/* Share Feedback / Download Notification Banner */}
+        {shareNotice && (
+          <div
+            style={{
+              backgroundColor: shareNotice.type === 'error' ? 'var(--danger-bg)' : '#f0fdf4',
+              border: `1.5px solid ${shareNotice.type === 'error' ? 'var(--danger-border)' : '#86efac'}`,
+              borderRadius: 'var(--radius-sm)',
+              padding: '0.85rem 1.25rem',
+              marginBottom: '0.85rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.75rem',
+              color: shareNotice.type === 'error' ? 'var(--danger)' : '#166534',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+            }}
+            role="status"
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              {shareNotice.type === 'error' ? (
+                <AlertCircle size={20} style={{ flexShrink: 0 }} />
+              ) : (
+                <CheckCircle2 size={20} style={{ flexShrink: 0, color: '#16a34a' }} />
+              )}
+              <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{shareNotice.message}</span>
+            </div>
+            <button
+              onClick={() => setShareNotice(null)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'inherit',
+                cursor: 'pointer',
+                padding: '0.2rem',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+              aria-label="Dismiss message"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        )}
+
         {/* 2. Full-Width Search Bar with Integrated Filter Icon */}
         <div className="admin-search-container" style={{ marginBottom: '0.65rem' }}>
           <SearchBar
@@ -227,7 +309,8 @@ export function AdminCandidatesPage() {
               onStatusChange={handleStatusChange}
               onDeleteClick={(target) => setDeleteTarget(target)}
               onRowClick={(reg) => setSelectedDrawerProfile(reg)}
-              onShareClick={(candidate) => setShareTarget(candidate)}
+              onShareClick={handleShareCandidate}
+              sharingId={sharingId}
             />
           ) : (
             <EmptyState
@@ -283,7 +366,8 @@ export function AdminCandidatesPage() {
         onClose={() => setSelectedDrawerProfile(null)}
         onStatusChange={handleStatusChange}
         onDeleteClick={(reg) => setDeleteTarget(reg)}
-        onShareClick={(candidate) => setShareTarget(candidate)}
+        onShareClick={handleShareCandidate}
+        isSharing={sharingId === (selectedDrawerProfile?.id || selectedDrawerProfile?.registrationId)}
       />
 
       {/* Delete Confirmation Modal */}
@@ -297,13 +381,6 @@ export function AdminCandidatesPage() {
         onCancel={() => setDeleteTarget(null)}
         isLoading={isDeleting}
         isDestructive={true}
-      />
-
-      {/* WhatsApp Share Candidate Modal */}
-      <ShareCandidateModal
-        candidate={shareTarget}
-        isOpen={Boolean(shareTarget)}
-        onClose={() => setShareTarget(null)}
       />
     </AdminLayout>
   );

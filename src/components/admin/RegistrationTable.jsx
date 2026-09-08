@@ -3,14 +3,15 @@ import { StatusBadge } from '../common/StatusBadge';
 import { RegistrationCard } from './RegistrationCard';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { Eye, Trash2, User, Phone, MapPin, Share2 } from 'lucide-react';
+import { Eye, Trash2, User, Phone, MapPin, Share2, Loader2 } from 'lucide-react';
 
 export function RegistrationTable({
   registrations,
   onStatusChange,
   onDeleteClick,
   onRowClick,
-  onShareClick
+  onShareClick,
+  sharingId = null
 }) {
   return (
     <div>
@@ -193,11 +194,16 @@ export function RegistrationTable({
                     <button
                       type="button"
                       onClick={() => onShareClick && onShareClick(reg)}
+                      disabled={sharingId === (reg.id || reg.registrationId)}
                       className="btn btn-secondary btn-sm"
                       style={{ padding: '0.3rem 0.55rem', fontSize: '0.75rem', color: '#25D366' }}
                       title="Share via WhatsApp"
                     >
-                      <Share2 size={13} />
+                      {sharingId === (reg.id || reg.registrationId) ? (
+                        <Loader2 size={13} className="spin" />
+                      ) : (
+                        <Share2 size={13} />
+                      )}
                       <span style={{ marginLeft: '4px' }}>Share</span>
                     </button>
 
@@ -228,6 +234,7 @@ export function RegistrationTable({
             onDeleteClick={onDeleteClick}
             onClick={() => onRowClick && onRowClick(reg)}
             onShareClick={onShareClick}
+            isSharing={sharingId === (reg.id || reg.registrationId)}
           />
         ))}
       </div>

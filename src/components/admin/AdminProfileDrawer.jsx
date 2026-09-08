@@ -17,7 +17,8 @@ import {
   MessageCircle,
   Clock,
   Printer,
-  Trash2
+  Trash2,
+  Loader2
 } from 'lucide-react';
 
 export function AdminProfileDrawer({
@@ -26,7 +27,8 @@ export function AdminProfileDrawer({
   onClose,
   onStatusChange,
   onDeleteClick,
-  onShareClick
+  onShareClick,
+  isSharing = false
 }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -373,15 +375,13 @@ export function AdminProfileDrawer({
 
           <button
             type="button"
-            onClick={() => {
-              onClose();
-              onShareClick && onShareClick(registration);
-            }}
+            onClick={() => onShareClick && onShareClick(registration)}
+            disabled={isSharing}
             className="btn btn-primary btn-sm"
             style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
           >
-            <Share2 size={14} />
-            <span>Share via WhatsApp</span>
+            {isSharing ? <Loader2 size={14} className="spin" /> : <Share2 size={14} />}
+            <span>{isSharing ? 'Preparing...' : 'Share via WhatsApp'}</span>
           </button>
         </div>
       </div>
