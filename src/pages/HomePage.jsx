@@ -29,7 +29,7 @@ import {
 } from 'lucide-react';
 
 export function HomePage() {
-  const [openFaq, setOpenFaq] = useState(0);
+  const [openFaq, setOpenFaq] = useState(null);
   const [contactForm, setContactForm] = useState({ name: '', phone: '', query: '' });
   const [contactErrors, setContactErrors] = useState({});
 
@@ -686,7 +686,7 @@ export function HomePage() {
                   >
                     <button
                       type="button"
-                      onClick={() => setOpenFaq(isOpen ? -1 : idx)}
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
                       className="faq-trigger"
                       aria-expanded={isOpen}
                       aria-controls={`faq-answer-${idx}`}
