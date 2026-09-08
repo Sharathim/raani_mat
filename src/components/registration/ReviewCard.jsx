@@ -176,11 +176,29 @@ export function ReviewCard({ formData, onConsentToggle, isSubmitting }) {
         {/* Section 4: Social & Location */}
         <div style={{ background: '#ffffff', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
           <h4 style={{ color: 'var(--maroon-900)', fontSize: '0.9rem', marginBottom: '0.65rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.3rem' }}>
-            Social & Location
+            Religion, Caste & Location
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '0.35rem', fontSize: '0.85rem' }}>
-            <span style={{ color: 'var(--muted)' }}>Religion/Caste:</span>
-            <strong>{formData.casteReligion || '—'}</strong>
+            <span style={{ color: 'var(--muted)' }}>Religion:</span>
+            <strong>{formData.religion || 'Hindu'}</strong>
+            {formData.community && (
+              <>
+                <span style={{ color: 'var(--muted)' }}>Community:</span>
+                <span>{formData.community}</span>
+              </>
+            )}
+            <span style={{ color: 'var(--muted)' }}>Caste:</span>
+            <strong>
+              {formData.caste && formData.caste.includes('Other')
+                ? formData.customCaste || formData.caste
+                : formData.caste || formData.casteReligion || '—'}
+            </strong>
+            {formData.subCaste && (
+              <>
+                <span style={{ color: 'var(--muted)' }}>Subcaste:</span>
+                <span>{formData.subCaste}</span>
+              </>
+            )}
             <span style={{ color: 'var(--muted)' }}>Native Place:</span>
             <span>{formData.nativePlace || '—'}</span>
             <span style={{ color: 'var(--muted)' }}>Location:</span>

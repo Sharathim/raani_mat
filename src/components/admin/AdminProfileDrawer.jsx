@@ -286,8 +286,20 @@ export function AdminProfileDrawer({
                 <strong>{registration.dateOfBirth || '—'}</strong>
               </div>
               <div>
-                <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Religion / Caste:</span>
-                <strong>{registration.casteReligion || '—'}</strong>
+                <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Religion:</span>
+                <strong>{registration.religion || 'Hindu'}</strong>
+              </div>
+              <div>
+                <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Community Category:</span>
+                <strong>{registration.community || '—'}</strong>
+              </div>
+              <div>
+                <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Caste:</span>
+                <strong>{registration.caste || registration.casteReligion || '—'}</strong>
+              </div>
+              <div>
+                <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Subcaste / Division:</span>
+                <strong>{registration.subCaste || '—'}</strong>
               </div>
               <div>
                 <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Location:</span>
@@ -297,7 +309,7 @@ export function AdminProfileDrawer({
                 <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Native Place:</span>
                 <strong>{registration.nativePlace || '—'}</strong>
               </div>
-              <div>
+              <div style={{ gridColumn: '1 / -1' }}>
                 <span style={{ color: 'var(--muted)', display: 'block', fontSize: '0.75rem' }}>Email:</span>
                 <strong>{registration.email || '—'}</strong>
               </div>

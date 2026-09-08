@@ -126,8 +126,13 @@ export function validateStep(stepNumber, formData) {
   }
 
   if (stepNumber === 5) {
-    if (!formData.casteReligion || formData.casteReligion.trim().length < 2) {
-      errors.casteReligion = 'Please enter Religion / Caste details';
+    if (!formData.religion) {
+      errors.religion = 'Please select Religion';
+    }
+    if (!formData.caste) {
+      errors.caste = 'Please select Caste / Community';
+    } else if (formData.caste.includes('Other') && (!formData.customCaste || formData.customCaste.trim().length < 2)) {
+      errors.customCaste = 'Please specify your Caste';
     }
     if (!formData.location || formData.location.trim().length < 2) {
       errors.location = 'Please enter current residential city/area';

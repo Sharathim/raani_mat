@@ -767,19 +767,27 @@ export function HomePage() {
 
                 <div className="contact-info-list">
                   <div className="contact-info-item">
-                    <span className="contact-info-icon"><MapPin size={19} /></span>
+                    <span className="contact-info-icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', minWidth: '38px', minHeight: '38px', flexShrink: 0 }}>
+                      <MapPin size={19} style={{ display: 'block', margin: 'auto' }} />
+                    </span>
                     <div><strong>Office Address</strong><span>{BRAND.address}</span></div>
                   </div>
                   <div className="contact-info-item">
-                    <span className="contact-info-icon"><Clock size={19} /></span>
+                    <span className="contact-info-icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', minWidth: '38px', minHeight: '38px', flexShrink: 0 }}>
+                      <Clock size={19} style={{ display: 'block', margin: 'auto' }} />
+                    </span>
                     <div><strong>Office Hours</strong><span>{BRAND.hours}</span></div>
                   </div>
                   <div className="contact-info-item">
-                    <span className="contact-info-icon"><MessageCircle size={19} /></span>
+                    <span className="contact-info-icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', minWidth: '38px', minHeight: '38px', flexShrink: 0 }}>
+                      <MessageCircle size={19} style={{ display: 'block', margin: 'auto' }} />
+                    </span>
                     <div><strong>WhatsApp</strong><a href={`https://wa.me/91${BRAND.whatsapp}`} target="_blank" rel="noopener noreferrer">{BRAND.displayPhones}</a></div>
                   </div>
                   <div className="contact-info-item">
-                    <span className="contact-info-icon"><Mail size={19} /></span>
+                    <span className="contact-info-icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', minWidth: '38px', minHeight: '38px', flexShrink: 0 }}>
+                      <Mail size={19} style={{ display: 'block', margin: 'auto' }} />
+                    </span>
                     <div><strong>Email</strong><a href={`mailto:${BRAND.email}`}>{BRAND.email}</a></div>
                   </div>
                 </div>

@@ -21,7 +21,10 @@ import {
   LAGNAMS,
   INCOME_OPTIONS,
   EDUCATION_SUGGESTIONS,
-  BRAND
+  BRAND,
+  RELIGIONS,
+  COMMUNITY_CATEGORIES,
+  getCastesForReligion
 } from '../utils/constants';
 import { calculateAge, validateStep } from '../utils/helpers';
 import { createRegistration } from '../services/registrationService';
@@ -79,6 +82,32 @@ export function RegisterPage() {
           updated.zodiacSign = NAKSHATRA_TO_RASI_MAP[value];
         }
       }
+
+      // Reset caste if religion changes and current caste isn't in new religion list
+      if (name === 'religion') {
+        const validCastes = getCastesForReligion(value);
+        if (updated.caste && !validCastes.includes(updated.caste)) {
+          updated.caste = '';
+          updated.customCaste = '';
+        }
+      }
+
+      // Keep composite casteReligion in sync
+      const currentRel = name === 'religion' ? value : (updated.religion || 'Hindu');
+      const currentCasteVal = name === 'caste' ? value : (updated.caste || '');
+      const activeCaste = currentCasteVal.includes('Other') && (updated.customCaste || name === 'customCaste')
+        ? (name === 'customCaste' ? value : updated.customCaste)
+        : currentCasteVal;
+      const currentSub = name === 'subCaste' ? value : (updated.subCaste || '');
+
+      let composite = currentRel;
+      if (activeCaste) {
+        composite += ` / ${activeCaste}`;
+      }
+      if (currentSub) {
+        composite += ` (${currentSub})`;
+      }
+      updated.casteReligion = composite;
 
       return updated;
     });
@@ -518,15 +547,15 @@ export function RegisterPage() {
               </div>
             )}
 
-            {/* Step 5: Photo & Location */}
+            {/* Step 5: Religion, Caste, Photo & Location */}
             {currentStep === 5 && (
               <div>
                 <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem' }}>
                   <h3 style={{ color: 'var(--maroon-950)', fontSize: '1.15rem' }}>
-                    Step 5: Profile Photo & Location
+                    Step 5: Religion, Caste, Photo & Location
                   </h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
-                    Attach a portrait photo and specify current residential location and native place.
+                    Select your religion, community and caste details, attach a portrait photo, and specify your location.
                   </p>
                 </div>
 
@@ -538,35 +567,89 @@ export function RegisterPage() {
                   error={errors.photo}
                 />
 
+                {/* Dedicated Religion & Caste Details Section */}
+                <div style={{ background: 'var(--surface-alt)', border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', padding: '1.25rem', marginBottom: '1.25rem' }}>
+                  <h4 style={{ color: 'var(--maroon-900)', fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Sparkles size={16} color="var(--gold-500)" />
+                    <span>Religion & Caste / Community Information</span>
+                  </h4>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                    <SelectField
+                      label="Religion (மதம்)"
+                      name="religion"
+                      value={formData.religion || 'Hindu'}
+                      onChange={handleChange}
+                      options={RELIGIONS}
+                      required
+                      error={errors.religion}
+                    />
+
+                    <SelectField
+                      label="Community Category (பிரிவு)"
+                      name="community"
+                      value={formData.community}
+                      onChange={handleChange}
+                      options={COMMUNITY_CATEGORIES}
+                      placeholder="-- Select Community Category --"
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+                    <SelectField
+                      label="Caste / Community (சாதி)"
+                      name="caste"
+                      value={formData.caste}
+                      onChange={handleChange}
+                      options={getCastesForReligion(formData.religion || 'Hindu')}
+                      placeholder="-- Select Caste --"
+                      required
+                      error={errors.caste}
+                    />
+
+                    <FormField
+                      label="Subcaste / Division / Kootam (உட்பிரிவு - விருப்பப்பட்டால்)"
+                      name="subCaste"
+                      value={formData.subCaste}
+                      onChange={handleChange}
+                      placeholder="e.g. Saiva Pillai / Vadakalai / Kootam"
+                    />
+                  </div>
+
+                  {formData.caste && formData.caste.includes('Other') && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <FormField
+                        label="Specify Caste Name (சாதி பெயரை குறிப்பிடவும்)"
+                        name="customCaste"
+                        value={formData.customCaste}
+                        onChange={handleChange}
+                        placeholder="Enter your caste name"
+                        required
+                        error={errors.customCaste}
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
                   <FormField
-                    label="Religion & Caste / Community"
-                    name="casteReligion"
-                    value={formData.casteReligion}
-                    onChange={handleChange}
-                    placeholder="e.g. Hindu / Pillai / Mudaliar / Naidu"
-                    required
-                    error={errors.casteReligion}
-                  />
-
-                  <FormField
-                    label="Native Place"
+                    label="Native Place (சொந்த ஊர்)"
                     name="nativePlace"
                     value={formData.nativePlace}
                     onChange={handleChange}
-                    placeholder="e.g. Madurai / Thanjavur"
+                    placeholder="e.g. Madurai / Thanjavur / Tirunelveli"
+                  />
+
+                  <FormField
+                    label="Current Residential City & Area (வசிக்கும் இடம்)"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    placeholder="e.g. Anna Nagar, Chennai"
+                    required
+                    error={errors.location}
                   />
                 </div>
-
-                <FormField
-                  label="Current Residential City & Area"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  placeholder="e.g. Anna Nagar, Chennai"
-                  required
-                  error={errors.location}
-                />
               </div>
             )}
 

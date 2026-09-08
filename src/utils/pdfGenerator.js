@@ -472,13 +472,15 @@ export async function generateCandidateBioDataPdf(candidate) {
     { label: 'Family Structure', value: candidate.familyType }
   ]);
 
-  // --- SECTION 4: PERSONAL & CONTACT INFORMATION ---
-  renderSectionCard('Personal & Contact Information', [
+  // --- SECTION 4: PERSONAL & COMMUNITY INFORMATION ---
+  renderSectionCard('Personal & Community Information', [
+    { label: 'Religion', value: candidate.religion || 'Hindu' },
+    { label: 'Caste / Community', value: candidate.caste || candidate.casteReligion || '—' },
+    { label: 'Subcaste / Division', value: candidate.subCaste || candidate.community || '—' },
     { label: 'Height', value: candidate.height },
     { label: 'Native Place', value: candidate.nativePlace },
     { label: 'Current Location', value: candidate.location },
     { label: 'Contact Phone', value: candidate.phone },
-    { label: 'Email Address', value: candidate.email },
     { label: 'Marital Status', value: candidate.maritalStatus || 'Never Married' }
   ]);
 

@@ -11,12 +11,32 @@ import { ErrorBanner } from '../components/common/ErrorBanner';
 import { EmptyState } from '../components/common/EmptyState';
 import { CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { shareCandidatePdf } from '../utils/shareCandidate';
+import { calculateAge } from '../utils/helpers';
 import {
   getRegistrations,
   updateRegistrationStatus,
   deleteRegistration
 } from '../services/registrationService';
 import { REGISTRATION_STATUS } from '../utils/constants';
+
+export const DEFAULT_CANDIDATE_FILTERS = {
+  status: 'all',
+  gender: 'all',
+  photo: 'all',
+  maritalStatus: 'all',
+  minAge: '',
+  maxAge: '',
+  religion: 'all',
+  community: 'all',
+  caste: 'all',
+  birthStar: 'all',
+  zodiacSign: 'all',
+  lagnam: 'all',
+  gothram: '',
+  dosham: 'all',
+  height: '',
+  sortBy: 'newest'
+};
 
 export function AdminCandidatesPage() {
   const [registrations, setRegistrations] = useState([]);
@@ -26,10 +46,7 @@ export function AdminCandidatesPage() {
 
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [genderFilter, setGenderFilter] = useState('all');
-  const [photoFilter, setPhotoFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('newest');
+  const [filters, setFilters] = useState(DEFAULT_CANDIDATE_FILTERS);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   // Drawer Profile Preview
@@ -136,75 +153,213 @@ export function AdminCandidatesPage() {
     }
   };
 
-  // Active filter count (excluding default 'all')
+  // Active filter count (excluding defaults)
   const activeFilterCount = useMemo(() => {
     let count = 0;
-    if (statusFilter !== 'all') count++;
-    if (genderFilter !== 'all') count++;
-    if (photoFilter !== 'all') count++;
-    if (sortBy !== 'newest') count++;
+    if (filters.status !== 'all') count++;
+    if (filters.gender !== 'all') count++;
+    if (filters.photo !== 'all') count++;
+    if (filters.maritalStatus !== 'all') count++;
+    if (filters.minAge || filters.maxAge) count++;
+    if (filters.religion !== 'all') count++;
+    if (filters.community !== 'all') count++;
+    if (filters.caste !== 'all') count++;
+    if (filters.birthStar !== 'all') count++;
+    if (filters.zodiacSign !== 'all') count++;
+    if (filters.lagnam !== 'all') count++;
+    if (filters.gothram && filters.gothram.trim()) count++;
+    if (filters.dosham !== 'all') count++;
+    if (filters.height && filters.height.trim()) count++;
+    if (filters.sortBy !== 'newest') count++;
     return count;
-  }, [statusFilter, genderFilter, photoFilter, sortBy]);
+  }, [filters]);
 
   // Filtered & Sorted Registrations
   const filteredRegistrations = useMemo(() => {
     return registrations
       .filter((reg) => {
-        // Search term matching (Name, Phone, Location, Occupation, ID, Education)
+        // 1. Search query matching
         if (searchTerm.trim()) {
           const q = searchTerm.toLowerCase().trim();
           const matchName = (reg.name || '').toLowerCase().includes(q);
           const matchPhone = (reg.phone || '').includes(q);
           const matchLocation = (reg.location || '').toLowerCase().includes(q);
+          const matchNative = (reg.nativePlace || '').toLowerCase().includes(q);
           const matchOccupation = (reg.occupation || '').toLowerCase().includes(q);
           const matchEducation = (reg.education || '').toLowerCase().includes(q);
           const matchId = (reg.registrationId || reg.id || '').toLowerCase().includes(q);
+          const matchCaste = (reg.caste || reg.casteReligion || '').toLowerCase().includes(q);
+          const matchReligion = (reg.religion || '').toLowerCase().includes(q);
+          const matchCommunity = (reg.community || '').toLowerCase().includes(q);
+          const matchSubCaste = (reg.subCaste || '').toLowerCase().includes(q);
+          const matchStar = (reg.birthStar || '').toLowerCase().includes(q);
+          const matchRasi = (reg.zodiacSign || '').toLowerCase().includes(q);
+          const matchLagnam = (reg.lagnam || '').toLowerCase().includes(q);
+          const matchGothram = (reg.gothram || '').toLowerCase().includes(q);
 
-          if (!matchName && !matchPhone && !matchLocation && !matchOccupation && !matchEducation && !matchId) {
+          if (
+            !matchName &&
+            !matchPhone &&
+            !matchLocation &&
+            !matchNative &&
+            !matchOccupation &&
+            !matchEducation &&
+            !matchId &&
+            !matchCaste &&
+            !matchReligion &&
+            !matchCommunity &&
+            !matchSubCaste &&
+            !matchStar &&
+            !matchRasi &&
+            !matchLagnam &&
+            !matchGothram
+          ) {
             return false;
           }
         }
 
-        // Status Filter
-        if (statusFilter !== 'all') {
-          if ((reg.status || REGISTRATION_STATUS.NEW) !== statusFilter) {
+        // 2. Status Filter
+        if (filters.status !== 'all') {
+          if ((reg.status || REGISTRATION_STATUS.NEW) !== filters.status) {
             return false;
           }
         }
 
-        // Gender Filter
-        if (genderFilter !== 'all') {
-          if (reg.gender !== genderFilter) {
+        // 3. Gender Filter
+        if (filters.gender !== 'all') {
+          if (reg.gender !== filters.gender) {
             return false;
           }
         }
 
-        // Photo Filter
-        if (photoFilter === 'withPhoto' && !reg.photoUrl) return false;
-        if (photoFilter === 'noPhoto' && reg.photoUrl) return false;
+        // 4. Photo Filter
+        if (filters.photo === 'withPhoto' && !reg.photoUrl) return false;
+        if (filters.photo === 'noPhoto' && reg.photoUrl) return false;
+
+        // 5. Marital Status Filter
+        if (filters.maritalStatus !== 'all') {
+          const mStatus = (reg.maritalStatus || 'Never Married').toLowerCase();
+          if (mStatus !== filters.maritalStatus.toLowerCase()) {
+            return false;
+          }
+        }
+
+        // 6. Age Range Filter
+        const candidateAge = Number(reg.age) || (reg.dateOfBirth ? Number(calculateAge(reg.dateOfBirth)) : null);
+        if (filters.minAge && candidateAge !== null && candidateAge < Number(filters.minAge)) {
+          return false;
+        }
+        if (filters.maxAge && candidateAge !== null && candidateAge > Number(filters.maxAge)) {
+          return false;
+        }
+
+        // 7. Religion Filter
+        if (filters.religion !== 'all') {
+          const rel = (reg.religion || reg.casteReligion || '').toLowerCase();
+          if (!rel.includes(filters.religion.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // 8. Community Category Filter
+        if (filters.community !== 'all') {
+          const comm = (reg.community || '').toLowerCase();
+          if (!comm.includes(filters.community.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // 9. Caste Filter
+        if (filters.caste !== 'all' && filters.caste.trim()) {
+          const cst = (reg.caste || reg.casteReligion || '').toLowerCase();
+          const cleanQuery = filters.caste.split('(')[0].toLowerCase().trim();
+          if (!cst.includes(cleanQuery)) {
+            return false;
+          }
+        }
+
+        // 10. Nakshatra (Birth Star) Filter
+        if (filters.birthStar !== 'all') {
+          const star = (reg.birthStar || '').toLowerCase();
+          if (!star.includes(filters.birthStar.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // 11. Zodiac Sign (Rasi) Filter
+        if (filters.zodiacSign !== 'all') {
+          const rasi = (reg.zodiacSign || '').toLowerCase();
+          if (!rasi.includes(filters.zodiacSign.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // 12. Lagnam Filter
+        if (filters.lagnam !== 'all') {
+          const lag = (reg.lagnam || '').toLowerCase();
+          if (!lag.includes(filters.lagnam.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // 13. Gothram Filter
+        if (filters.gothram && filters.gothram.trim()) {
+          const g = (reg.gothram || '').toLowerCase();
+          if (!g.includes(filters.gothram.toLowerCase().trim())) {
+            return false;
+          }
+        }
+
+        // 14. Dosham Filter
+        if (filters.dosham !== 'all') {
+          const d = (reg.dosham || 'None').toLowerCase();
+          if (filters.dosham === 'None') {
+            if (d !== 'none' && d !== '' && !d.includes('none')) return false;
+          } else {
+            if (!d.includes(filters.dosham.toLowerCase())) return false;
+          }
+        }
+
+        // 15. Height Filter
+        if (filters.height && filters.height.trim()) {
+          const h = (reg.height || '').toLowerCase();
+          if (!h.includes(filters.height.toLowerCase().trim())) {
+            return false;
+          }
+        }
 
         return true;
       })
       .sort((a, b) => {
-        if (sortBy === 'newest') {
+        if (filters.sortBy === 'newest') {
           const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
           const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
           return dateB - dateA;
         }
-        if (sortBy === 'oldest') {
+        if (filters.sortBy === 'oldest') {
           const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
           const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
           return dateA - dateB;
         }
-        if (sortBy === 'nameAsc') {
+        if (filters.sortBy === 'nameAsc') {
           return (a.name || '').localeCompare(b.name || '');
         }
-        if (sortBy === 'nameDesc') {
+        if (filters.sortBy === 'nameDesc') {
           return (b.name || '').localeCompare(a.name || '');
+        }
+        if (filters.sortBy === 'ageAsc') {
+          const ageA = Number(a.age) || (a.dateOfBirth ? Number(calculateAge(a.dateOfBirth)) : 999);
+          const ageB = Number(b.age) || (b.dateOfBirth ? Number(calculateAge(b.dateOfBirth)) : 999);
+          return ageA - ageB;
+        }
+        if (filters.sortBy === 'ageDesc') {
+          const ageA = Number(a.age) || (a.dateOfBirth ? Number(calculateAge(a.dateOfBirth)) : 0);
+          const ageB = Number(b.age) || (b.dateOfBirth ? Number(calculateAge(b.dateOfBirth)) : 0);
+          return ageB - ageA;
         }
         return 0;
       });
-  }, [registrations, searchTerm, statusFilter, genderFilter, photoFilter, sortBy]);
+  }, [registrations, searchTerm, filters]);
 
   return (
     <AdminLayout
@@ -285,12 +440,7 @@ export function AdminCandidatesPage() {
             <button
               type="button"
               className="admin-clear-filters-link"
-              onClick={() => {
-                setStatusFilter('all');
-                setGenderFilter('all');
-                setPhotoFilter('all');
-                setSortBy('newest');
-              }}
+              onClick={() => setFilters(DEFAULT_CANDIDATE_FILTERS)}
             >
               Clear all filters
             </button>
@@ -326,10 +476,7 @@ export function AdminCandidatesPage() {
                     type="button"
                     onClick={() => {
                       setSearchTerm('');
-                      setStatusFilter('all');
-                      setGenderFilter('all');
-                      setPhotoFilter('all');
-                      setSortBy('newest');
+                      setFilters(DEFAULT_CANDIDATE_FILTERS);
                     }}
                     className="btn btn-secondary btn-sm"
                   >
@@ -349,14 +496,9 @@ export function AdminCandidatesPage() {
       <CandidateFilterModal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
-        genderFilter={genderFilter}
-        onGenderChange={setGenderFilter}
-        photoFilter={photoFilter}
-        onPhotoChange={setPhotoFilter}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
+        filters={filters}
+        onApplyFilters={setFilters}
+        onResetFilters={() => setFilters(DEFAULT_CANDIDATE_FILTERS)}
       />
 
       {/* Slide-Over Profile Inspection Drawer */}

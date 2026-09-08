@@ -62,7 +62,7 @@ export const FORM_STEPS = [
   { id: 2, title: 'Family Details', subtitle: 'Parents & Siblings', icon: 'Users' },
   { id: 3, title: 'Birth & Horoscope', subtitle: 'Astro & Stars', icon: 'Sparkles' },
   { id: 4, title: 'Education & Career', subtitle: 'Work & Income', icon: 'GraduationCap' },
-  { id: 5, title: 'Photo & Location', subtitle: 'Photo & Native', icon: 'Camera' },
+  { id: 5, title: 'Religion & Location', subtitle: 'Caste & Native', icon: 'Camera' },
   { id: 6, title: 'Partner Expectations', subtitle: 'Preferences', icon: 'HeartHandshake' },
   { id: 7, title: 'Review & Submit', subtitle: 'Verification', icon: 'CheckCircle2' }
 ];
@@ -267,6 +267,147 @@ export const FAQS = [
   }
 ];
 
+export const RELIGIONS = [
+  { value: 'Hindu', label: 'Hindu (இந்து)' },
+  { value: 'Christian', label: 'Christian (கிறிஸ்தவர்)' },
+  { value: 'Muslim', label: 'Muslim (முஸ்லிம்)' },
+  { value: 'Jain', label: 'Jain (சைனர்)' },
+  { value: 'Sikh', label: 'Sikh (சீக்கியர்)' },
+  { value: 'Buddhist', label: 'Buddhist (பௌத்தர்)' },
+  { value: 'Inter-Religion', label: 'Inter-Religion (மத தடையில்லை)' },
+  { value: 'Other', label: 'Other / Not Listed (பிற மதம்)' }
+];
+
+export const COMMUNITY_CATEGORIES = [
+  { value: 'FC / General', label: 'FC / General (Forward Community / பொதுப்பிரிவு)' },
+  { value: 'BC', label: 'BC (Backward Class / பிற்படுத்தப்பட்டோர்)' },
+  { value: 'BCM', label: 'BCM (Backward Class Muslim)' },
+  { value: 'MBC / DNC', label: 'MBC / DNC (Most Backward / மிகவும் பிற்படுத்தப்பட்டோர்)' },
+  { value: 'SC', label: 'SC (Scheduled Caste / ஆதிதிராவிடர்)' },
+  { value: 'ST', label: 'ST (Scheduled Tribe / பழங்குடியினர்)' },
+  { value: 'Inter-Caste', label: 'Inter-Caste (கலப்பு சாதி)' },
+  { value: 'Caste No Bar', label: 'Caste No Bar (சாதி தடையில்லை)' },
+  { value: 'Other', label: 'Other / Not Listed' }
+];
+
+export const HINDU_CASTES = [
+  'Pillai / Vellalar (பிள்ளை / வெள்ளாளர்)',
+  'Mudaliar (முதலியார்)',
+  'Brahmin - Iyer (பிராமணர் - ஐயர்)',
+  'Brahmin - Iyengar (பிராமணர் - ஐயங்கார்)',
+  'Brahmin - Gurukkal (பிராமணர் - குருக்கள்)',
+  'Brahmin - Others (பிராமணர் - பிற)',
+  'Nadar (நாடார்)',
+  'Vanniyar / Padayachi (வன்னியர் / படையாட்சி)',
+  'Chettiar / Arya Vysya (செட்டியார்)',
+  'Gounder / Kongu Vellalar (கவுண்டர் / கொங்கு வெள்ளாளர்)',
+  'Thevar / Mukkulathor (தேவர் / முக்குலத்தோர்)',
+  'Kallar (கள்ளர்)',
+  'Maravar (மறவர்)',
+  'Agamudayar (அகமுடையார்)',
+  'Naidu (நாயுடு)',
+  'Reddy / Reddiar (ரெட்டி / ரெட்டியார்)',
+  'Viswakarma / Achari / Kammalar (விஸ்வகர்மா / ஆச்சாரி)',
+  'Yadava / Konar (யாதவர் / கோனார்)',
+  'Devendra Kula Vellalar (தேவேந்திர குல வேளாளர்)',
+  'Adi Dravidar (ஆதி திராவிடர்)',
+  'Sengunthar / Kaikolar (செங்குந்தர் / கைகோளார்)',
+  'Sourashtra (சௌராஷ்டிரா)',
+  'Muthuraja / Mutharaiyar (முத்துராஜா / முத்தரையர்)',
+  'Devanga Chettiar (தேவாங்க செட்டியார்)',
+  'Vaniya Chettiar (வாணிய செட்டியார்)',
+  'Nair (நாயர்)',
+  'Ezhava / Thiyya (ஈழவர்)',
+  'Arunthathiyar (அருந்ததியர்)',
+  'Parkavakulam / Udayar / Moopanar (பார்கவகுலம் / உடையார்)',
+  'Sozhiya Vellalar (சோழிய வெள்ளாளர்)',
+  'Karkatha Vellalar (கார்காத்த வெள்ளாளர்)',
+  'Isai Vellalar (இசை வெள்ளாளர்)',
+  'Valluvar (வள்ளுவர்)',
+  'Kulalar / Kuyavar (குலாலர் / குயவர்)',
+  'Vannar (வண்ணார்)',
+  'Maruthuvar / Navithar (மருத்துவர் / நாவிதர்)',
+  'Boyar (போயர்)',
+  'Gounder - Vettuva (வேட்டுவ கவுண்டர்)',
+  'Kuruba / Kurumba (குரும்பர்)',
+  'Pallar (பள்ளர்)',
+  'Sakkiliar (சக்கிலியர்)',
+  'Veerakodi Vellalar (வீரக்கொடி வெள்ளாளர்)',
+  'Inter-Caste (கலப்பு சாதி)',
+  'Caste No Bar (சாதி தடையில்லை)',
+  'Other / Not Listed (பிற சாதி)'
+];
+
+export const CHRISTIAN_CASTES = [
+  'Christian - RC (Roman Catholic / ரோமன் கத்தோலிக்கர்)',
+  'Christian - CSI (Church of South India / சி.எஸ்.ஐ)',
+  'Christian - Protestant (புராட்டஸ்டன்ட்)',
+  'Christian - Pentecostal (பெந்தெகொஸ்தே)',
+  'Christian - Nadar (கிறிஸ்தவ நாடார்)',
+  'Christian - Vellalar / Pillai (கிறிஸ்தவ வெள்ளாளர்)',
+  'Christian - Mudaliar (கிறிஸ்தவ முதலியார்)',
+  'Christian - Anglo Indian (ஆங்கிலோ இந்தியன்)',
+  'Christian - Marthoma / Syrian Catholic',
+  'Christian - Latin Catholic',
+  'Christian - Seventh Day Adventist',
+  'Christian - Others / Caste No Bar',
+  'Other / Not Listed (பிற சாதி)'
+];
+
+export const MUSLIM_CASTES = [
+  'Muslim - Sunni (சுன்னி)',
+  'Muslim - Shia (ஷியா)',
+  'Muslim - Hanafi (ஹனபி)',
+  'Muslim - Shafi (ஷாபி)',
+  'Muslim - Rowther (ராவூத்தர்)',
+  'Muslim - Marakkayar (மரைக்காயர்)',
+  'Muslim - Lebbai (லெப்பை)',
+  'Muslim - Syed (சையத்)',
+  'Muslim - Sheikh (ஷேக்)',
+  'Muslim - Pathan (பதான்)',
+  'Muslim - Ansari (அன்சாரி)',
+  'Muslim - Qureshi (குரேஷி)',
+  'Muslim - Others / Caste No Bar',
+  'Other / Not Listed (பிற பிரிவு)'
+];
+
+export const JAIN_CASTES = [
+  'Jain - Digambar',
+  'Jain - Shwetambar',
+  'Jain - Agarwal',
+  'Jain - Porwal',
+  'Jain - Oswal',
+  'Jain - Others',
+  'Other / Not Listed (பிற பிரிவு)'
+];
+
+export const SIKH_CASTES = [
+  'Sikh - Jat',
+  'Sikh - Khatri',
+  'Sikh - Ramgarhia',
+  'Sikh - Arora',
+  'Sikh - Others',
+  'Other / Not Listed (பிற பிரிவு)'
+];
+
+export const ALL_CASTES = [
+  ...HINDU_CASTES,
+  ...CHRISTIAN_CASTES,
+  ...MUSLIM_CASTES,
+  ...JAIN_CASTES,
+  ...SIKH_CASTES
+];
+
+export const getCastesForReligion = (religion) => {
+  if (religion === 'Christian') return CHRISTIAN_CASTES;
+  if (religion === 'Muslim') return MUSLIM_CASTES;
+  if (religion === 'Jain') return JAIN_CASTES;
+  if (religion === 'Sikh') return SIKH_CASTES;
+  if (religion === 'Buddhist') return ['Buddhist - Navayana', 'Buddhist - Others', 'Caste No Bar', 'Other / Not Listed (பிற பிரிவு)'];
+  if (religion === 'Inter-Religion') return ['Inter-Caste (கலப்பு சாதி)', 'Caste No Bar (சாதி தடையில்லை)', 'Other / Not Listed (பிற பிரிவு)'];
+  return HINDU_CASTES;
+};
+
 export const INITIAL_FORM_STATE = {
   // Step 1: Basic
   profileFor: 'Self',
@@ -300,7 +441,12 @@ export const INITIAL_FORM_STATE = {
   employedIn: 'Private Sector',
   income: '',
 
-  // Step 5: Photo & Location
+  // Step 5: Religion, Caste & Location
+  religion: 'Hindu',
+  community: '',
+  caste: '',
+  subCaste: '',
+  customCaste: '',
   casteReligion: '',
   location: '',
   nativePlace: '',

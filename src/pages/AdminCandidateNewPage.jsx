@@ -14,7 +14,10 @@ import {
   NAKSHATRA_TO_RASI_MAP,
   LAGNAMS,
   INCOME_OPTIONS,
-  EDUCATION_SUGGESTIONS
+  EDUCATION_SUGGESTIONS,
+  RELIGIONS,
+  COMMUNITY_CATEGORIES,
+  getCastesForReligion
 } from '../utils/constants';
 import { calculateAge } from '../utils/helpers';
 import {
@@ -63,6 +66,32 @@ export function AdminCandidateNewPage() {
           updated.zodiacSign = NAKSHATRA_TO_RASI_MAP[value];
         }
       }
+
+      // Reset caste if religion changes and current caste isn't in new religion list
+      if (name === 'religion') {
+        const validCastes = getCastesForReligion(value);
+        if (updated.caste && !validCastes.includes(updated.caste)) {
+          updated.caste = '';
+          updated.customCaste = '';
+        }
+      }
+
+      // Keep composite casteReligion in sync
+      const currentRel = name === 'religion' ? value : (updated.religion || 'Hindu');
+      const currentCasteVal = name === 'caste' ? value : (updated.caste || '');
+      const activeCaste = currentCasteVal.includes('Other') && (updated.customCaste || name === 'customCaste')
+        ? (name === 'customCaste' ? value : updated.customCaste)
+        : currentCasteVal;
+      const currentSub = name === 'subCaste' ? value : (updated.subCaste || '');
+
+      let composite = currentRel;
+      if (activeCaste) {
+        composite += ` / ${activeCaste}`;
+      }
+      if (currentSub) {
+        composite += ` (${currentSub})`;
+      }
+      updated.casteReligion = composite;
 
       return updated;
     });
@@ -594,16 +623,74 @@ export function AdminCandidateNewPage() {
                   </div>
 
                   <div className="admin-form-group">
-                    <label className="admin-form-label">Caste & Religion</label>
+                    <label className="admin-form-label">Religion</label>
+                    <select
+                      name="religion"
+                      value={formData.religion || 'Hindu'}
+                      onChange={handleChange}
+                      className="admin-form-input"
+                    >
+                      {RELIGIONS.map((r) => (
+                        <option key={r.value} value={r.value}>{r.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Community Category</label>
+                    <select
+                      name="community"
+                      value={formData.community}
+                      onChange={handleChange}
+                      className="admin-form-input"
+                    >
+                      <option value="">-- Select Community Category --</option>
+                      {COMMUNITY_CATEGORIES.map((c) => (
+                        <option key={c.value} value={c.value}>{c.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Caste / Community</label>
+                    <select
+                      name="caste"
+                      value={formData.caste}
+                      onChange={handleChange}
+                      className="admin-form-input"
+                    >
+                      <option value="">-- Select Caste --</option>
+                      {getCastesForReligion(formData.religion || 'Hindu').map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Subcaste / Division (Optional)</label>
                     <input
                       type="text"
-                      name="casteReligion"
-                      value={formData.casteReligion}
+                      name="subCaste"
+                      value={formData.subCaste}
                       onChange={handleChange}
-                      placeholder="e.g. Hindu / Pillai"
+                      placeholder="e.g. Saiva Pillai / Vadakalai"
                       className="admin-form-input"
                     />
                   </div>
+
+                  {formData.caste && formData.caste.includes('Other') && (
+                    <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                      <label className="admin-form-label">Specify Custom Caste Name</label>
+                      <input
+                        type="text"
+                        name="customCaste"
+                        value={formData.customCaste}
+                        onChange={handleChange}
+                        placeholder="Enter custom caste name"
+                        className="admin-form-input"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
