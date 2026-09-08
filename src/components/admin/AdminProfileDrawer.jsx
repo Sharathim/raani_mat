@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS, STATUS_CONFIG } from '../../utils/constants';
@@ -14,7 +13,7 @@ import {
   Briefcase,
   GraduationCap,
   Sparkles,
-  ExternalLink,
+  Share2,
   MessageCircle,
   Clock,
   Printer,
@@ -26,7 +25,8 @@ export function AdminProfileDrawer({
   isOpen,
   onClose,
   onStatusChange,
-  onDeleteClick
+  onDeleteClick,
+  onShareClick
 }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -371,13 +371,18 @@ export function AdminProfileDrawer({
             <span>Delete Profile</span>
           </button>
 
-          <Link
-            to={`/admin/registrations/${registration.id}`}
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onShareClick && onShareClick(registration);
+            }}
             className="btn btn-primary btn-sm"
+            style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
           >
-            <span>Full Bio-Data Page</span>
-            <ExternalLink size={14} />
-          </Link>
+            <Share2 size={14} />
+            <span>Share via WhatsApp</span>
+          </button>
         </div>
       </div>
     </div>

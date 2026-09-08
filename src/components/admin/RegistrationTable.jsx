@@ -1,16 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { StatusBadge } from '../common/StatusBadge';
 import { RegistrationCard } from './RegistrationCard';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { Eye, Trash2, User, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Eye, Trash2, User, Phone, MapPin, Share2 } from 'lucide-react';
 
 export function RegistrationTable({
   registrations,
   onStatusChange,
   onDeleteClick,
-  onRowClick
+  onRowClick,
+  onShareClick
 }) {
   return (
     <div>
@@ -190,14 +190,16 @@ export function RegistrationTable({
                       <span>Preview</span>
                     </button>
 
-                    <Link
-                      to={`/admin/registrations/${reg.id || reg.registrationId}`}
+                    <button
+                      type="button"
+                      onClick={() => onShareClick && onShareClick(reg)}
                       className="btn btn-secondary btn-sm"
-                      style={{ padding: '0.3rem 0.45rem', fontSize: '0.75rem' }}
-                      title="Full Bio-Data Page"
+                      style={{ padding: '0.3rem 0.55rem', fontSize: '0.75rem', color: '#25D366' }}
+                      title="Share via WhatsApp"
                     >
-                      <ExternalLink size={13} />
-                    </Link>
+                      <Share2 size={13} />
+                      <span style={{ marginLeft: '4px' }}>Share</span>
+                    </button>
 
                     <button
                       type="button"
@@ -225,6 +227,7 @@ export function RegistrationTable({
             onStatusChange={onStatusChange}
             onDeleteClick={onDeleteClick}
             onClick={() => onRowClick && onRowClick(reg)}
+            onShareClick={onShareClick}
           />
         ))}
       </div>

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
 import { REGISTRATION_STATUS } from '../../utils/constants';
-import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, ExternalLink } from 'lucide-react';
+import { User, Phone, MapPin, Briefcase, Eye, Trash2, Calendar, Share2 } from 'lucide-react';
 
 export function RegistrationCard({
   registration,
   onStatusChange,
   onDeleteClick,
-  onClick
+  onClick,
+  onShareClick
 }) {
   return (
     <div
@@ -134,13 +134,15 @@ export function RegistrationCard({
             <option value={REGISTRATION_STATUS.CLOSED}>Closed</option>
           </select>
 
-          <Link
-            to={`/admin/registrations/${registration.id || registration.registrationId}`}
+          <button
+            type="button"
+            onClick={() => onShareClick && onShareClick(registration)}
             className="btn btn-secondary btn-sm"
-            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
+            style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', color: '#25D366' }}
+            title="Share via WhatsApp"
           >
-            <ExternalLink size={12} />
-          </Link>
+            <Share2 size={12} />
+          </button>
 
           <button
             type="button"

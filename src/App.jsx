@@ -9,7 +9,8 @@ import { RegisterPage } from './pages/RegisterPage';
 import { RegistrationSuccessPage } from './pages/RegistrationSuccessPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
-import { AdminRegistrationDetailPage } from './pages/AdminRegistrationDetailPage';
+import { AdminCandidatesPage } from './pages/AdminCandidatesPage';
+import { AdminCandidateNewPage } from './pages/AdminCandidateNewPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 function ScrollToHashElement() {
@@ -56,10 +57,18 @@ export function App() {
             }
           />
           <Route
-            path="/admin/registrations/:id"
+            path="/admin/candidates"
             element={
               <ProtectedRoute>
-                <AdminRegistrationDetailPage />
+                <AdminCandidatesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/candidates/new"
+            element={
+              <ProtectedRoute>
+                <AdminCandidateNewPage />
               </ProtectedRoute>
             }
           />

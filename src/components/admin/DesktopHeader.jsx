@@ -4,7 +4,7 @@ import { LogoMark } from '../common/LogoMark';
 import { BRAND } from '../../utils/constants';
 import { LayoutDashboard, Users, LogOut, Globe, RefreshCw } from 'lucide-react';
 
-export function AdminHeader({
+export function DesktopHeader({
   onRefresh,
   isRefreshing = false,
   onRequestLogout
@@ -16,23 +16,21 @@ export function AdminHeader({
   const isCandidatesActive = currentPath.startsWith('/admin/candidates');
 
   return (
-    <header className="admin-header">
+    <header className="admin-desktop-header" aria-label="Desktop Header Navigation">
       <div className="container admin-header-inner">
-        {/* Left: Brand Logo & COMPLETE Tamil Website Name */}
+        {/* Left: Brand Logo & Website Title */}
         <div className="admin-header-brand-wrap">
           <Link to="/admin" className="admin-header-brand-link" title="Rani Matrimony Admin">
-            <LogoMark size={36} />
+            <LogoMark size={38} />
             <div className="admin-header-brand-text">
               <div className="admin-header-title-row">
                 <span className="font-tamil-brand admin-header-brand-name">
                   {BRAND.tamilName}
                 </span>
-                {/* Desktop-only ADMIN badge */}
                 <span className="admin-badge-desktop">
                   ADMIN
                 </span>
               </div>
-              {/* Desktop-only subtitle */}
               <div className="admin-subtitle-desktop">
                 Matrimonial Management Portal
               </div>
@@ -40,7 +38,7 @@ export function AdminHeader({
           </Link>
         </div>
 
-        {/* Center/Right: Desktop Primary Navigation Tabs */}
+        {/* Center/Right: Desktop Primary Navigation Tabs & Utilities */}
         <nav className="admin-desktop-nav" aria-label="Desktop Admin Navigation">
           <Link
             to="/admin"
@@ -58,7 +56,6 @@ export function AdminHeader({
             <span>Candidates</span>
           </Link>
 
-          {/* Secondary Actions on Desktop */}
           <div className="admin-desktop-nav-divider" />
 
           <Link
@@ -80,7 +77,10 @@ export function AdminHeader({
               className="admin-desktop-utility-btn"
               title="Refresh Data"
             >
-              <RefreshCw size={15} className={isRefreshing ? 'animate-spin' : ''} style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}} />
+              <RefreshCw
+                size={15}
+                style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}}
+              />
               <span>Refresh</span>
             </button>
           )}
@@ -96,22 +96,6 @@ export function AdminHeader({
             <span>Logout</span>
           </button>
         </nav>
-
-        {/* Mobile Header Right: Optional subtle refresh indicator if needed */}
-        {onRefresh && (
-          <div className="admin-mobile-header-right">
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="admin-mobile-refresh-icon-btn"
-              title="Refresh Data"
-              aria-label="Refresh data"
-            >
-              <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} style={isRefreshing ? { animation: 'spin 1s linear infinite' } : {}} />
-            </button>
-          </div>
-        )}
       </div>
     </header>
   );

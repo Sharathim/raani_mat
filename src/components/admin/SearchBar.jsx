@@ -1,60 +1,53 @@
 import React from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, SlidersHorizontal } from 'lucide-react';
 
 export function SearchBar({
   searchTerm,
   onSearchChange,
-  placeholder = 'Search by name, phone, location, education, ID...'
+  placeholder = 'Search candidates by name, phone, location...',
+  onOpenFilter,
+  activeFilterCount = 0
 }) {
   return (
-    <div className="admin-search-bar" style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
-      <Search
-        size={16}
-        style={{
-          position: 'absolute',
-          left: '12px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          color: 'var(--muted)',
-          pointerEvents: 'none'
-        }}
-      />
+    <div className="admin-search-wrapper">
+      <div className="admin-search-icon-box">
+        <Search size={18} />
+      </div>
+
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
-        style={{
-          width: '100%',
-          padding: '0.55rem 2.25rem 0.55rem 2.25rem',
-          backgroundColor: '#ffffff',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-sm)',
-          fontSize: '0.875rem',
-          outline: 'none',
-          color: 'var(--ink)'
-        }}
+        className="admin-search-input"
+        aria-label="Search candidate profiles"
       />
+
       {searchTerm && (
         <button
           type="button"
           onClick={() => onSearchChange('')}
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'none',
-            border: 'none',
-            color: 'var(--muted)',
-            cursor: 'pointer',
-            padding: '2px',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-          aria-label="Clear search"
+          className="admin-search-clear-btn"
+          aria-label="Clear search text"
         >
-          <X size={14} />
+          <X size={16} />
+        </button>
+      )}
+
+      {onOpenFilter && (
+        <button
+          type="button"
+          onClick={onOpenFilter}
+          className={`admin-search-filter-btn ${activeFilterCount > 0 ? 'has-active' : ''}`}
+          aria-label="Filter candidates"
+          title="Filter candidates"
+        >
+          <SlidersHorizontal size={18} />
+          {activeFilterCount > 0 && (
+            <span className="admin-search-filter-badge" aria-label={`${activeFilterCount} filters active`}>
+              {activeFilterCount}
+            </span>
+          )}
         </button>
       )}
     </div>
