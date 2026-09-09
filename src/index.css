@@ -466,11 +466,22 @@ button, input, select, textarea {
 }
 
 /* ===========================================================================
+   iOS PWA Safe-Area Support (standalone mode status bar overlap fix)
+   ========================================================================== */
+@media all and (display-mode: standalone) {
+  html {
+    /* Ensure the page background extends behind the iOS status bar in PWA mode */
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* ===========================================================================
    Responsive layout refinements
    ========================================================================== */
 :root {
   --page-gutter: clamp(1rem, 3vw, 1.5rem);
   --section-space: clamp(3.5rem, 7vw, 5.5rem);
+  --sat: env(safe-area-inset-top, 0px);
 }
 
 img, svg {
@@ -1031,9 +1042,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   /* Hero Section - Mobile */
   .hero-section {
     padding: 1.25rem 1.15rem 0.85rem !important;
-    height: calc(100svh - var(--header-h, 72px)) !important;
+    height: calc(100svh - var(--header-h, 72px) - env(safe-area-inset-top, 0px)) !important;
     min-height: 0 !important;
-    max-height: calc(100svh - var(--header-h, 72px)) !important;
+    max-height: calc(100svh - var(--header-h, 72px) - env(safe-area-inset-top, 0px)) !important;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
@@ -1781,6 +1792,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   top: 0 !important;
   z-index: 1000 !important;
   background-color: #ffffff !important;
+  padding-top: env(safe-area-inset-top, 0px) !important;
 }
 
 .admin-desktop-header {
@@ -1788,6 +1800,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background-color: #ffffff;
   border-bottom: 1px solid var(--border);
   padding: 0.75rem 1.25rem;
+  padding-top: calc(0.75rem + env(safe-area-inset-top, 0px));
   box-shadow: var(--shadow-sm);
   position: sticky !important;
   top: 0 !important;
@@ -1799,6 +1812,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background-color: #ffffff;
   border-bottom: 1px solid var(--border);
   padding: 0.65rem 1rem;
+  padding-top: calc(0.65rem + env(safe-area-inset-top, 0px));
   box-shadow: var(--shadow-sm);
   position: sticky !important;
   top: 0 !important;
@@ -3365,6 +3379,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
+  padding-top: calc(0.5rem + env(safe-area-inset-top, 0px));
   background: #ffffff;
   border-bottom: 1px solid var(--border-subtle);
 }
