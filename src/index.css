@@ -1031,9 +1031,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   /* Hero Section - Mobile */
   .hero-section {
     padding: 1.25rem 1.15rem 0.85rem !important;
-    min-height: min(580px, calc(100svh - 72px)) !important;
+    height: calc(100svh - var(--header-h, 72px)) !important;
+    min-height: 0 !important;
+    max-height: calc(100svh - var(--header-h, 72px)) !important;
     display: flex !important;
     flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .hero-section .container {

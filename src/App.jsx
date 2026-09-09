@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
@@ -13,6 +13,7 @@ import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { AdminCandidatesPage } from './pages/AdminCandidatesPage';
 import { AdminCandidateNewPage } from './pages/AdminCandidateNewPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { SplashScreen } from './components/common/SplashScreen';
 
 function ScrollToHashElement() {
   const location = useLocation();
@@ -35,8 +36,20 @@ function ScrollToHashElement() {
 }
 
 export function App() {
+  const [showSplash, setShowSplash] = useState(() => {
+    // Only show splash on first visit per session
+    if (sessionStorage.getItem('splashShown')) return false;
+    return true;
+  });
+
+  const handleSplashFinished = () => {
+    sessionStorage.setItem('splashShown', 'true');
+    setShowSplash(false);
+  };
+
   return (
     <AuthProvider>
+      {showSplash && <SplashScreen onFinished={handleSplashFinished} />}
       <BrowserRouter>
         <ScrollToHashElement />
         <Routes>
