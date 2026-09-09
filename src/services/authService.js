@@ -11,9 +11,14 @@ export async function loginAdmin(email, password) {
   if (isFirebaseConfigured && auth) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const adminUid = import.meta.env.VITE_ADMIN_UID;
-      if (adminUid && adminUid !== 'your_admin_user_uid_here') {
-        if (userCredential.user.uid !== adminUid) {
+      const adminUidConfig = import.meta.env.VITE_ADMIN_UID || '';
+      const adminUids = adminUidConfig
+        .split(',')
+        .map((id) => id.trim())
+        .filter((id) => Boolean(id) && id !== 'your_admin_user_uid_here');
+
+      if (adminUids.length > 0) {
+        if (!adminUids.includes(userCredential.user.uid)) {
           await signOut(auth);
           throw new Error('This account is not authorized as an administrator.');
         }
