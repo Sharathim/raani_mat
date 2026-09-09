@@ -1073,8 +1073,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
   .hero-video-layer,
   .hero-bg-layer {
-    object-position: center 32% !important;
-    background-position: center 32% !important;
+    object-position: 87% 30% !important;
+    background-position: 87% 30% !important;
   }
 
   .hero-vignette-layer {
