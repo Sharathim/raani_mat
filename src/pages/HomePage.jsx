@@ -347,37 +347,39 @@ export function HomePage() {
 
             {/* Mobile Hero Content */}
             <div className="hero-mobile-content">
-              {/* Pill Badge */}
-              <div className="hero-mobile-badge-wrap">
-                <span className="hero-mobile-badge">
-                  <span className="badge-star">❖</span>
-                  <span>{BRAND.tagline}</span>
-                  <span className="badge-star">❖</span>
-                </span>
+              <div className="hero-mobile-text-group">
+                {/* Pill Badge */}
+                <div className="hero-mobile-badge-wrap">
+                  <span className="hero-mobile-badge">
+                    <span className="badge-star">❖</span>
+                    <span>{BRAND.tagline}</span>
+                    <span className="badge-star">❖</span>
+                  </span>
+                </div>
+
+                {/* Tamil Title */}
+                <h1 className="hero-mobile-title font-tamil-serif">
+                  {BRAND.tamilName}
+                </h1>
+
+                {/* English Subtitle */}
+                <div className="hero-mobile-subtitle">
+                  {BRAND.englishName}
+                </div>
+
+                {/* Decorative Accent Divider Line */}
+                <div className="hero-mobile-line-accent" />
+
+                {/* Sub-tagline */}
+                <div className="hero-mobile-tagline">
+                  {BRAND.subTagline}
+                </div>
+
+                {/* Description */}
+                <p className="hero-mobile-desc">
+                  Find a meaningful match that fits your family's values and traditions.
+                </p>
               </div>
-
-              {/* Tamil Title */}
-              <h1 className="hero-mobile-title font-tamil-serif">
-                {BRAND.tamilName}
-              </h1>
-
-              {/* English Subtitle */}
-              <div className="hero-mobile-subtitle">
-                {BRAND.englishName}
-              </div>
-
-              {/* Decorative Accent Divider Line */}
-              <div className="hero-mobile-line-accent" />
-
-              {/* Sub-tagline */}
-              <div className="hero-mobile-tagline">
-                {BRAND.subTagline}
-              </div>
-
-              {/* Description */}
-              <p className="hero-mobile-desc">
-                Find a meaningful match that fits your family's values and traditions.
-              </p>
 
               {/* Mobile CTA Cards */}
               <div className="hero-mobile-actions">
