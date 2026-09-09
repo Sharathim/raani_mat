@@ -1772,16 +1772,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   padding: 1.75rem 1.25rem 3.5rem;
 }
 
-/* Desktop & Mobile Header Separation */
+.brand-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
+  background-color: #ffffff !important;
+}
+
 .admin-desktop-header {
   display: block;
   background-color: #ffffff;
   border-bottom: 1px solid var(--border);
   padding: 0.75rem 1.25rem;
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
 }
 
 .admin-mobile-header {
@@ -1790,9 +1796,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   border-bottom: 1px solid var(--border);
   padding: 0.65rem 1rem;
   box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000 !important;
 }
 
 .admin-mobile-header-inner {

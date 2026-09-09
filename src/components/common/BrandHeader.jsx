@@ -56,7 +56,7 @@ export function BrandHeader() {
         borderBottom: '1px solid var(--border)',
         position: 'sticky',
         top: 0,
-        zIndex: 100,
+        zIndex: 1000,
         boxShadow: 'var(--shadow-sm)'
       }}
     >

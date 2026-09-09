@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
-import { PullToRefresh } from './components/common/PullToRefresh';
 import { PWAInstallPrompt } from './components/common/PWAInstallPrompt';
 
 // Pages
@@ -39,9 +38,8 @@ export function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <PullToRefresh>
-          <ScrollToHashElement />
-          <Routes>
+        <ScrollToHashElement />
+        <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -119,7 +117,6 @@ export function App() {
 
           {/* PWA App Installation Prompt */}
           <PWAInstallPrompt />
-        </PullToRefresh>
       </BrowserRouter>
     </AuthProvider>
   );
