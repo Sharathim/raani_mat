@@ -21,7 +21,7 @@ export function AdminLayout({
     setIsLoggingOut(true);
     try {
       await logout();
-      navigate('/admin/login');
+      navigate('/');
     } catch (err) {
       console.error('Logout error:', err);
       setIsLoggingOut(false);

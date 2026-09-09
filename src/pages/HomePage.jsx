@@ -409,13 +409,6 @@ export function HomePage() {
                   </div>
                 </a>
               </div>
-
-              {/* Bottom Carousel / Pagination Dots */}
-              <div className="hero-mobile-dots">
-                <span className="dot active" />
-                <span className="dot" />
-                <span className="dot" />
-              </div>
             </div>
           </div>
         </section>

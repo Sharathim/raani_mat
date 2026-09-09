@@ -47,9 +47,23 @@ function createTamilTextDataUrl(text, fontSize = 28, color = '#ffffff', fontWeig
  */
 function sanitizePdfText(str) {
   if (!str) return '';
-  return String(str)
+  let cleaned = String(str)
     .replace(/₹\s*/g, 'Rs. ')
     .replace(/\u20B9\s*/g, 'Rs. ');
+
+  // Strip Tamil parenthetical translation blocks, e.g. " (யாதவர் / கோனார்)"
+  cleaned = cleaned.replace(/\s*\([\u0B80-\u0BFF\s\/,\.\-–—]+\)/g, '');
+
+  // Strip any remaining standalone Tamil script characters
+  cleaned = cleaned.replace(/[\u0B80-\u0BFF]/g, '');
+
+  // Strip any non-ASCII characters to prevent Helvetica font distortion
+  cleaned = cleaned.replace(/[^\x00-\x7F]/g, '');
+
+  // Normalize whitespace
+  cleaned = cleaned.replace(/\s+/g, ' ').trim();
+
+  return cleaned;
 }
 
 /**

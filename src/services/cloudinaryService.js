@@ -71,6 +71,14 @@ export function openCloudinaryWidget({ onSuccess, onError, onClose }) {
               thumbnailUrl: info.thumbnail_url || info.secure_url
             });
           }
+          // Automatically close the Cloudinary widget window on upload success
+          if (widget && typeof widget.close === 'function') {
+            try {
+              widget.close({ quiet: true });
+            } catch (err) {
+              console.warn('Auto-close widget warning:', err);
+            }
+          }
         } else if (result && result.event === 'close') {
           if (onClose) onClose();
         }

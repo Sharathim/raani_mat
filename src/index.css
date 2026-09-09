@@ -1138,10 +1138,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .hero-mobile-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.65rem;
     width: 100%;
-    max-width: 360px;
-    margin-bottom: 2rem;
+    max-width: 100%;
+    margin-top: auto;
+    margin-bottom: 0 !important;
+    padding-top: 1.25rem;
   }
 
   .hero-mobile-btn-primary {
@@ -4233,6 +4235,16 @@ select option {
 .custom-option-check {
   color: var(--maroon-800);
   flex-shrink: 0;
+}
+
+/* Photo Uploader Mobile Responsive Rules */
+@media (max-width: 768px) {
+  .hide-uploaded-mobile {
+    display: none !important;
+  }
+  .profile-photo-uploader-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 

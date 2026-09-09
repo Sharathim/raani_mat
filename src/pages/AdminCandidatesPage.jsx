@@ -186,8 +186,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
         return {
           title: 'New Registrations',
           entityName: 'new registrations',
-          searchPlaceholder: 'Search new registrations by name, phone, location...',
-          emptyTitle: 'no new profiles found',
+          searchPlaceholder: 'Search new profiles',
+          emptyTitle: 'No new profiles found',
           emptyDesc: 'New applicant registration submissions will automatically appear here once registered online.',
           showAddButton: false
         };
@@ -195,8 +195,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
         return {
           title: 'Completed Profiles',
           entityName: 'completed profiles',
-          searchPlaceholder: 'Search completed profiles by name, phone, location...',
-          emptyTitle: 'no completed profiles found',
+          searchPlaceholder: 'Search completed profiles',
+          emptyTitle: 'No completed profiles found',
           emptyDesc: 'Matrimonial profiles marked as completed or settled will appear here.',
           showAddButton: false
         };
@@ -205,8 +205,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
         return {
           title: 'Profiles',
           entityName: 'profiles',
-          searchPlaceholder: 'Search profiles by name, phone, location...',
-          emptyTitle: 'no reviewed profiles found',
+          searchPlaceholder: 'Search reviewed profiles',
+          emptyTitle: 'No reviewed profiles found',
           emptyDesc: 'Candidate profiles that have been reviewed by admin will appear here.',
           showAddButton: true
         };
