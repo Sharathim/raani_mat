@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BrandHeader } from '../components/common/BrandHeader';
 import { Footer } from '../components/common/Footer';
 import { SectionHeader } from '../components/common/DecorativeElements';
 import { BRAND, SUCCESS_STORIES, FAQS } from '../utils/constants';
-import heroBg from '../assets/hero-bg.jpg';
+import heroBg from '../assets/hero-bg.png';
+import heroVideo from '../assets/hero.mp4';
 import {
   HeartHandshake,
   Phone,
@@ -29,9 +30,20 @@ import {
 } from 'lucide-react';
 
 export function HomePage() {
+  const videoRef = useRef(null);
   const [openFaq, setOpenFaq] = useState(null);
   const [contactForm, setContactForm] = useState({ name: '', phone: '', query: '' });
   const [contactErrors, setContactErrors] = useState({});
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {
+        // Autoplay may be deferred by browser power settings
+      });
+    }
+  }, []);
 
   const handleContactChange = (event) => {
     const { name, value } = event.target;
@@ -153,22 +165,32 @@ export function HomePage() {
             backgroundColor: '#fffdf8'
           }}
         >
-          {/* Background Artwork Layer */}
-          <div
-            className="hero-bg-layer"
+          {/* Background Video Layer */}
+          <video
+            ref={videoRef}
+            className="hero-video-layer"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster={heroBg}
+            disablePictureInPicture
+            disableRemotePlayback
+            aria-hidden="true"
             style={{
               position: 'absolute',
               top: 0,
               left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage: `url(${heroBg})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              zIndex: 1
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: 1,
+              pointerEvents: 'none'
             }}
-          />
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
 
           {/* Vignette Layer */}
           <div
