@@ -599,13 +599,38 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .hero-video-layer {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   z-index: 1;
+  pointer-events: none;
+}
+
+/* Ensure no native video controls, play/pause buttons, or circular overlays appear */
+.hero-video-layer::-webkit-media-controls,
+.hero-video-layer::-webkit-media-controls-enclosure,
+.hero-video-layer::-webkit-media-controls-panel,
+.hero-video-layer::-webkit-media-controls-play-button,
+.hero-video-layer::-webkit-media-controls-start-playback-button,
+.hero-video-layer::-webkit-media-controls-overlay-play-button,
+.hero-video-layer::-webkit-media-controls-overlay-enclosure {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
   pointer-events: none;
 }
 

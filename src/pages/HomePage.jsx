@@ -36,11 +36,28 @@ export function HomePage() {
   const [contactErrors, setContactErrors] = useState({});
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {
-        // Autoplay may be deferred by browser power settings
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Silently retry playback on first user touch/scroll if browser low-power mode restricts initial autoplay
+        const startPlayback = () => {
+          video.play().catch(() => {});
+          ['touchstart', 'touchend', 'scroll', 'click'].forEach((evt) => {
+            window.removeEventListener(evt, startPlayback);
+          });
+        };
+        ['touchstart', 'touchend', 'scroll', 'click'].forEach((evt) => {
+          window.addEventListener(evt, startPlayback, { once: true, passive: true });
+        });
       });
     }
   }, []);
@@ -165,23 +182,40 @@ export function HomePage() {
             backgroundColor: '#fffdf8'
           }}
         >
+          {/* Background Fallback Image (behind video) */}
+          <div
+            className="hero-bg-layer"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url(${heroBg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              zIndex: 0,
+              pointerEvents: 'none'
+            }}
+            aria-hidden="true"
+          />
+
           {/* Background Video Layer */}
           <video
             ref={videoRef}
             className="hero-video-layer"
             autoPlay
-            loop
             muted
+            loop
             playsInline
             preload="auto"
-            poster={heroBg}
+            webkit-playsinline="true"
+            tabIndex={-1}
             disablePictureInPicture
             disableRemotePlayback
             aria-hidden="true"
             style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
+              inset: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
@@ -197,10 +231,7 @@ export function HomePage() {
             className="hero-vignette-layer"
             style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              inset: 0,
               zIndex: 2,
               pointerEvents: 'none'
             }}
