@@ -8,6 +8,7 @@ export const BRAND = {
   displayPhones: '+91 90031 92733',
   whatsapp: '9003192733',
   address: 'No 29, Mettukuppam Main Road, Sridevi Karumariamman Nagar, Nerkundram, Chennai 600107',
+  mapUrl: 'https://maps.google.com/?q=13.055509,80.181450',
   hours: 'Monday – Sunday: 9:00 AM – 8:00 PM',
   copyrightYear: '2026'
 };

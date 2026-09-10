@@ -947,7 +947,7 @@ export function HomePage() {
         </section>
       </main>
 
-      {/* Floating Quick Helpline Action on Bottom Right */}
+      {/* Floating Quick Helpline & Location Actions on Bottom Right */}
       <div
         className="floating-contact-actions"
         style={{
@@ -960,6 +960,30 @@ export function HomePage() {
           gap: '10px'
         }}
       >
+        {/* Google Maps Location Button */}
+        <a
+          href={BRAND.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            backgroundColor: '#ea4335',
+            color: '#ffffff',
+            borderRadius: '50%',
+            width: '52px',
+            height: '52px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 6px 16px rgba(234, 67, 53, 0.35)',
+            textDecoration: 'none'
+          }}
+          title="Find Us on Google Maps"
+          aria-label="Find our service center on Google Maps"
+        >
+          <MapPin size={24} />
+        </a>
+
+        {/* WhatsApp Button */}
         <a
           href={`https://wa.me/91${BRAND.whatsapp}?text=${encodeURIComponent('Hello, I would like to inquire about matrimonial profile registration at Rani Thirumana Sevai Maiyam.')}`}
           target="_blank"
@@ -973,13 +997,16 @@ export function HomePage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 6px 16px rgba(0,0,0,0.25)',
+            boxShadow: '0 6px 16px rgba(37, 211, 102, 0.35)',
             textDecoration: 'none'
           }}
           title="Chat with us on WhatsApp"
+          aria-label="Chat with us on WhatsApp"
         >
           <MessageCircle size={28} />
         </a>
+
+        {/* Phone Call Button */}
         <a
           href={`tel:${BRAND.phones[0]}`}
           style={{
@@ -996,6 +1023,7 @@ export function HomePage() {
             textDecoration: 'none'
           }}
           title="Direct Phone Call"
+          aria-label="Call direct helpline"
         >
           <Phone size={24} />
         </a>

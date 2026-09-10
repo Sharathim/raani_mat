@@ -112,7 +112,9 @@ export function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
                 <MapPin size={16} color="var(--gold-300)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span style={{ color: 'rgba(255, 250, 240, 0.85)' }}>{BRAND.address}</span>
+                <a href={BRAND.mapUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255, 250, 240, 0.85)', textDecoration: 'none' }} title="Open in Google Maps">
+                  {BRAND.address}
+                </a>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Phone size={16} color="var(--gold-300)" style={{ flexShrink: 0 }} />
