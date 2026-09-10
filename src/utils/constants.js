@@ -2,7 +2,7 @@ export const BRAND = {
   tamilName: 'ராணி திருமண சேவை மையம்',
   englishName: 'Rani Thirumana Sevai Maiyam',
   tagline: 'Trusted Matrimonial Service for All Communities',
-  subTagline: 'Two Hearts. One Beautiful Journey. ',
+  subTagline: 'அனைத்து சமூகத்தினருக்கும்.',
   email: 'ranithirumanasevaimayam@gmail.com',
   phones: ['9003192733'],
   displayPhones: '+91 90031 92733',
