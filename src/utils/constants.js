@@ -116,7 +116,8 @@ export const ZODIAC_SIGNS = [
   { value: 'Dhanusu', label: 'Dhanusu (Sagittarius)' },
   { value: 'Makaram', label: 'Makaram (Capricorn)' },
   { value: 'Kumbam', label: 'Kumbam (Aquarius)' },
-  { value: 'Meenam', label: 'Meenam (Pisces)' }
+  { value: 'Meenam', label: 'Meenam (Pisces)' },
+  { value: 'Other', label: 'Other / Not Listed (பிற ராசி)' }
 ];
 
 export const NAKSHATRAS = [
@@ -146,7 +147,8 @@ export const NAKSHATRAS = [
   { value: 'Shatabhisha', label: 'Shatabhisha (Sathayam)' },
   { value: 'Purva Bhadrapada', label: 'Purva Bhadrapada (Poorattathi)' },
   { value: 'Uttara Bhadrapada', label: 'Uttara Bhadrapada (Uthirattathi)' },
-  { value: 'Revati', label: 'Revati' }
+  { value: 'Revati', label: 'Revati' },
+  { value: 'Other', label: 'Other / Not Listed (பிற நட்சத்திரம்)' }
 ];
 
 export const NAKSHATRA_TO_RASI_MAP = {
@@ -191,7 +193,17 @@ export const LAGNAMS = [
   { value: 'Dhanusu', label: 'Dhanusu (Sagittarius)' },
   { value: 'Makaram', label: 'Makaram (Capricorn)' },
   { value: 'Kumbam', label: 'Kumbam (Aquarius)' },
-  { value: 'Meenam', label: 'Meenam (Pisces)' }
+  { value: 'Meenam', label: 'Meenam (Pisces)' },
+  { value: 'Other', label: 'Other / Not Listed (பிற லக்னம்)' }
+];
+
+export const DOSHAM_OPTIONS = [
+  { value: 'None', label: 'None / No Dosham (சுத்த ஜாதகம்)' },
+  { value: 'Sevvai Dosham', label: 'Sevvai Dosham (Chevvai / செவ்வாய் தோஷம்)' },
+  { value: 'Rahu-Ketu Dosham', label: 'Rahu-Ketu / Sarpa Dosham (சர்ப்ப தோஷம்)' },
+  { value: 'Parigara Dosham', label: 'Parigara Dosham (பரிகார தோஷம்)' },
+  { value: 'Don’t Know', label: 'Don’t Know / To be analyzed' },
+  { value: 'Other', label: 'Other Dosham / Specify (பிற தோஷம்)' }
 ];
 
 export const INCOME_OPTIONS = [
@@ -445,10 +457,14 @@ export const INITIAL_FORM_STATE = {
 
   // Step 3: Birth / Horoscope
   birthStar: '',
+  customBirthStar: '',
   zodiacSign: '',
+  customZodiacSign: '',
   lagnam: '',
+  customLagnam: '',
   gothram: '',
   dosham: 'None',
+  customDosham: '',
 
   // Step 4: Education & Career
   height: '',

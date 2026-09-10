@@ -19,6 +19,7 @@ import {
   NAKSHATRAS,
   NAKSHATRA_TO_RASI_MAP,
   LAGNAMS,
+  DOSHAM_OPTIONS,
   INCOME_OPTIONS,
   EDUCATION_SUGGESTIONS,
   BRAND,
@@ -81,6 +82,20 @@ export function RegisterPage() {
         if (!prev.zodiacSign || prev.zodiacSign === '') {
           updated.zodiacSign = NAKSHATRA_TO_RASI_MAP[value];
         }
+      }
+
+      // Clear custom astrology fields if user selects a standard option
+      if (name === 'birthStar' && value !== 'Other') {
+        updated.customBirthStar = '';
+      }
+      if (name === 'zodiacSign' && value !== 'Other') {
+        updated.customZodiacSign = '';
+      }
+      if (name === 'lagnam' && value !== 'Other') {
+        updated.customLagnam = '';
+      }
+      if (name === 'dosham' && !value.includes('Other')) {
+        updated.customDosham = '';
       }
 
       // Reset caste if religion changes and current caste isn't in new religion list
@@ -421,58 +436,115 @@ export function RegisterPage() {
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                  <SelectField
-                    label="Birth Star (Nakshatra)"
-                    name="birthStar"
-                    value={formData.birthStar}
-                    onChange={handleChange}
-                    options={NAKSHATRAS}
-                    required
-                    error={errors.birthStar}
-                  />
+                  <div>
+                    <SelectField
+                      label="Birth Star (Nakshatra)"
+                      name="birthStar"
+                      value={formData.birthStar}
+                      onChange={handleChange}
+                      options={NAKSHATRAS}
+                      required
+                      error={errors.birthStar}
+                    />
+                    {formData.birthStar === 'Other' && (
+                      <div style={{ marginTop: '0.6rem' }}>
+                        <FormField
+                          label="Specify Birth Star (நட்சத்திரத்தை குறிப்பிடவும்)"
+                          name="customBirthStar"
+                          value={formData.customBirthStar}
+                          onChange={handleChange}
+                          placeholder="Enter your birth star (Nakshatra)"
+                          required
+                          error={errors.customBirthStar}
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                  <SelectField
-                    label="Zodiac Sign (Rasi)"
-                    name="zodiacSign"
-                    value={formData.zodiacSign}
-                    onChange={handleChange}
-                    options={ZODIAC_SIGNS}
-                    required
-                    error={errors.zodiacSign}
-                  />
+                  <div>
+                    <SelectField
+                      label="Zodiac Sign (Rasi)"
+                      name="zodiacSign"
+                      value={formData.zodiacSign}
+                      onChange={handleChange}
+                      options={ZODIAC_SIGNS}
+                      required
+                      error={errors.zodiacSign}
+                    />
+                    {formData.zodiacSign === 'Other' && (
+                      <div style={{ marginTop: '0.6rem' }}>
+                        <FormField
+                          label="Specify Zodiac Sign / Rasi (ராசியை குறிப்பிடவும்)"
+                          name="customZodiacSign"
+                          value={formData.customZodiacSign}
+                          onChange={handleChange}
+                          placeholder="Enter your zodiac sign (Rasi)"
+                          required
+                          error={errors.customZodiacSign}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
-                  <SelectField
-                    label="Lagnam"
-                    name="lagnam"
-                    value={formData.lagnam}
-                    onChange={handleChange}
-                    options={LAGNAMS}
-                  />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+                  <div>
+                    <SelectField
+                      label="Lagnam"
+                      name="lagnam"
+                      value={formData.lagnam}
+                      onChange={handleChange}
+                      options={LAGNAMS}
+                    />
+                    {formData.lagnam === 'Other' && (
+                      <div style={{ marginTop: '0.6rem' }}>
+                        <FormField
+                          label="Specify Lagnam (லக்னத்தை குறிப்பிடவும்)"
+                          name="customLagnam"
+                          value={formData.customLagnam}
+                          onChange={handleChange}
+                          placeholder="Enter your lagnam"
+                          required
+                          error={errors.customLagnam}
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                  <FormField
-                    label="Gothram (Optional)"
-                    name="gothram"
-                    value={formData.gothram}
-                    onChange={handleChange}
-                    placeholder="e.g. Siva / Vishnu / Vashishta"
-                  />
+                  <div>
+                    <FormField
+                      label="Gothram (Optional)"
+                      name="gothram"
+                      value={formData.gothram}
+                      onChange={handleChange}
+                      placeholder="e.g. Siva / Vishnu / Vashishta"
+                    />
+                  </div>
                 </div>
 
-                <SelectField
-                  label="Dosham Status"
-                  name="dosham"
-                  value={formData.dosham}
-                  onChange={handleChange}
-                  options={[
-                    'None / No Dosham',
-                    'Sevvai Dosham (Chevvai)',
-                    'Naga / Rahu-Ketu Dosham',
-                    'Other Dosham',
-                    'Don’t Know / To be analyzed'
-                  ]}
-                />
+                <div style={{ marginTop: '1rem' }}>
+                  <SelectField
+                    label="Dosham Status"
+                    name="dosham"
+                    value={formData.dosham}
+                    onChange={handleChange}
+                    options={DOSHAM_OPTIONS}
+                  />
+
+                  {(formData.dosham === 'Other' || formData.dosham === 'Other Dosham' || (formData.dosham && formData.dosham.includes('Other'))) && (
+                    <div style={{ marginTop: '0.6rem' }}>
+                      <FormField
+                        label="Specify Dosham Details (தோஷ விவரத்தை குறிப்பிடவும்)"
+                        name="customDosham"
+                        value={formData.customDosham}
+                        onChange={handleChange}
+                        placeholder="e.g. Kalathra Dosham / Manglik / Sevvai Dosham"
+                        required
+                        error={errors.customDosham}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

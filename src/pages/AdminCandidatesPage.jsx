@@ -246,10 +246,11 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
           const matchReligion = (reg.religion || '').toLowerCase().includes(q);
           const matchCommunity = (reg.community || '').toLowerCase().includes(q);
           const matchSubCaste = (reg.subCaste || '').toLowerCase().includes(q);
-          const matchStar = (reg.birthStar || '').toLowerCase().includes(q);
-          const matchRasi = (reg.zodiacSign || '').toLowerCase().includes(q);
-          const matchLagnam = (reg.lagnam || '').toLowerCase().includes(q);
+          const matchStar = (reg.birthStar || '').toLowerCase().includes(q) || (reg.customBirthStar || '').toLowerCase().includes(q);
+          const matchRasi = (reg.zodiacSign || '').toLowerCase().includes(q) || (reg.customZodiacSign || '').toLowerCase().includes(q);
+          const matchLagnam = (reg.lagnam || '').toLowerCase().includes(q) || (reg.customLagnam || '').toLowerCase().includes(q);
           const matchGothram = (reg.gothram || '').toLowerCase().includes(q);
+          const matchDosham = (reg.dosham || '').toLowerCase().includes(q) || (reg.customDosham || '').toLowerCase().includes(q);
 
           if (
             !matchName &&
@@ -266,7 +267,8 @@ export function AdminCandidatesPage({ statusScope = 'reviewed' }) {
             !matchStar &&
             !matchRasi &&
             !matchLagnam &&
-            !matchGothram
+            !matchGothram &&
+            !matchDosham
           ) {
             return false;
           }

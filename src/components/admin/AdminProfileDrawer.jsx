@@ -374,12 +374,23 @@ export function AdminProfileDrawer({
 
               {/* SECTION 3: Horoscope & Astrology */}
               <DetailSection icon={Sparkles} title="3. Horoscope & Astrology">
-                <DetailField label="Birth Star (Nakshatra)" value={registration.birthStar} maroon />
-                <DetailField label="Zodiac Sign (Rasi)" value={registration.zodiacSign} maroon />
-                <DetailField label="Lagnam" value={registration.lagnam} />
+                <DetailField
+                  label="Birth Star (Nakshatra)"
+                  value={registration.birthStar === 'Other' ? (registration.customBirthStar || 'Other') : registration.birthStar}
+                  maroon
+                />
+                <DetailField
+                  label="Zodiac Sign (Rasi)"
+                  value={registration.zodiacSign === 'Other' ? (registration.customZodiacSign || 'Other') : registration.zodiacSign}
+                  maroon
+                />
+                <DetailField
+                  label="Lagnam"
+                  value={registration.lagnam === 'Other' ? (registration.customLagnam || 'Other') : registration.lagnam}
+                />
                 <DetailField
                   label="Gothram / Dosham"
-                  value={`${registration.gothram || '—'} (${registration.dosham || 'None'})`}
+                  value={`${registration.gothram || '—'} (${(registration.dosham === 'Other' || registration.dosham === 'Other Dosham' || (registration.dosham && registration.dosham.includes('Other'))) ? (registration.customDosham || 'Other') : (registration.dosham || 'None')})`}
                 />
               </DetailSection>
 

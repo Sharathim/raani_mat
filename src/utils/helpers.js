@@ -107,9 +107,22 @@ export function validateStep(stepNumber, formData) {
   if (stepNumber === 3) {
     if (!formData.birthStar) {
       errors.birthStar = 'Please select Birth Star (Nakshatra)';
+    } else if (formData.birthStar === 'Other' && (!formData.customBirthStar || formData.customBirthStar.trim().length < 2)) {
+      errors.customBirthStar = 'Please specify Birth Star (Nakshatra)';
     }
+
     if (!formData.zodiacSign) {
       errors.zodiacSign = 'Please select Zodiac Sign (Rasi)';
+    } else if (formData.zodiacSign === 'Other' && (!formData.customZodiacSign || formData.customZodiacSign.trim().length < 2)) {
+      errors.customZodiacSign = 'Please specify Zodiac Sign (Rasi)';
+    }
+
+    if (formData.lagnam === 'Other' && (!formData.customLagnam || formData.customLagnam.trim().length < 2)) {
+      errors.customLagnam = 'Please specify Lagnam';
+    }
+
+    if ((formData.dosham === 'Other' || formData.dosham === 'Other Dosham') && (!formData.customDosham || formData.customDosham.trim().length < 2)) {
+      errors.customDosham = 'Please specify Dosham details';
     }
   }
 

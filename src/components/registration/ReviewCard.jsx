@@ -146,13 +146,23 @@ export function ReviewCard({ formData, onConsentToggle, isSubmitting }) {
           </h4>
           <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: '0.35rem', fontSize: '0.85rem' }}>
             <span style={{ color: 'var(--muted)' }}>Birth Star:</span>
-            <strong style={{ color: 'var(--maroon-900)' }}>{formData.birthStar || '—'}</strong>
+            <strong style={{ color: 'var(--maroon-900)' }}>
+              {formData.birthStar === 'Other' ? (formData.customBirthStar || 'Other') : (formData.birthStar || '—')}
+            </strong>
             <span style={{ color: 'var(--muted)' }}>Zodiac Sign:</span>
-            <strong>{formData.zodiacSign || '—'}</strong>
+            <strong>
+              {formData.zodiacSign === 'Other' ? (formData.customZodiacSign || 'Other') : (formData.zodiacSign || '—')}
+            </strong>
             <span style={{ color: 'var(--muted)' }}>Lagnam:</span>
-            <span>{formData.lagnam || '—'}</span>
+            <span>
+              {formData.lagnam === 'Other' ? (formData.customLagnam || 'Other') : (formData.lagnam || '—')}
+            </span>
             <span style={{ color: 'var(--muted)' }}>Dosham:</span>
-            <span>{formData.dosham || 'None'}</span>
+            <span>
+              {(formData.dosham === 'Other' || formData.dosham === 'Other Dosham' || (formData.dosham && formData.dosham.includes('Other')))
+                ? (formData.customDosham || 'Other')
+                : (formData.dosham || 'None')}
+            </span>
           </div>
         </div>
 

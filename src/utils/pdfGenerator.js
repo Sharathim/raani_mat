@@ -346,7 +346,13 @@ export async function generateCandidateBioDataPdf(candidate) {
     { label: 'Registration ID:', value: candidate.registrationId || candidate.id, isId: true },
     { label: 'Current Location:', value: candidate.location || '—' },
     { label: 'Caste & Religion:', value: candidate.casteReligion || 'Hindu' },
-    { label: 'Star & Rasi:', value: [candidate.birthStar, candidate.zodiacSign].filter(Boolean).join(' / ') || '—' },
+    {
+      label: 'Star & Rasi:',
+      value: [
+        candidate.birthStar === 'Other' ? (candidate.customBirthStar || 'Other') : candidate.birthStar,
+        candidate.zodiacSign === 'Other' ? (candidate.customZodiacSign || 'Other') : candidate.zodiacSign
+      ].filter(Boolean).join(' / ') || '—'
+    },
     { label: 'Native Place:', value: candidate.nativePlace || '—' },
     { label: 'Profession:', value: candidate.occupation || '—' }
   ];
@@ -526,11 +532,16 @@ export async function generateCandidateBioDataPdf(candidate) {
 
   // --- SECTION 2: HOROSCOPE & ASTROLOGICAL DETAILS ---
   renderSectionCard('Horoscope & Astrological Details', [
-    { label: 'Birth Star (Nakshatra)', value: candidate.birthStar },
-    { label: 'Zodiac Sign (Rasi)', value: candidate.zodiacSign },
-    { label: 'Lagnam', value: candidate.lagnam },
+    { label: 'Birth Star (Nakshatra)', value: candidate.birthStar === 'Other' ? (candidate.customBirthStar || 'Other') : candidate.birthStar },
+    { label: 'Zodiac Sign (Rasi)', value: candidate.zodiacSign === 'Other' ? (candidate.customZodiacSign || 'Other') : candidate.zodiacSign },
+    { label: 'Lagnam', value: candidate.lagnam === 'Other' ? (candidate.customLagnam || 'Other') : candidate.lagnam },
     { label: 'Gothram', value: candidate.gothram },
-    { label: 'Dosham', value: candidate.dosham || 'None' },
+    {
+      label: 'Dosham',
+      value: (candidate.dosham === 'Other' || candidate.dosham === 'Other Dosham' || (candidate.dosham && candidate.dosham.includes('Other')))
+        ? (candidate.customDosham || 'Other')
+        : (candidate.dosham || 'None')
+    },
     { label: 'Date of Birth', value: candidate.dateOfBirth }
   ]);
 

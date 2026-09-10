@@ -14,6 +14,7 @@ import {
   NAKSHATRAS,
   NAKSHATRA_TO_RASI_MAP,
   LAGNAMS,
+  DOSHAM_OPTIONS,
   INCOME_OPTIONS,
   EDUCATION_SUGGESTIONS,
   RELIGIONS,
@@ -59,9 +60,45 @@ export function AdminCandidateNewPage() {
       getRegistration(id)
         .then((data) => {
           if (data) {
+            let bStar = data.birthStar || '';
+            let cBStar = data.customBirthStar || '';
+            if (bStar && bStar !== 'Other' && !NAKSHATRAS.some((n) => n.value === bStar)) {
+              cBStar = bStar;
+              bStar = 'Other';
+            }
+
+            let zSign = data.zodiacSign || '';
+            let cZSign = data.customZodiacSign || '';
+            if (zSign && zSign !== 'Other' && !ZODIAC_SIGNS.some((z) => z.value === zSign)) {
+              cZSign = zSign;
+              zSign = 'Other';
+            }
+
+            let lag = data.lagnam || '';
+            let cLag = data.customLagnam || '';
+            if (lag && lag !== 'Other' && !LAGNAMS.some((l) => l.value === lag)) {
+              cLag = lag;
+              lag = 'Other';
+            }
+
+            let dsh = data.dosham || 'None';
+            let cDsh = data.customDosham || '';
+            if (dsh && dsh !== 'Other' && !DOSHAM_OPTIONS.some((d) => d.value === dsh)) {
+              cDsh = dsh;
+              dsh = 'Other';
+            }
+
             setFormData((prev) => ({
               ...prev,
               ...data,
+              birthStar: bStar,
+              customBirthStar: cBStar,
+              zodiacSign: zSign,
+              customZodiacSign: cZSign,
+              lagnam: lag,
+              customLagnam: cLag,
+              dosham: dsh,
+              customDosham: cDsh,
               maritalStatus: data.maritalStatus === 'Never Married' ? 'Single' : (data.maritalStatus || 'Single')
             }));
           }
@@ -94,6 +131,20 @@ export function AdminCandidateNewPage() {
         if (!prev.zodiacSign || prev.zodiacSign === '') {
           updated.zodiacSign = NAKSHATRA_TO_RASI_MAP[value];
         }
+      }
+
+      // Clear custom astrology fields if user selects a standard option
+      if (name === 'birthStar' && value !== 'Other') {
+        updated.customBirthStar = '';
+      }
+      if (name === 'zodiacSign' && value !== 'Other') {
+        updated.customZodiacSign = '';
+      }
+      if (name === 'lagnam' && value !== 'Other') {
+        updated.customLagnam = '';
+      }
+      if (name === 'dosham' && !value.includes('Other')) {
+        updated.customDosham = '';
       }
 
       // Reset caste if religion changes and current caste isn't in new religion list
@@ -534,6 +585,19 @@ export function AdminCandidateNewPage() {
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
                     </select>
+                    {formData.birthStar === 'Other' && (
+                      <div style={{ marginTop: '0.4rem' }}>
+                        <input
+                          type="text"
+                          name="customBirthStar"
+                          value={formData.customBirthStar || ''}
+                          onChange={handleChange}
+                          placeholder="Specify custom birth star"
+                          className="admin-form-input"
+                          style={{ borderColor: 'var(--gold-500)', backgroundColor: '#fffdfa' }}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="admin-form-group">
@@ -549,6 +613,19 @@ export function AdminCandidateNewPage() {
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
                     </select>
+                    {formData.zodiacSign === 'Other' && (
+                      <div style={{ marginTop: '0.4rem' }}>
+                        <input
+                          type="text"
+                          name="customZodiacSign"
+                          value={formData.customZodiacSign || ''}
+                          onChange={handleChange}
+                          placeholder="Specify custom zodiac sign (Rasi)"
+                          className="admin-form-input"
+                          style={{ borderColor: 'var(--gold-500)', backgroundColor: '#fffdfa' }}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="admin-form-group">
@@ -564,6 +641,19 @@ export function AdminCandidateNewPage() {
                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
                     </select>
+                    {formData.lagnam === 'Other' && (
+                      <div style={{ marginTop: '0.4rem' }}>
+                        <input
+                          type="text"
+                          name="customLagnam"
+                          value={formData.customLagnam || ''}
+                          onChange={handleChange}
+                          placeholder="Specify custom lagnam"
+                          className="admin-form-input"
+                          style={{ borderColor: 'var(--gold-500)', backgroundColor: '#fffdfa' }}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="admin-form-group">
@@ -586,11 +676,23 @@ export function AdminCandidateNewPage() {
                       onChange={handleChange}
                       className="admin-form-input"
                     >
-                      <option value="None">None (No Dosham)</option>
-                      <option value="Sevvai Dosham">Sevvai Dosham (Mars)</option>
-                      <option value="Rahu-Ketu Dosham">Rahu-Ketu Dosham</option>
-                      <option value="Parigara Dosham">Parigara Dosham</option>
+                      {DOSHAM_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
                     </select>
+                    {(formData.dosham === 'Other' || formData.dosham === 'Other Dosham' || (formData.dosham && formData.dosham.includes('Other'))) && (
+                      <div style={{ marginTop: '0.4rem' }}>
+                        <input
+                          type="text"
+                          name="customDosham"
+                          value={formData.customDosham || ''}
+                          onChange={handleChange}
+                          placeholder="Specify custom dosham details"
+                          className="admin-form-input"
+                          style={{ borderColor: 'var(--gold-500)', backgroundColor: '#fffdfa' }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
