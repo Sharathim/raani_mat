@@ -465,28 +465,11 @@ textarea {
   }
 }
 
-/* Mobile App-like Bottom Action Bar for Form */
+/* Mobile App-like Bottom Action Bar (disabled) */
 .mobile-sticky-action-bar {
-  display: none;
+  display: none !important;
 }
 
-@media (max-width: 768px) {
-  .mobile-sticky-action-bar {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #ffffff;
-    border-top: 1px solid var(--border);
-    padding: 0.75rem 1rem;
-    z-index: 90;
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.75rem;
-  }
-}
 
 /* Print Styles */
 @media print {
@@ -1753,7 +1736,12 @@ textarea:focus-visible {
 
 
   .registration-page main {
-    padding: 1.5rem var(--page-gutter) 5.5rem !important;
+    padding: 1.5rem var(--page-gutter) 2.25rem !important;
+  }
+
+  .registration-page footer,
+  .registration-page .registration-footer {
+    display: none !important;
   }
 
   .registration-page .card-clean {

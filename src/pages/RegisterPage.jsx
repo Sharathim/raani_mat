@@ -833,50 +833,23 @@ export function RegisterPage() {
           </div>
         </div>
 
-        {/* Mobile Sticky Action Bar for App-like experience */}
-        <div className="mobile-sticky-action-bar">
-          {currentStep > 1 ? (
-            <button
-              type="button"
-              onClick={handleBack}
-              disabled={isSubmitting}
-              className="btn btn-secondary btn-sm"
-              style={{ flex: 1 }}
-            >
-              <ArrowLeft size={14} />
-              <span>Back</span>
-            </button>
-          ) : (
-            <Link to="/" className="btn btn-secondary btn-sm" style={{ flex: 1 }}>
-              <span>Home</span>
-            </Link>
-          )}
-
-          {currentStep < 7 ? (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="btn btn-primary btn-sm"
-              style={{ flex: 2 }}
-            >
-              <span>Continue Step {currentStep + 1}</span>
-              <ArrowRight size={14} />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !formData.consentAccepted}
-              className="btn btn-primary btn-sm"
-              style={{ flex: 2 }}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Profile'}
-            </button>
-          )}
-        </div>
       </main>
 
-      <Footer />
+      <div className="registration-footer">
+        <Footer />
+      </div>
+
+      <style>{`
+        @media (max-width: 820px) {
+          .registration-page footer,
+          .registration-page .registration-footer {
+            display: none !important;
+          }
+          .registration-page main {
+            padding-bottom: 2rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
