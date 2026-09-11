@@ -327,7 +327,7 @@ export function HomePage() {
                     >
                       <Phone size={18} color="#5a0715" />
                       <div style={{ textAlign: 'left', lineHeight: 1.1 }}>
-                        <div style={{ fontWeight: 700, color: '#5a0715', fontSize: '0.95rem' }}>Call Helpline</div>
+                        <div style={{ fontWeight: 700, color: '#5a0715', fontSize: '0.95rem' }}>Contact Us for Matches</div>
                         <span style={{ fontSize: '0.725rem', fontWeight: 500, color: '#5a0715', opacity: 0.85 }}>Direct Service Center</span>
                       </div>
                     </a>
@@ -416,13 +416,13 @@ export function HomePage() {
                   </div>
                 </Link>
 
-                {/* Button 2: Call Helpline */}
+                {/* Button 2: Contact Us for Matches */}
                 <a href={`tel:${BRAND.phones[0]}`} className="hero-mobile-btn-secondary">
                   <div className="btn-icon-wrap">
                     <Phone size={20} color="#5a0715" strokeWidth={1.8} />
                   </div>
                   <div className="btn-text-wrap">
-                    <div className="btn-main-text">Call Helpline</div>
+                    <div className="btn-main-text">Contact Us for Matches</div>
                     <div className="btn-sub-text">Direct Service Center</div>
                   </div>
                   <div className="btn-arrow-wrap">
