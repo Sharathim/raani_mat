@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogoMark } from './LogoMark';
 import { BRAND } from '../../utils/constants';
-import { Phone, Mail, MapPin, Clock, ShieldCheck, Heart } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ShieldCheck } from 'lucide-react';
 
 export function Footer() {
   const location = useLocation();
@@ -155,10 +155,30 @@ export function Footer() {
           <div>
             © {BRAND.copyrightYear} {BRAND.tamilName} ({BRAND.englishName}). All rights reserved.
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--gold-300)' }}>
-            <span>Connecting Hearts & Families</span>
-            <Heart size={13} fill="var(--maroon-500)" color="var(--maroon-500)" />
-          </div>
+          <a
+            href="https://techscaleco.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              color: 'var(--gold-300)',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              cursor: 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#fff';
+              e.currentTarget.style.textDecoration = 'underline';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--gold-300)';
+              e.currentTarget.style.textDecoration = 'none';
+            }}
+          >
+            Created By TechScale
+          </a>
         </div>
       </div>
     </footer>
