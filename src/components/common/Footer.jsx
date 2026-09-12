@@ -177,7 +177,7 @@ export function Footer() {
               e.currentTarget.style.textDecoration = 'none';
             }}
           >
-            Created By TechScale
+            Designed By TechScale
           </a>
         </div>
       </div>
